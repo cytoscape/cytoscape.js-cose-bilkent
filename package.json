@@ -1,0 +1,40 @@
+{
+  "name": "cytoscape-cose-bilkent",
+  "version": "1.0.0",
+  "description": "The CoSE layout for Cytoscape.js by Bilkent",
+  "main": "cytoscape-cose-bilkent.js",
+  "spm": {
+    "main": "cytoscape-cose-bilkent.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cytoscape/cytoscape.js-cose-bilkent.git"
+  },
+  "keywords": [
+    "cytoscape",
+    "cyext"
+  ],
+  "license": "LGPL-3.0+",
+  "bugs": {
+    "url": "https://github.com/cytoscape/cytoscape.js-cose-bilkent/issues"
+  },
+  "homepage": "https://github.com/cytoscape/cytoscape.js-cose-bilkent",
+  "devDependencies": {
+    "browserify": "^11.0.1",
+    "gulp": "^3.8.8",
+    "gulp-derequire": "^2.1.0",
+    "gulp-jshint": "^1.8.5",
+    "gulp-prompt": "^0.1.1",
+    "gulp-replace": "^0.4.0",
+    "gulp-shell": "^0.2.9",
+    "gulp-util": "^3.0.6",
+    "jshint-stylish": "^1.0.0",
+    "node-notifier": "^4.2.3",
+    "run-sequence": "^1.0.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
