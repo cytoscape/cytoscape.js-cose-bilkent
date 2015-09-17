@@ -234,7 +234,7 @@ _CoSELayout.prototype.run = function () {
 
   nodes.each(
           function (i, node) {
-            var nodeId = this._private.data.id;
+            var nodeId = this.id();
             var parentId = node.parent().id();
             var nodeBb = node.boundingBox();
             var w = nodeBb.w;
@@ -265,7 +265,7 @@ _CoSELayout.prototype.run = function () {
           function () {
             var srcNodeId = this.source().id();
             var tgtNodeId = this.target().id();
-            var edgeId = this._private.data.id;
+            var edgeId = this.id();
             pData[ 'edges' ].push({
               id: edgeId,
               source: srcNodeId,
