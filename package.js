@@ -3,7 +3,7 @@
 var packageJson = JSON.parse(Npm.require("fs").readFileSync('package.json'));
 
 Package.describe({
-  name: ':cytoscape-cose-bilkent',
+  name: 'maxkfranz:cytoscape-cose-bilkent',
   version: packageJson.version,
   summary: packageJson.description,
   git: packageJson.repository.url,
@@ -21,7 +21,7 @@ Package.onUse(function(api) {
 
 Package.onTest(function(api) {
   api.use('maxkfranz:cytoscape');
-  api.use(':cytoscape-cose-bilkent');
+  api.use('maxkfranz:cytoscape-cose-bilkent');
   api.use('tinytest');
 
   // define your test files here if you like
