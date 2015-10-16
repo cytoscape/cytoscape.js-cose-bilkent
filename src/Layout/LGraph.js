@@ -2,6 +2,7 @@ var LGraphObject = require('./LGraphObject');
 var Integer = require('./Integer');
 var LayoutConstants = require('./LayoutConstants');
 var LGraphManager = require('./LGraphManager');
+var LNode = require('./LNode');
 
 function LGraph(parent, obj2, vGraph) {
   LGraphObject.call(this, vGraph);
