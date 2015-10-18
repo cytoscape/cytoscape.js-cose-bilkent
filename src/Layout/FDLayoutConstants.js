@@ -1,3 +1,5 @@
+var layoutOptionsPack = require('./layoutOptionsPack');
+
 function FDLayoutConstants() {
 }
 
@@ -15,6 +17,9 @@ FDLayoutConstants.getUserOptions = function (options) {
     FDLayoutConstants.DEFAULT_GRAVITY_STRENGTH = options.gravity;
   if (options.numIter != null)
     FDLayoutConstants.MAX_ITERATIONS = options.numIter;
+  
+  layoutOptionsPack.incremental = !(options.randomize);
+  layoutOptionsPack.animate = options.animate;
 }
 
 FDLayoutConstants.MAX_ITERATIONS = 2500;

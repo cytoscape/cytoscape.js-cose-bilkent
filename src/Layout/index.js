@@ -31,9 +31,7 @@ var CoSEGraph = require('./CoSEGraph');
 var CoSEGraphManager = require('./CoSEGraphManager');
 var CoSELayout = require('./CoSELayout');
 var CoSENode = require('./CoSENode');
-
-function layoutOptionsPack() {
-}
+var layoutOptionsPack = require('./layoutOptionsPack');
 
 layoutOptionsPack.layoutQuality; // proof, default, draft
 layoutOptionsPack.animationDuringLayout; // T-F
