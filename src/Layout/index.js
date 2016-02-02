@@ -100,7 +100,7 @@ var defaults = {
   // Padding on fit
   padding: 10,
   // Whether to enable incremental mode
-  randomize: false,
+  randomize: true,
   // Node repulsion (non overlapping) multiplier
   nodeRepulsion: 4500,
   // Ideal edge (non nested) length
