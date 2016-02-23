@@ -116,7 +116,11 @@ var defaults = {
   // For enabling tiling
   tile: true,
   //whether to make animation while performing the layout
-  animate: true
+  animate: true,
+  //vertical padding between the tiled nodes(can also be a function)
+  tilingPaddingVertical: 10,
+  //horizontal padding between the tiled nodes(can also be a function)
+  tilingPaddingHorizontal: 10
 };
 
 function extend(defaults, options) {
@@ -668,8 +672,10 @@ _CoSELayout.prototype.repopulateCompounds = function (tiledMemberPack) {
   for (var i = _CoSELayout.compoundOrder.length - 1; i >= 0; i--) {
     var id = _CoSELayout.compoundOrder[i].id();
     var lCompoundNode = _CoSELayout.idToLNode[id];
+    var horizontalMargin = parseInt(_CoSELayout.compoundOrder[i].css('padding-left'));
+    var verticalMargin = parseInt(_CoSELayout.compoundOrder[i].css('padding-top'));
 
-    this.adjustLocations(tiledMemberPack[id], lCompoundNode.rect.x, lCompoundNode.rect.y);
+    this.adjustLocations(tiledMemberPack[id], lCompoundNode.rect.x, lCompoundNode.rect.y, horizontalMargin, verticalMargin);
   }
 };
 
@@ -677,9 +683,11 @@ _CoSELayout.prototype.repopulateZeroDegreeMembers = function (tiledPack) {
   for (var i in tiledPack) {
     var compound = this.cy.getElementById(i);
     var compoundNode = _CoSELayout.idToLNode[i];
-
+    var horizontalMargin = parseInt(compound.css('padding-left'));
+    var verticalMargin = parseInt(compound.css('padding-top'));
+    
     // Adjust the positions of nodes wrt its compound
-    this.adjustLocations(tiledPack[i], compoundNode.rect.x, compoundNode.rect.y);
+    this.adjustLocations(tiledPack[i], compoundNode.rect.x, compoundNode.rect.y, horizontalMargin, verticalMargin);
 
     var tempchildren = compound.data('tempchildren');
     for (var i = 0; i < tempchildren.length; i++) {
@@ -694,9 +702,9 @@ _CoSELayout.prototype.repopulateZeroDegreeMembers = function (tiledPack) {
 /**
  * This method places each zero degree member wrt given (x,y) coordinates (top left). 
  */
-_CoSELayout.prototype.adjustLocations = function (organization, x, y) {
-  x += organization.compoundMargin;
-  y += organization.compoundMargin;
+_CoSELayout.prototype.adjustLocations = function (organization, x, y, compoundHorizontalMargin, compoundVerticalMargin) {
+  x += compoundHorizontalMargin;
+  y += compoundVerticalMargin;
 
   var left = x;
 
@@ -744,15 +752,17 @@ _CoSELayout.prototype.tileCompoundMembers = function (childGraphMap) {
 };
 
 _CoSELayout.prototype.tileNodes = function (nodes) {
+  var self = this;
+  var verticalPadding = typeof self.options.tilingPaddingVertical === 'function' ? self.options.tilingPaddingVertical.call() : self.options.tilingPaddingVertical;
+  var horizontalPadding = typeof self.options.tilingPaddingHorizontal === 'function' ? self.options.tilingPaddingHorizontal.call() : self.options.tilingPaddingHorizontal;
   var organization = {
     rows: [],
     rowWidth: [],
     rowHeight: [],
-    compoundMargin: 10,
     width: 20,
     height: 20,
-    verticalPadding: 10,
-    horizontalPadding: 10
+    verticalPadding: verticalPadding,
+    horizontalPadding: horizontalPadding
   };
 
   var layoutNodes = [];
@@ -785,15 +795,21 @@ _CoSELayout.prototype.tileNodes = function (nodes) {
   // Create the organization -> tile members
   for (var i = 0; i < layoutNodes.length; i++) {
     var lNode = layoutNodes[i];
-
+    
+    var cyNode = cy.getElementById(lNode.id).parent()[0];
+    var minWidth = 0;
+    if(cyNode){
+      minWidth = parseInt(cyNode.css('padding-left')) + parseInt(cyNode.css('padding-right'));
+    }
+    
     if (organization.rows.length == 0) {
-      this.insertNodeToRow(organization, lNode, 0);
+      this.insertNodeToRow(organization, lNode, 0, minWidth);
     }
     else if (this.canAddHorizontal(organization, lNode.rect.width, lNode.rect.height)) {
-      this.insertNodeToRow(organization, lNode, this.getShortestRowIndex(organization));
+      this.insertNodeToRow(organization, lNode, this.getShortestRowIndex(organization), minWidth);
     }
     else {
-      this.insertNodeToRow(organization, lNode, organization.rows.length);
+      this.insertNodeToRow(organization, lNode, organization.rows.length, minWidth);
     }
 
     this.shiftToLastRow(organization);
@@ -802,8 +818,8 @@ _CoSELayout.prototype.tileNodes = function (nodes) {
   return organization;
 };
 
-_CoSELayout.prototype.insertNodeToRow = function (organization, node, rowIndex) {
-  var minCompoundSize = organization.compoundMargin * 2;
+_CoSELayout.prototype.insertNodeToRow = function (organization, node, rowIndex, minWidth) {
+  var minCompoundSize = minWidth;
 
   // Add new row if needed
   if (rowIndex == organization.rows.length) {
