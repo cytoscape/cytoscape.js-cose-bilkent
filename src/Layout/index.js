@@ -117,9 +117,9 @@ var defaults = {
   tile: true,
   //whether to make animation while performing the layout
   animate: true,
-  //vertical padding between the tiled nodes(can also be a function)
+  //represents the amount of the vertical space to put between the zero degree members during the tiling operation(can also be a function)
   tilingPaddingVertical: 10,
-  //horizontal padding between the tiled nodes(can also be a function)
+  //represents the amount of the horizontal space to put between the zero degree members during the tiling operation(can also be a function)
   tilingPaddingHorizontal: 10
 };
 
