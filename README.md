@@ -56,7 +56,7 @@ var defaultOptions = {
   // Padding on fit
   padding: 10,
   // Whether to enable incremental mode
-  randomize: false,
+  randomize: true,
   // Node repulsion (non overlapping) multiplier
   nodeRepulsion: 4500,
   // Ideal edge (non nested) length
@@ -72,7 +72,11 @@ var defaultOptions = {
   // For enabling tiling
   tile: true,
   //whether to make animation while performing the layout
-  animate: true
+  animate: true,
+  //represents the amount of the vertical space to put between the zero degree members during the tiling operation(can also be a function)
+  tilingPaddingVertical: 10,
+  //represents the amount of the horizontal space to put between the zero degree members during the tiling operation(can also be a function)
+  tilingPaddingHorizontal: 10
 };
 ```
 
