@@ -19,7 +19,8 @@ var version;
 
 var browserifyOpts = {
   entries: './src/index.js',
-  debug: true
+  debug: true,
+  standalone: 'cytoscape-cose-bilkent'
 };
 
 var logError = function( err ){
