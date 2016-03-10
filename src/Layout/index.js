@@ -796,7 +796,7 @@ _CoSELayout.prototype.tileNodes = function (nodes) {
   for (var i = 0; i < layoutNodes.length; i++) {
     var lNode = layoutNodes[i];
     
-    var cyNode = cy.getElementById(lNode.id).parent()[0];
+    var cyNode = this.cy.getElementById(lNode.id).parent()[0];
     var minWidth = 0;
     if(cyNode){
       minWidth = parseInt(cyNode.css('padding-left')) + parseInt(cyNode.css('padding-right'));
