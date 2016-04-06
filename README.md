@@ -4,8 +4,9 @@ cytoscape-cose-bilkent
 
 ## Description
 
-The CoSE layout for Cytoscape.js by Bilkent in the [i-Vis group](http://cs.bilkent.edu.tr/~ivis/)
+The CoSE layout for Cytoscape.js by the [i-Vis group](http://cs.bilkent.edu.tr/~ivis/) in Bilkent University. Please cite the following when using this layout:
 
+U. Dogrusoz, E. Giral, A. Cetintas, A. Civril, and E. Demir, "[A Layout Algorithm For Undirected Compound Graphs](http://www.sciencedirect.com/science/article/pii/S0020025508004799)", Information Sciences, 179, pp. 980-994, 2009.
 
 ## Dependencies
 
