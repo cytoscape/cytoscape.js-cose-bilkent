@@ -110,7 +110,7 @@ var defaults = {
   // Nesting factor (multiplier) to compute ideal edge length for nested edges
   nestingFactor: 0.1,
   // Gravity force (constant)
-  gravity: 0.4,
+  gravity: 0.25,
   // Maximum number of iterations to perform
   numIter: 2500,
   // For enabling tiling
