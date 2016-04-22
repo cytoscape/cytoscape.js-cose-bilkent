@@ -992,6 +992,12 @@ _CoSELayout.prototype.shiftToLastRow = function (organization) {
 _CoSELayout.prototype.stop = function () {
   this.stopped = true;
 
+  if( this.thread ){
+    this.thread.stop();
+  }
+  
+  this.trigger('layoutstop');
+
   return this; // chaining
 };
 
