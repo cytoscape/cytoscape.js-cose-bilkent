@@ -1,6 +1,6 @@
 {
   "name": "cytoscape-cose-bilkent",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "description": "The CoSE layout for Cytoscape.js by Bilkent",
   "main": "cytoscape-cose-bilkent.js",
   "spm": {
@@ -36,5 +36,8 @@
     "run-sequence": "^1.1.4",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "peerDependencies": {
+    "cytoscape": "^2.4.0"
   }
 }
