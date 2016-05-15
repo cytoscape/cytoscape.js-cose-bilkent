@@ -166,7 +166,7 @@ _CoSELayout.prototype.run = function () {
   this.root = gm.addRoot();
 
   if (!this.options.tile) {
-    this.processChildrenList(this.root, nodes.orphans());
+    this.processChildrenList(this.root, _CoSELayout.getTopMostNodes(nodes));
   }
   else {
     // Find zero degree nodes and create a compound for each level
@@ -482,6 +482,29 @@ _CoSELayout.prototype.run = function () {
   return this; // chaining
 };
 
+//Get the top most ones of a list of nodes in linear time
+_CoSELayout.getTopMostNodes = function(nodes) {
+  //Map the ids of nodes in the list to check if a node is in the list in constant time
+  var nodeIdMap = {};
+  
+  //Fill the map in linear time
+  for(var i = 0; i < nodes.length; i++){
+    nodeIdMap[nodes[i].id()] = true;
+  }
+  
+  //The nodes whose parent is not mapped are top most ones
+  var topMostNodes = nodes.filter(function(i, ele){
+    if(nodeIdMap[ele.data('parent')]){
+      return false;
+    }
+    
+    return true;
+  });
+  
+  //return the list of top most nodes
+  return topMostNodes;
+};
+
 _CoSELayout.prototype.getToBeTiled = function (node) {
   var id = node.data("id");
   //firstly check the previous results
@@ -613,7 +636,7 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
 _CoSELayout.prototype.performDFSOnCompounds = function (options) {
   var compoundOrder = [];
 
-  var roots = this.options.eles.nodes().orphans();
+  var roots = _CoSELayout.getTopMostNodes(this.options.eles.nodes());
   this.fillCompexOrderByDFS(compoundOrder, roots);
 
   return compoundOrder;
@@ -635,7 +658,7 @@ _CoSELayout.prototype.clearCompounds = function (options) {
   // Get compound ordering by finding the inner one first
   var compoundOrder = this.performDFSOnCompounds(options);
   _CoSELayout.compoundOrder = compoundOrder;
-  this.processChildrenList(this.root, this.options.eles.nodes().orphans());
+  this.processChildrenList(this.root, _CoSELayout.getTopMostNodes(this.options.eles.nodes()));
 
   for (var i = 0; i < compoundOrder.length; i++) {
     // find the corresponding layout node
