@@ -233,12 +233,23 @@ _CoSELayout.prototype.run = function () {
     'edges': []
   };
 
+  //Map the ids of nodes in the list to check if a node is in the list in constant time
+  var nodeIdMap = {};
+  
+  //Fill the map in linear time
+  for(var i = 0; i < nodes.length; i++){
+    nodeIdMap[nodes[i].id()] = true;
+  }
+
   var lnodes = gm.getAllNodes();
   for (var i = 0; i < lnodes.length; i++) {
     var lnode = lnodes[i];
     var nodeId = lnode.id;
     var cyNode = this.options.cy.getElementById(nodeId);
+    
     var parentId = cyNode.data('parent');
+    parentId = nodeIdMap[parentId]?parentId:undefined;
+    
     var w = lnode.rect.width;
     var posX = lnode.rect.x;
     var posY = lnode.rect.y;
@@ -570,9 +581,16 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
   var tempMemberGroups = [];
   var memberGroups = [];
   var self = this;
+  var topMostNodes = _CoSELayout.getTopMostNodes(this.options.eles.nodes());
+  
   // Find all zero degree nodes which aren't covered by a compound
   var zeroDegree = this.options.eles.nodes().filter(function (i, ele) {
-    if (self.getNodeDegreeWithChildren(ele) == 0 && (ele.parent().length == 0 || (ele.parent().length > 0 && !self.getToBeTiled(ele.parent()[0]))))
+    var pid = ele.data('parent');
+    if(pid != undefined && !topMostNodes[pid]){
+      pid = undefined;
+    }
+    
+    if (self.getNodeDegreeWithChildren(ele) == 0 && (pid == undefined || (pid != undefined && !self.getToBeTiled(ele.parent()[0]))))
       return true;
     else
       return false;
@@ -583,6 +601,10 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
   {
     var node = zeroDegree[i];
     var p_id = node.parent().id();
+    
+    if(p_id != undefined && !topMostNodes[p_id]){
+      p_id = undefined;
+    }
 
     if (typeof tempMemberGroups[p_id] === "undefined")
       tempMemberGroups[p_id] = [];
