@@ -581,12 +581,16 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
   var tempMemberGroups = [];
   var memberGroups = [];
   var self = this;
-  var topMostNodes = _CoSELayout.getTopMostNodes(this.options.eles.nodes());
+  var parentMap = {};
+  
+  for(var i = 0; i < this.options.eles.nodes().length; i++){
+    parentMap[this.options.eles.nodes()[i].id()] = true;
+  }
   
   // Find all zero degree nodes which aren't covered by a compound
   var zeroDegree = this.options.eles.nodes().filter(function (i, ele) {
     var pid = ele.data('parent');
-    if(pid != undefined && !topMostNodes[pid]){
+    if(pid != undefined && !parentMap[pid]){
       pid = undefined;
     }
     
@@ -602,7 +606,7 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
     var node = zeroDegree[i];
     var p_id = node.parent().id();
     
-    if(p_id != undefined && !topMostNodes[p_id]){
+    if(p_id != undefined && !parentMap[p_id]){
       p_id = undefined;
     }
 
