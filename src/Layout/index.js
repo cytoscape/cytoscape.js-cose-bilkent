@@ -493,27 +493,24 @@ _CoSELayout.prototype.run = function () {
   return this; // chaining
 };
 
-//Get the top most ones of a list of nodes in linear time
+//Get the top most ones of a list of nodes
 _CoSELayout.getTopMostNodes = function(nodes) {
-  //Map the ids of nodes in the list to check if a node is in the list in constant time
-  var nodeIdMap = {};
-  
-  //Fill the map in linear time
-  for(var i = 0; i < nodes.length; i++){
-    nodeIdMap[nodes[i].id()] = true;
+  var nodesMap = {};
+  for (var i = 0; i < nodes.length; i++) {
+      nodesMap[nodes[i].id()] = true;
   }
-  
-  //The nodes whose parent is not mapped are top most ones
-  var topMostNodes = nodes.filter(function(i, ele){
-    if(nodeIdMap[ele.data('parent')]){
-      return false;
-    }
-    
-    return true;
+  var roots = nodes.filter(function (i, ele) {
+      var parent = ele.parent()[0];
+      while(parent != null){
+        if(nodesMap[parent.id()]){
+          return false;
+        }
+        parent = parent.parent()[0];
+      }
+      return true;
   });
-  
-  //return the list of top most nodes
-  return topMostNodes;
+
+  return roots;
 };
 
 _CoSELayout.prototype.getToBeTiled = function (node) {
