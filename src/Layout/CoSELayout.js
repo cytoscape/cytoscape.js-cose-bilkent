@@ -138,7 +138,7 @@ CoSELayout.prototype.runSpringEmbedder = function () {
     this.calcGravitationalForces();
     this.moveNodes();
     this.animate();
-    if (layoutOptionsPack.animate && this.totalIterations % animationPeriod == 0) {
+    if (layoutOptionsPack.animate === 'during' && this.totalIterations % animationPeriod == 0) {
       for (var i = 0; i < 1e7; i++) {
         if ((new Date().getTime() - lastFrame) > 25) {
           break;

@@ -116,7 +116,7 @@ var defaults = {
   // For enabling tiling
   tile: true,
   //whether to make animation while performing the layout
-  animate: true,
+  animate: 'end',
   //represents the amount of the vertical space to put between the zero degree members during the tiling operation(can also be a function)
   tilingPaddingVertical: 10,
   //represents the amount of the horizontal space to put between the zero degree members during the tiling operation(can also be a function)
@@ -422,7 +422,7 @@ _CoSELayout.prototype.run = function () {
       after.options.eles.nodes().updateCompoundBounds();
     }
 
-    after.options.eles.nodes().positions(function (i, ele) {
+    var getPositions = function(i ,ele){
       var theId = ele.data('id');
       var lNode = _CoSELayout.idToLNode[theId];
 
@@ -430,22 +430,29 @@ _CoSELayout.prototype.run = function () {
         x: lNode.getRect().getCenterX(),
         y: lNode.getRect().getCenterY()
       };
-    });
+    };
 
-    if (after.options.fit)
-      after.options.cy.fit(after.options.eles.nodes(), after.options.padding);
-
-    //trigger layoutready when each node has had its position set at least once
-    if (!ready) {
-      after.cy.one('layoutready', after.options.ready);
-      after.cy.trigger('layoutready');
+    if(after.options.animate !== 'during'){
+      after.options.eles.nodes().layoutPositions(after, after.options, getPositions);
     }
-
-    // trigger layoutstop when the layout stops (e.g. finishes)
-    after.cy.one('layoutstop', after.options.stop);
-    after.cy.trigger('layoutstop');
+    else {
+      after.options.eles.nodes().positions(getPositions);
+      
+      if (after.options.fit)
+        after.options.cy.fit(after.options.eles.nodes(), after.options.padding);
+    
+      //trigger layoutready when each node has had its position set at least once
+      if (!ready) {
+        after.cy.one('layoutready', after.options.ready);
+        after.cy.trigger('layoutready');
+      }
+      
+      // trigger layoutstop when the layout stops (e.g. finishes)
+      after.cy.one('layoutstop', after.options.stop);
+      after.cy.trigger('layoutstop');
+    }
+    
     t1.stop();
-
     after.options.eles.nodes().removeData('dummy_parent_id');
   });
 
@@ -761,12 +768,7 @@ _CoSELayout.prototype.adjustLocations = function (organization, x, y, compoundHo
 
     for (var j = 0; j < row.length; j++) {
       var lnode = row[j];
-
       var node = this.cy.getElementById(lnode.id);
-      node.position({
-        x: x + lnode.rect.width / 2,
-        y: y + lnode.rect.height / 2
-      });
 
       lnode.rect.x = x;// + lnode.rect.width / 2;
       lnode.rect.y = y;// + lnode.rect.height / 2;
