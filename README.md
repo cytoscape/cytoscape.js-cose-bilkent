@@ -67,16 +67,16 @@ var defaultOptions = {
   // Nesting factor (multiplier) to compute ideal edge length for nested edges
   nestingFactor: 0.1,
   // Gravity force (constant)
-  gravity: 0.4,
+  gravity: 0.25,
   // Maximum number of iterations to perform
   numIter: 2500,
   // For enabling tiling
   tile: true,
-  //whether to make animation while performing the layout
-  animate: true,
-  //represents the amount of the vertical space to put between the zero degree members during the tiling operation(can also be a function)
+  // Type of layout animation. The option set is {'during', 'end', false}
+  animate: 'end',
+  // Represents the amount of the vertical space to put between the zero degree members during the tiling operation(can also be a function)
   tilingPaddingVertical: 10,
-  //represents the amount of the horizontal space to put between the zero degree members during the tiling operation(can also be a function)
+  // Represents the amount of the horizontal space to put between the zero degree members during the tiling operation(can also be a function)
   tilingPaddingHorizontal: 10
 };
 ```
