@@ -245,14 +245,13 @@ Layout.prototype.update = function (obj) {
 Layout.prototype.initParameters = function () {
   if (!this.isSubLayout)
   {
-    this.layoutQuality = layoutOptionsPack.layoutQuality;
-    this.animationDuringLayout = layoutOptionsPack.animationDuringLayout;
-    this.animationPeriod = Math.floor(Layout.transform(layoutOptionsPack.animationPeriod,
-            LayoutConstants.DEFAULT_ANIMATION_PERIOD));
-    this.animationOnLayout = layoutOptionsPack.animationOnLayout;
-    this.incremental = layoutOptionsPack.incremental;
-    this.createBendsAsNeeded = layoutOptionsPack.createBendsAsNeeded;
-    this.uniformLeafNodeSizes = layoutOptionsPack.uniformLeafNodeSizes;
+    this.layoutQuality = LayoutConstants.DEFAULT_QUALITY;
+    this.animationDuringLayout = LayoutConstants.DEFAULT_ANIMATION_ON_LAYOUT;
+    this.animationPeriod = LayoutConstants.DEFAULT_ANIMATION_PERIOD;
+    this.animationOnLayout = LayoutConstants.DEFAULT_ANIMATION_DURING_LAYOUT;
+    this.incremental = LayoutConstants.DEFAULT_INCREMENTAL;
+    this.createBendsAsNeeded = LayoutConstants.DEFAULT_CREATE_BENDS_AS_NEEDED;
+    this.uniformLeafNodeSizes = LayoutConstants.DEFAULT_UNIFORM_LEAF_NODE_SIZES;
   }
 
   if (this.animationDuringLayout)

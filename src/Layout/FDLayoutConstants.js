@@ -1,4 +1,4 @@
-var layoutOptionsPack = require('./layoutOptionsPack');
+var LayoutConstants = require('./LayoutConstants');
 
 function FDLayoutConstants() {
 }
@@ -18,8 +18,8 @@ FDLayoutConstants.getUserOptions = function (options) {
   if (options.numIter != null)
     FDLayoutConstants.MAX_ITERATIONS = options.numIter;
   
-  layoutOptionsPack.incremental = !(options.randomize);
-  layoutOptionsPack.animate = options.animate;
+  LayoutConstants.DEFAULT_INCREMENTAL = !(options.randomize);
+  FDLayoutConstants.ANIMATE = options.animate;
 }
 
 FDLayoutConstants.MAX_ITERATIONS = 2500;

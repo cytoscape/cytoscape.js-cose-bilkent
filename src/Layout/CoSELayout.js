@@ -35,40 +35,34 @@ CoSELayout.prototype.newEdge = function (vEdge) {
 CoSELayout.prototype.initParameters = function () {
   FDLayout.prototype.initParameters.call(this, arguments);
   if (!this.isSubLayout) {
-    if (layoutOptionsPack.idealEdgeLength < 10)
+    if (CoSEConstants.DEFAULT_EDGE_LENGTH < 10)
     {
       this.idealEdgeLength = 10;
     }
     else
     {
-      this.idealEdgeLength = layoutOptionsPack.idealEdgeLength;
+      this.idealEdgeLength = CoSEConstants.DEFAULT_EDGE_LENGTH;
     }
 
     this.useSmartIdealEdgeLengthCalculation =
-            layoutOptionsPack.smartEdgeLengthCalc;
+            CoSEConstants.DEFAULT_USE_SMART_IDEAL_EDGE_LENGTH_CALCULATION;
     this.springConstant =
-            Layout.transform(layoutOptionsPack.springStrength,
-                    FDLayoutConstants.DEFAULT_SPRING_STRENGTH, 5.0, 5.0);
+            FDLayoutConstants.DEFAULT_SPRING_STRENGTH;
     this.repulsionConstant =
-            Layout.transform(layoutOptionsPack.repulsionStrength,
-                    FDLayoutConstants.DEFAULT_REPULSION_STRENGTH, 5.0, 5.0);
+            FDLayoutConstants.DEFAULT_REPULSION_STRENGTH;
     this.gravityConstant =
-            Layout.transform(layoutOptionsPack.gravityStrength,
-                    FDLayoutConstants.DEFAULT_GRAVITY_STRENGTH);
+            FDLayoutConstants.DEFAULT_GRAVITY_STRENGTH;
     this.compoundGravityConstant =
-            Layout.transform(layoutOptionsPack.compoundGravityStrength,
-                    FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_STRENGTH);
+            FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_STRENGTH;
     this.gravityRangeFactor =
-            Layout.transform(layoutOptionsPack.gravityRange,
-                    FDLayoutConstants.DEFAULT_GRAVITY_RANGE_FACTOR);
+            FDLayoutConstants.DEFAULT_GRAVITY_RANGE_FACTOR;
     this.compoundGravityRangeFactor =
-            Layout.transform(layoutOptionsPack.compoundGravityRange,
-                    FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR);
+            FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR;
   }
 };
 
 CoSELayout.prototype.layout = function () {
-  var createBendsAsNeeded = layoutOptionsPack.createBendsAsNeeded;
+  var createBendsAsNeeded = LayoutConstants.DEFAULT_CREATE_BENDS_AS_NEEDED;
   if (createBendsAsNeeded)
   {
     this.createBendpoints();
@@ -138,7 +132,7 @@ CoSELayout.prototype.runSpringEmbedder = function () {
     this.calcGravitationalForces();
     this.moveNodes();
     this.animate();
-    if (layoutOptionsPack.animate === 'during' && this.totalIterations % animationPeriod == 0) {
+    if (FDLayoutConstants.ANIMATE === 'during' && this.totalIterations % animationPeriod == 0) {
       for (var i = 0; i < 1e7; i++) {
         if ((new Date().getTime() - lastFrame) > 25) {
           break;
