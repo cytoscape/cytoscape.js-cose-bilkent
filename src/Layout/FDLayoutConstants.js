@@ -1,25 +1,4 @@
-var LayoutConstants = require('./LayoutConstants');
-
 function FDLayoutConstants() {
-}
-
-FDLayoutConstants.getUserOptions = function (options) {
-  if (options.nodeRepulsion != null)
-    FDLayoutConstants.DEFAULT_REPULSION_STRENGTH = options.nodeRepulsion;
-  if (options.idealEdgeLength != null) {
-    FDLayoutConstants.DEFAULT_EDGE_LENGTH = options.idealEdgeLength;
-  }
-  if (options.edgeElasticity != null)
-    FDLayoutConstants.DEFAULT_SPRING_STRENGTH = options.edgeElasticity;
-  if (options.nestingFactor != null)
-    FDLayoutConstants.PER_LEVEL_IDEAL_EDGE_LENGTH_FACTOR = options.nestingFactor;
-  if (options.gravity != null)
-    FDLayoutConstants.DEFAULT_GRAVITY_STRENGTH = options.gravity;
-  if (options.numIter != null)
-    FDLayoutConstants.MAX_ITERATIONS = options.numIter;
-  
-  LayoutConstants.DEFAULT_INCREMENTAL = !(options.randomize);
-  FDLayoutConstants.ANIMATE = options.animate;
 }
 
 FDLayoutConstants.MAX_ITERATIONS = 2500;
