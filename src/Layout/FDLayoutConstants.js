@@ -1,4 +1,11 @@
+var LayoutConstants = require('./LayoutConstants');
+
 function FDLayoutConstants() {
+}
+
+//FDLayoutConstants inherits static props in LayoutConstants
+for (var prop in LayoutConstants) {
+  FDLayoutConstants[prop] = LayoutConstants[prop];
 }
 
 FDLayoutConstants.MAX_ITERATIONS = 2500;
