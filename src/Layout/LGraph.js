@@ -22,9 +22,9 @@ function LGraph(parent, obj2, vGraph) {
 }
 
 LGraph.prototype = Object.create(LGraphObject.prototype);
-for (var prop in LGraphObject) {
+Object.keys(LGraphObject).forEach(function(prop) {
   LGraph[prop] = LGraphObject[prop];
-}
+});
 
 LGraph.prototype.getNodes = function () {
   return this.nodes;
@@ -432,14 +432,13 @@ LGraph.prototype.updateConnected = function ()
     var noOfVisitedInThisGraph = 0;
 
     var s = visited.size();
-    for (var visitedId in visited.set)
-    {
+    Object.keys(visited.set).forEach(function(visitedId) {
       var visitedNode = visited.set[visitedId];
       if (visitedNode.owner == this)
       {
         noOfVisitedInThisGraph++;
       }
-    }
+    });
 
     if (noOfVisitedInThisGraph == this.nodes.length)
     {

@@ -5,8 +5,8 @@ function CoSEGraphManager(layout) {
 }
 
 CoSEGraphManager.prototype = Object.create(LGraphManager.prototype);
-for (var prop in LGraphManager) {
+Object.keys(LGraphManager).forEach(function(prop) {
   CoSEGraphManager[prop] = LGraphManager[prop];
-}
+});
 
 module.exports = CoSEGraphManager;

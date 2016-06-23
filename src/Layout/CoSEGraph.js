@@ -5,8 +5,8 @@ function CoSEGraph(parent, graphMgr, vGraph) {
 }
 
 CoSEGraph.prototype = Object.create(LGraph.prototype);
-for (var prop in LGraph) {
+Object.keys(LGraph).forEach(function(prop) {
   CoSEGraph[prop] = LGraph[prop];
-}
+});
 
 module.exports = CoSEGraph;

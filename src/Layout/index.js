@@ -78,18 +78,16 @@ var defaults = {
 
 function extend(defaults, options) {
   var obj = {};
-
-  for (var i in defaults) {
+  Object.keys(defaults).forEach(function(i) {
     obj[i] = defaults[i];
-  }
+  });
 
-  for (var i in options) {
+  Object.keys(options).forEach(function(i) {
     obj[i] = options[i];
-  }
+  });
 
   return obj;
 }
-;
 
 _CoSELayout.layout = new CoSELayout();
 function _CoSELayout(options) {
@@ -117,7 +115,7 @@ _CoSELayout.getUserOptions = function (options) {
     CoSEConstants.DEFAULT_COMPOUND_GRAVITY_STRENGTH = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_STRENGTH = options.gravityCompound;
   if(options.gravityRangeCompound != null)
     CoSEConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = options.gravityRangeCompound;
-  
+
   CoSEConstants.DEFAULT_INCREMENTAL = FDLayoutConstants.DEFAULT_INCREMENTAL = LayoutConstants.DEFAULT_INCREMENTAL =
           !(options.randomize);
   CoSEConstants.ANIMATE = FDLayoutConstants.ANIMATE = options.animate;
@@ -211,7 +209,7 @@ _CoSELayout.prototype.run = function () {
 
   //Map the ids of nodes in the list to check if a node is in the list in constant time
   var nodeIdMap = {};
-  
+
   //Fill the map in linear time
   for(var i = 0; i < nodes.length; i++){
     nodeIdMap[nodes[i].id()] = true;
@@ -222,10 +220,10 @@ _CoSELayout.prototype.run = function () {
     var lnode = lnodes[i];
     var nodeId = lnode.id;
     var cyNode = this.options.cy.getElementById(nodeId);
-    
+
     var parentId = cyNode.data('parent');
     parentId = nodeIdMap[parentId]?parentId:undefined;
-    
+
     var w = lnode.rect.width;
     var posX = lnode.rect.x;
     var posY = lnode.rect.y;
@@ -357,7 +355,7 @@ _CoSELayout.prototype.run = function () {
     layout_t.runLayout();
 
     //fill the result map
-    for (var id in idToLNode_t) {
+    Object.keys(idToLNode_t).forEach(function(id) {
       var lNode = idToLNode_t[id];
       var rect = lNode.rect;
       result[id] = {
@@ -367,14 +365,14 @@ _CoSELayout.prototype.run = function () {
         w: rect.width,
         h: rect.height
       };
-    }
+    });
     var seeds = {};
     seeds.rsSeed = RandomSeed.seed;
     seeds.rsX = RandomSeed.x;
     var pass = {
       result: result,
       seeds: seeds
-    }
+    };
     //return the result map to pass it to the then function as parameter
     return pass;
   }).then(function (pass) {
@@ -383,14 +381,15 @@ _CoSELayout.prototype.run = function () {
     RandomSeed.seed = seeds.rsSeed;
     RandomSeed.x = seeds.rsX;
     //refresh the lnode positions and sizes by using result map
-    for (var id in result) {
+    Object.keys(result).forEach(function(id) {
       var lNode = _CoSELayout.idToLNode[id];
       var node = result[id];
       lNode.rect.x = node.x;
       lNode.rect.y = node.y;
       lNode.rect.width = node.w;
       lNode.rect.height = node.h;
-    }
+    });
+
     if (after.options.tile) {
       // Repopulate members
       after.repopulateZeroDegreeMembers(tiledZeroDegreeNodes);
@@ -413,21 +412,21 @@ _CoSELayout.prototype.run = function () {
     }
     else {
       after.options.eles.nodes().positions(getPositions);
-      
+
       if (after.options.fit)
         after.options.cy.fit(after.options.eles.nodes(), after.options.padding);
-    
+
       //trigger layoutready when each node has had its position set at least once
       if (!ready) {
         after.cy.one('layoutready', after.options.ready);
         after.cy.trigger('layoutready');
       }
-      
+
       // trigger layoutstop when the layout stops (e.g. finishes)
       after.cy.one('layoutstop', after.options.stop);
       after.cy.trigger('layoutstop');
     }
-    
+
     t1.stop();
     after.options.eles.nodes().removeData('dummy_parent_id');
   });
@@ -557,23 +556,23 @@ _CoSELayout.prototype.getNodeDegreeWithChildren = function (node) {
 };
 
 _CoSELayout.prototype.groupZeroDegreeMembers = function () {
-  // array of [parent_id x oneDegreeNode_id] 
+  // array of [parent_id x oneDegreeNode_id]
   var tempMemberGroups = [];
   var memberGroups = [];
   var self = this;
   var parentMap = {};
-  
+
   for(var i = 0; i < this.options.eles.nodes().length; i++){
     parentMap[this.options.eles.nodes()[i].id()] = true;
   }
-  
+
   // Find all zero degree nodes which aren't covered by a compound
   var zeroDegree = this.options.eles.nodes().filter(function (i, ele) {
     var pid = ele.data('parent');
     if(pid != undefined && !parentMap[pid]){
       pid = undefined;
     }
-    
+
     if (self.getNodeDegreeWithChildren(ele) == 0 && (pid == undefined || (pid != undefined && !self.getToBeTiled(ele.parent()[0]))))
       return true;
     else
@@ -585,7 +584,7 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
   {
     var node = zeroDegree[i];
     var p_id = node.parent().id();
-    
+
     if(p_id != undefined && !parentMap[p_id]){
       p_id = undefined;
     }
@@ -597,7 +596,7 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
   }
 
   // If there are at least two nodes at a level, create a dummy compound for them
-  for (var p_id in tempMemberGroups) {
+  Object.keys(tempMemberGroups).forEach(function(p_id) {
     if (tempMemberGroups[p_id].length > 1) {
       var dummyCompoundId = "DummyCompound_" + p_id;
       memberGroups[dummyCompoundId] = tempMemberGroups[p_id];
@@ -634,7 +633,7 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
         }
       }
     }
-  }
+  });
 
   return memberGroups;
 };
@@ -672,7 +671,7 @@ _CoSELayout.prototype.clearCompounds = function (options) {
 
     childGraphMap[compoundOrder[i].id()] = compoundOrder[i].children();
 
-    // Remove children of compounds 
+    // Remove children of compounds
     lCompoundNode.child = null;
   }
 
@@ -684,8 +683,7 @@ _CoSELayout.prototype.clearCompounds = function (options) {
 
 _CoSELayout.prototype.clearZeroDegreeMembers = function (memberGroups) {
   var tiledZeroDegreePack = [];
-
-  for (var id in memberGroups) {
+  Object.keys(memberGroups).forEach(function(id) {
     var compoundNode = _CoSELayout.idToLNode[id];
 
     tiledZeroDegreePack[id] = this.tileNodes(memberGroups[id]);
@@ -693,7 +691,7 @@ _CoSELayout.prototype.clearZeroDegreeMembers = function (memberGroups) {
     // Set the width and height of the dummy compound as calculated
     compoundNode.rect.width = tiledZeroDegreePack[id].width;
     compoundNode.rect.height = tiledZeroDegreePack[id].height;
-  }
+  });
   return tiledZeroDegreePack;
 };
 
@@ -709,12 +707,12 @@ _CoSELayout.prototype.repopulateCompounds = function (tiledMemberPack) {
 };
 
 _CoSELayout.prototype.repopulateZeroDegreeMembers = function (tiledPack) {
-  for (var i in tiledPack) {
+  Object.keys(tiledPack).forEach(function(i) {
     var compound = this.cy.getElementById(i);
     var compoundNode = _CoSELayout.idToLNode[i];
     var horizontalMargin = parseInt(compound.css('padding-left'));
     var verticalMargin = parseInt(compound.css('padding-top'));
-    
+
     // Adjust the positions of nodes wrt its compound
     this.adjustLocations(tiledPack[i], compoundNode.rect.x, compoundNode.rect.y, horizontalMargin, verticalMargin);
 
@@ -725,11 +723,11 @@ _CoSELayout.prototype.repopulateZeroDegreeMembers = function (tiledPack) {
 
     // Remove the dummy compound
     compound.remove();
-  }
+  });
 };
 
 /**
- * This method places each zero degree member wrt given (x,y) coordinates (top left). 
+ * This method places each zero degree member wrt given (x,y) coordinates (top left).
  */
 _CoSELayout.prototype.adjustLocations = function (organization, x, y, compoundHorizontalMargin, compoundVerticalMargin) {
   x += compoundHorizontalMargin;
@@ -762,7 +760,7 @@ _CoSELayout.prototype.adjustLocations = function (organization, x, y, compoundHo
 _CoSELayout.prototype.tileCompoundMembers = function (childGraphMap) {
   var tiledMemberPack = [];
 
-  for (var id in childGraphMap) {
+  Object.keys(childGraphMap).forEach(function(id) {
     // Access layoutInfo nodes to set the width and height of compounds
     var compoundNode = _CoSELayout.idToLNode[id];
 
@@ -770,7 +768,7 @@ _CoSELayout.prototype.tileCompoundMembers = function (childGraphMap) {
 
     compoundNode.rect.width = tiledMemberPack[id].width + 20;
     compoundNode.rect.height = tiledMemberPack[id].height + 20;
-  }
+  });
 
   return tiledMemberPack;
 };
@@ -819,13 +817,13 @@ _CoSELayout.prototype.tileNodes = function (nodes) {
   // Create the organization -> tile members
   for (var i = 0; i < layoutNodes.length; i++) {
     var lNode = layoutNodes[i];
-    
+
     var cyNode = this.cy.getElementById(lNode.id).parent()[0];
     var minWidth = 0;
     if(cyNode){
       minWidth = parseInt(cyNode.css('padding-left')) + parseInt(cyNode.css('padding-right'));
     }
-    
+
     if (organization.rows.length == 0) {
       this.insertNodeToRow(organization, lNode, 0, minWidth);
     }
@@ -1019,7 +1017,7 @@ _CoSELayout.prototype.stop = function () {
   if( this.thread ){
     this.thread.stop();
   }
-  
+
   this.trigger('layoutstop');
 
   return this; // chaining

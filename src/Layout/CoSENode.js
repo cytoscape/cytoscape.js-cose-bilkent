@@ -6,9 +6,9 @@ function CoSENode(gm, loc, size, vNode) {
 
 
 CoSENode.prototype = Object.create(FDLayoutNode.prototype);
-for (var prop in FDLayoutNode) {
+Object.keys(FDLayoutNode).forEach(function(prop) {
   CoSENode[prop] = FDLayoutNode[prop];
-}
+});
 
 CoSENode.prototype.move = function ()
 {

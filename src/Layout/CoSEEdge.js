@@ -5,8 +5,8 @@ function CoSEEdge(source, target, vEdge) {
 }
 
 CoSEEdge.prototype = Object.create(FDLayoutEdge.prototype);
-for (var prop in FDLayoutEdge) {
+Object.keys(FDLayoutEdge).forEach(function(prop) {
   CoSEEdge[prop] = FDLayoutEdge[prop];
-}
+});
 
 module.exports = CoSEEdge
