@@ -616,7 +616,7 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
 
         for (var i = 0; i < tempMemberGroups[p_id].length; i++) {
           if (i == 0) {
-            dummy.data('tempchildren', []);
+            dummy.scratch('tempchildren', []);
           }
           var node = tempMemberGroups[p_id][i];
           node.scratch('dummy_parent_id', dummyCompoundId);
@@ -718,7 +718,7 @@ _CoSELayout.prototype.repopulateZeroDegreeMembers = function (tiledPack) {
     // Adjust the positions of nodes wrt its compound
     this.adjustLocations(tiledPack[i], compoundNode.rect.x, compoundNode.rect.y, horizontalMargin, verticalMargin);
 
-    var tempchildren = compound.data('tempchildren');
+    var tempchildren = compound.scratch('tempchildren');
     for (var i = 0; i < tempchildren.length; i++) {
       tempchildren[i].remove();
     }
