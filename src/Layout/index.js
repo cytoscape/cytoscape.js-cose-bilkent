@@ -230,7 +230,7 @@ _CoSELayout.prototype.run = function () {
     var posX = lnode.rect.x;
     var posY = lnode.rect.y;
     var h = lnode.rect.height;
-    var dummy_parent_id = cyNode.data('dummy_parent_id');
+    var dummy_parent_id = cyNode.scratch('dummy_parent_id');
 
     pData[ 'nodes' ].push({
       id: nodeId,
@@ -429,7 +429,7 @@ _CoSELayout.prototype.run = function () {
     }
     
     t1.stop();
-    after.options.eles.nodes().removeData('dummy_parent_id');
+    after.options.eles.nodes().removeScratch('dummy_parent_id');
   });
 
   t1.on('message', function (e) {
@@ -441,10 +441,10 @@ _CoSELayout.prototype.run = function () {
     var pData = e.message.pData;
     if (pData != null) {
       after.options.eles.nodes().positions(function (i, ele) {
-        if (ele.data('dummy_parent_id')) {
+        if (ele.scratch('dummy_parent_id')) {
           return {
-            x: pData[ele.data('dummy_parent_id')].x,
-            y: pData[ele.data('dummy_parent_id')].y
+            x: pData[ele.scratch('dummy_parent_id')].x,
+            y: pData[ele.scratch('dummy_parent_id')].y
           };
         }
         var theId = ele.data('id');
@@ -619,7 +619,7 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
             dummy.data('tempchildren', []);
           }
           var node = tempMemberGroups[p_id][i];
-          node.data('dummy_parent_id', dummyCompoundId);
+          node.scratch('dummy_parent_id', dummyCompoundId);
           this.options.cy.add({
             group: "nodes",
             data: {parent: dummyCompoundId, width: node.width(), height: node.height()
@@ -630,7 +630,7 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
           tempchild.css('width', tempchild.data('width'));
           tempchild.css('height', tempchild.data('height'));
           tempchild.width();
-          dummy.data('tempchildren').push(tempchild);
+          dummy.scratch('tempchildren').push(tempchild);
         }
       }
     }
@@ -796,7 +796,7 @@ _CoSELayout.prototype.tileNodes = function (nodes) {
     var node = nodes[i];
     var lNode = _CoSELayout.idToLNode[node.id()];
 
-    if (!node.data('dummy_parent_id')) {
+    if (!node.scratch('dummy_parent_id')) {
       var owner = lNode.owner;
       owner.remove(lNode);
 
