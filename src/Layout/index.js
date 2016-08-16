@@ -230,7 +230,9 @@ _CoSELayout.prototype.run = function () {
     var posX = lnode.rect.x;
     var posY = lnode.rect.y;
     var h = lnode.rect.height;
-    var dummy_parent_id = cyNode.scratch('dummy_parent_id');
+    var dummy_parent_id = null;
+    if(cyNode.scratch('coseBilkent') && cyNode.scratch('coseBilkent').dummy_parent_id)
+      dummy_parent_id = cyNode.scratch('coseBilkent').dummy_parent_id;
 
     pData[ 'nodes' ].push({
       id: nodeId,
@@ -429,7 +431,7 @@ _CoSELayout.prototype.run = function () {
     }
     
     t1.stop();
-    after.options.eles.nodes().removeScratch('dummy_parent_id');
+    after.options.eles.nodes().removeScratch('coseBilkent');
   });
 
   t1.on('message', function (e) {
@@ -441,10 +443,11 @@ _CoSELayout.prototype.run = function () {
     var pData = e.message.pData;
     if (pData != null) {
       after.options.eles.nodes().positions(function (i, ele) {
-        if (ele.scratch('dummy_parent_id')) {
+        if (ele.scratch('coseBilkent') && ele.scratch('coseBilkent').dummy_parent_id) {
+          var dummyParent = ele.scratch('coseBilkent').dummy_parent_id;
           return {
-            x: pData[ele.scratch('dummy_parent_id')].x,
-            y: pData[ele.scratch('dummy_parent_id')].y
+            x: dummyParent.x,
+            y: dummyParent.y
           };
         }
         var theId = ele.data('id');
@@ -616,10 +619,15 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
 
         for (var i = 0; i < tempMemberGroups[p_id].length; i++) {
           if (i == 0) {
-            dummy.scratch('tempchildren', []);
+            dummy.scratch('coseBilkent', {tempchildren: []});
           }
           var node = tempMemberGroups[p_id][i];
-          node.scratch('dummy_parent_id', dummyCompoundId);
+          var scratchObj = node.scratch('coseBilkent');
+          if(!scratchObj) {
+              scratchObj = {};
+              node.scratch('coseBilkent', scratchObj); 
+          }
+          scatchObj['dummy_parent_id'] = dummyCompoundId;
           this.options.cy.add({
             group: "nodes",
             data: {parent: dummyCompoundId, width: node.width(), height: node.height()
@@ -630,7 +638,7 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
           tempchild.css('width', tempchild.data('width'));
           tempchild.css('height', tempchild.data('height'));
           tempchild.width();
-          dummy.scratch('tempchildren').push(tempchild);
+          dummy.scratch('coseBilkent').tempchildren.push(tempchild);
         }
       }
     }
@@ -718,7 +726,7 @@ _CoSELayout.prototype.repopulateZeroDegreeMembers = function (tiledPack) {
     // Adjust the positions of nodes wrt its compound
     this.adjustLocations(tiledPack[i], compoundNode.rect.x, compoundNode.rect.y, horizontalMargin, verticalMargin);
 
-    var tempchildren = compound.scratch('tempchildren');
+    var tempchildren = compound.scratch('coseBilkent').tempchildren;
     for (var i = 0; i < tempchildren.length; i++) {
       tempchildren[i].remove();
     }
@@ -796,7 +804,7 @@ _CoSELayout.prototype.tileNodes = function (nodes) {
     var node = nodes[i];
     var lNode = _CoSELayout.idToLNode[node.id()];
 
-    if (!node.scratch('dummy_parent_id')) {
+    if (!node.scratch('coseBilkent')  || !node.scratch('coseBilkent').dummy_parent_id) {
       var owner = lNode.owner;
       owner.remove(lNode);
 
