@@ -627,7 +627,7 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
               scratchObj = {};
               node.scratch('coseBilkent', scratchObj); 
           }
-          scatchObj['dummy_parent_id'] = dummyCompoundId;
+          scratchObj['dummy_parent_id'] = dummyCompoundId;
           this.options.cy.add({
             group: "nodes",
             data: {parent: dummyCompoundId, width: node.width(), height: node.height()
