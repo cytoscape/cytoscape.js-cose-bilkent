@@ -23,19 +23,24 @@
   },
   "homepage": "https://github.com/cytoscape/cytoscape.js-cose-bilkent",
   "devDependencies": {
-    "browserify": "^11.2.0",
+    "babel-preset-es2015": "^6.16.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.0",
     "gulp": "^3.9.0",
     "gulp-derequire": "^2.1.0",
     "gulp-jshint": "^1.11.2",
+    "gulp-livereload": "^3.8.1",
     "gulp-prompt": "^0.1.2",
     "gulp-replace": "^0.5.4",
     "gulp-shell": "^0.5.0",
-    "gulp-util": "^3.0.6",
+    "gulp-util": "^3.0.7",
+    "http-server": "^0.9.0",
     "jshint-stylish": "^2.0.1",
-    "node-notifier": "^4.3.1",
+    "node-notifier": "^4.6.1",
     "run-sequence": "^1.1.4",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0"
   },
   "peerDependencies": {
     "cytoscape": "^2.4.0"
