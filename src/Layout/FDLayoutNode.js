@@ -26,9 +26,9 @@ function FDLayoutNode(gm, loc, size, vNode) {
 
 FDLayoutNode.prototype = Object.create(LNode.prototype);
 
-for (var prop in LNode) {
+Object.keys(LNode).forEach(function(prop) {
   FDLayoutNode[prop] = LNode[prop];
-}
+});
 
 FDLayoutNode.prototype.setGridCoordinates = function (_startX, _finishX, _startY, _finishY)
 {

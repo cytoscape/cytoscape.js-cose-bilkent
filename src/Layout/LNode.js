@@ -27,9 +27,9 @@ function LNode(gm, loc, size, vNode) {
 }
 
 LNode.prototype = Object.create(LGraphObject.prototype);
-for (var prop in LGraphObject) {
+Object.keys(LGraphObject).forEach(function(prop) {
   LNode[prop] = LGraphObject[prop];
-}
+});
 
 LNode.prototype.getEdges = function ()
 {
@@ -133,11 +133,8 @@ LNode.prototype.moveBy = function (dx, dy)
 LNode.prototype.getEdgeListToNode = function (to)
 {
   var edgeList = [];
-  var edge;
 
-  for (var obj in this.edges)
-  {
-    edge = obj;
+  this.edges.forEach(function(edge) {
 
     if (edge.target == to)
     {
@@ -146,7 +143,7 @@ LNode.prototype.getEdgeListToNode = function (to)
 
       edgeList.push(edge);
     }
-  }
+  });
 
   return edgeList;
 };
@@ -154,11 +151,8 @@ LNode.prototype.getEdgeListToNode = function (to)
 LNode.prototype.getEdgesBetween = function (other)
 {
   var edgeList = [];
-  var edge;
 
-  for (var obj in this.edges)
-  {
-    edge = this.edges[obj];
+  this.edges.forEach(function(edge) {
 
     if (!(edge.source == this || edge.target == this))
       throw "Incorrect edge source and/or target";
@@ -167,7 +161,7 @@ LNode.prototype.getEdgesBetween = function (other)
     {
       edgeList.push(edge);
     }
-  }
+  });
 
   return edgeList;
 };
@@ -175,12 +169,8 @@ LNode.prototype.getEdgesBetween = function (other)
 LNode.prototype.getNeighborsList = function ()
 {
   var neighbors = new HashSet();
-  var edge;
 
-  for (var obj in this.edges)
-  {
-    edge = this.edges[obj];
-
+  this.edges.forEach(function(edge) {
     if (edge.source == this)
     {
       neighbors.add(edge.target);
@@ -191,7 +181,7 @@ LNode.prototype.getNeighborsList = function ()
         throw "Incorrect incidency!";
       neighbors.add(edge.source);
     }
-  }
+  });
 
   return neighbors;
 };

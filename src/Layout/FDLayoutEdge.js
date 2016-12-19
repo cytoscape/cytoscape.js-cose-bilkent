@@ -8,8 +8,8 @@ function FDLayoutEdge(source, target, vEdge) {
 
 FDLayoutEdge.prototype = Object.create(LEdge.prototype);
 
-for (var prop in LEdge) {
+Object.keys(LEdge).forEach(function(prop) {
   FDLayoutEdge[prop] = LEdge[prop];
-}
+});
 
 module.exports = FDLayoutEdge;

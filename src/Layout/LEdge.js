@@ -12,9 +12,9 @@ function LEdge(source, target, vEdge) {
 
 LEdge.prototype = Object.create(LGraphObject.prototype);
 
-for (var prop in LGraphObject) {
+Object.keys(LGraphObject).forEach(function(prop) {
   LEdge[prop] = LGraphObject[prop];
-}
+});
 
 LEdge.prototype.getSource = function ()
 {

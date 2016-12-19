@@ -22,9 +22,9 @@ function FDLayout() {
 
 FDLayout.prototype = Object.create(Layout.prototype);
 
-for (var prop in Layout) {
+Object.keys(Layout).forEach(function(prop) {
   FDLayout[prop] = Layout[prop];
-}
+});
 
 FDLayout.prototype.initParameters = function () {
   Layout.prototype.initParameters.call(this, arguments);

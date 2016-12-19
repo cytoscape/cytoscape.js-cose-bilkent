@@ -10,9 +10,9 @@ function CoSELayout() {
 
 CoSELayout.prototype = Object.create(FDLayout.prototype);
 
-for (var prop in FDLayout) {
+Object.keys(FDLayout).forEach(function(prop) {
   CoSELayout[prop] = FDLayout[prop];
-}
+});
 
 CoSELayout.prototype.newGraphManager = function () {
   var gm = new CoSEGraphManager(this);
