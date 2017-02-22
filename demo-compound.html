@@ -16,7 +16,6 @@
       });
     </script>
 
-    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
     <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
 
     <!-- for testing with local version of cytoscape.js -->
@@ -46,7 +45,7 @@
     </style>
 
     <script>
-      $(function(){
+      document.addEventListener('DOMContentLoaded', function(){
 
         var cy = window.cy = cytoscape({
           container: document.getElementById('cy'),
