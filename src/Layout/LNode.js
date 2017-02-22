@@ -1,6 +1,9 @@
 var LGraphObject = require('./LGraphObject');
 var Integer = require('./Integer');
 var RectangleD = require('./RectangleD');
+var LayoutConstants = require('./LayoutConstants');
+var RandomSeed = require('./RandomSeed');
+var PointD = require('./PointD');
 
 function LNode(gm, loc, size, vNode) {
   //Alternative constructor 1 : LNode(LGraphManager gm, Point loc, Dimension size, Object vNode)

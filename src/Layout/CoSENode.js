@@ -1,4 +1,5 @@
 var FDLayoutNode = require('./FDLayoutNode');
+var IMath = require('./IMath');
 
 function CoSENode(gm, loc, size, vNode) {
   FDLayoutNode.call(this, gm, loc, size, vNode);

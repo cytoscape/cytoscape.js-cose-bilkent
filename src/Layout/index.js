@@ -1,7 +1,5 @@
 'use strict';
 
-var Thread;
-
 var DimensionD = require('./DimensionD');
 var HashMap = require('./HashMap');
 var HashSet = require('./HashSet');
@@ -117,7 +115,7 @@ _CoSELayout.getUserOptions = function (options) {
     CoSEConstants.DEFAULT_COMPOUND_GRAVITY_STRENGTH = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_STRENGTH = options.gravityCompound;
   if(options.gravityRangeCompound != null)
     CoSEConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = options.gravityRangeCompound;
-  
+
   CoSEConstants.DEFAULT_INCREMENTAL = FDLayoutConstants.DEFAULT_INCREMENTAL = LayoutConstants.DEFAULT_INCREMENTAL =
           !(options.randomize);
   CoSEConstants.ANIMATE = FDLayoutConstants.ANIMATE = options.animate;
@@ -163,43 +161,6 @@ _CoSELayout.prototype.run = function () {
     e1.id = edge.id();
   }
 
-
-  var t1 = layout.thread;
-
-  if (!t1 || t1.stopped()) { // try to reuse threads
-    t1 = layout.thread = Thread();
-
-    t1.require(DimensionD, 'DimensionD');
-    t1.require(HashMap, 'HashMap');
-    t1.require(HashSet, 'HashSet');
-    t1.require(IGeometry, 'IGeometry');
-    t1.require(IMath, 'IMath');
-    t1.require(Integer, 'Integer');
-    t1.require(Point, 'Point');
-    t1.require(PointD, 'PointD');
-    t1.require(RandomSeed, 'RandomSeed');
-    t1.require(RectangleD, 'RectangleD');
-    t1.require(Transform, 'Transform');
-    t1.require(UniqueIDGeneretor, 'UniqueIDGeneretor');
-    t1.require(LGraphObject, 'LGraphObject');
-    t1.require(LGraph, 'LGraph');
-    t1.require(LEdge, 'LEdge');
-    t1.require(LGraphManager, 'LGraphManager');
-    t1.require(LNode, 'LNode');
-    t1.require(Layout, 'Layout');
-    t1.require(LayoutConstants, 'LayoutConstants');
-    t1.require(FDLayout, 'FDLayout');
-    t1.require(FDLayoutConstants, 'FDLayoutConstants');
-    t1.require(FDLayoutEdge, 'FDLayoutEdge');
-    t1.require(FDLayoutNode, 'FDLayoutNode');
-    t1.require(CoSEConstants, 'CoSEConstants');
-    t1.require(CoSEEdge, 'CoSEEdge');
-    t1.require(CoSEGraph, 'CoSEGraph');
-    t1.require(CoSEGraphManager, 'CoSEGraphManager');
-    t1.require(CoSELayout, 'CoSELayout');
-    t1.require(CoSENode, 'CoSENode');
-  }
-
   var nodes = this.options.eles.nodes();
   var edges = this.options.eles.edges();
 
@@ -211,7 +172,7 @@ _CoSELayout.prototype.run = function () {
 
   //Map the ids of nodes in the list to check if a node is in the list in constant time
   var nodeIdMap = {};
-  
+
   //Fill the map in linear time
   for(var i = 0; i < nodes.length; i++){
     nodeIdMap[nodes[i].id()] = true;
@@ -222,10 +183,10 @@ _CoSELayout.prototype.run = function () {
     var lnode = lnodes[i];
     var nodeId = lnode.id;
     var cyNode = this.options.cy.getElementById(nodeId);
-    
+
     var parentId = cyNode.data('parent');
     parentId = nodeIdMap[parentId]?parentId:undefined;
-    
+
     var w = lnode.rect.width;
     var posX = lnode.rect.x;
     var posY = lnode.rect.y;
@@ -262,15 +223,20 @@ _CoSELayout.prototype.run = function () {
 
   var ready = false;
 
-  t1.pass(pData).run(function (pData) {
-    var log = function (msg) {
-      broadcast({log: msg});
-    };
+  var logListeners = [];
 
-    log("start thread");
+  var log = function (msg) {
+    logListeners.forEach(function( l ){
+      l({ type: 'message', log: msg });
+    });
+  };
 
-    //the layout will be run in the thread and the results are to be passed
-    //to the main thread with the result map
+  var onLog = function( cb ){
+    logListeners.push( cb );
+  };
+
+  var run = (function (pData) {
+    // the layout will be run and the results are to be returned with the result map
     var layout_t = new CoSELayout();
     var gm_t = layout_t.newGraphManager();
     var ngraph = gm_t.layout.newGraph();
@@ -280,16 +246,15 @@ _CoSELayout.prototype.run = function () {
     gm_t.setRootGraph(root);
     var root_t = gm_t.rootGraph;
 
-    //maps for inner usage of the thread
+    //maps for inner usage
     var orphans_t = [];
     var idToLNode_t = {};
     var childrenMap = {};
 
     //A map of node id to corresponding node position and sizes
-    //it is to be returned at the end of the thread function
+    //it is to be returned at the end of the function
     var result = {};
 
-    //this function is similar to processChildrenList function in the main thread
     //it is to process the nodes in correct order recursively
     var processNodes = function (parent, children) {
       var size = children.length;
@@ -355,7 +320,7 @@ _CoSELayout.prototype.run = function () {
       var e1 = gm_t.add(layout_t.newEdge(), sourceNode, targetNode);
     }
 
-    //run the layout crated in this thread
+    //run the layout
     layout_t.runLayout();
 
     //fill the result map
@@ -373,13 +338,17 @@ _CoSELayout.prototype.run = function () {
     var seeds = {};
     seeds.rsSeed = RandomSeed.seed;
     seeds.rsX = RandomSeed.x;
+
     var pass = {
       result: result,
       seeds: seeds
-    }
+    };
+
     //return the result map to pass it to the then function as parameter
     return pass;
-  }).then(function (pass) {
+  });
+
+  var done = (function (pass) {
     var result = pass.result;
     var seeds = pass.seeds;
     RandomSeed.seed = seeds.rsSeed;
@@ -415,29 +384,28 @@ _CoSELayout.prototype.run = function () {
     }
     else {
       after.options.eles.nodes().positions(getPositions);
-      
+
       if (after.options.fit)
         after.options.cy.fit(after.options.eles.nodes(), after.options.padding);
-    
+
       //trigger layoutready when each node has had its position set at least once
       if (!ready) {
         after.cy.one('layoutready', after.options.ready);
         after.cy.trigger('layoutready');
       }
-      
+
       // trigger layoutstop when the layout stops (e.g. finishes)
       after.cy.one('layoutstop', after.options.stop);
       after.cy.trigger('layoutstop');
     }
-    
-    t1.stop();
+
     after.options.eles.nodes().removeScratch('coseBilkent');
   });
 
-  t1.on('message', function (e) {
+  onLog(function (e) {
     var logMsg = e.message.log;
     if (logMsg != null) {
-      console.log('Thread log: ' + logMsg);
+      console.log('Log: ' + logMsg);
       return;
     }
     var pData = e.message.pData;
@@ -475,6 +443,8 @@ _CoSELayout.prototype.run = function () {
       return;
     }
   });
+
+  done( run( pData ) );
 
   return this; // chaining
 };
@@ -560,23 +530,23 @@ _CoSELayout.prototype.getNodeDegreeWithChildren = function (node) {
 };
 
 _CoSELayout.prototype.groupZeroDegreeMembers = function () {
-  // array of [parent_id x oneDegreeNode_id] 
+  // array of [parent_id x oneDegreeNode_id]
   var tempMemberGroups = [];
   var memberGroups = [];
   var self = this;
   var parentMap = {};
-  
+
   for(var i = 0; i < this.options.eles.nodes().length; i++){
     parentMap[this.options.eles.nodes()[i].id()] = true;
   }
-  
+
   // Find all zero degree nodes which aren't covered by a compound
   var zeroDegree = this.options.eles.nodes().filter(function (i, ele) {
     var pid = ele.data('parent');
     if(pid != undefined && !parentMap[pid]){
       pid = undefined;
     }
-    
+
     if (self.getNodeDegreeWithChildren(ele) == 0 && (pid == undefined || (pid != undefined && !self.getToBeTiled(ele.parent()[0]))))
       return true;
     else
@@ -588,7 +558,7 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
   {
     var node = zeroDegree[i];
     var p_id = node.parent().id();
-    
+
     if(p_id != undefined && !parentMap[p_id]){
       p_id = undefined;
     }
@@ -625,7 +595,7 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
           var scratchObj = node.scratch('coseBilkent');
           if(!scratchObj) {
               scratchObj = {};
-              node.scratch('coseBilkent', scratchObj); 
+              node.scratch('coseBilkent', scratchObj);
           }
           scratchObj['dummy_parent_id'] = dummyCompoundId;
           this.options.cy.add({
@@ -680,7 +650,7 @@ _CoSELayout.prototype.clearCompounds = function (options) {
 
     childGraphMap[compoundOrder[i].id()] = compoundOrder[i].children();
 
-    // Remove children of compounds 
+    // Remove children of compounds
     lCompoundNode.child = null;
   }
 
@@ -722,7 +692,7 @@ _CoSELayout.prototype.repopulateZeroDegreeMembers = function (tiledPack) {
     var compoundNode = _CoSELayout.idToLNode[i];
     var horizontalMargin = parseInt(compound.css('padding-left'));
     var verticalMargin = parseInt(compound.css('padding-top'));
-    
+
     // Adjust the positions of nodes wrt its compound
     this.adjustLocations(tiledPack[i], compoundNode.rect.x, compoundNode.rect.y, horizontalMargin, verticalMargin);
 
@@ -737,7 +707,7 @@ _CoSELayout.prototype.repopulateZeroDegreeMembers = function (tiledPack) {
 };
 
 /**
- * This method places each zero degree member wrt given (x,y) coordinates (top left). 
+ * This method places each zero degree member wrt given (x,y) coordinates (top left).
  */
 _CoSELayout.prototype.adjustLocations = function (organization, x, y, compoundHorizontalMargin, compoundVerticalMargin) {
   x += compoundHorizontalMargin;
@@ -827,13 +797,13 @@ _CoSELayout.prototype.tileNodes = function (nodes) {
   // Create the organization -> tile members
   for (var i = 0; i < layoutNodes.length; i++) {
     var lNode = layoutNodes[i];
-    
+
     var cyNode = this.cy.getElementById(lNode.id).parent()[0];
     var minWidth = 0;
     if(cyNode){
       minWidth = parseInt(cyNode.css('padding-left')) + parseInt(cyNode.css('padding-right'));
     }
-    
+
     if (organization.rows.length == 0) {
       this.insertNodeToRow(organization, lNode, 0, minWidth);
     }
@@ -1024,10 +994,6 @@ _CoSELayout.prototype.shiftToLastRow = function (organization) {
 _CoSELayout.prototype.stop = function () {
   this.stopped = true;
 
-  if( this.thread ){
-    this.thread.stop();
-  }
-  
   this.trigger('layoutstop');
 
   return this; // chaining
@@ -1071,7 +1037,5 @@ _CoSELayout.prototype.processChildrenList = function (parent, children) {
 };
 
 module.exports = function get(cytoscape) {
-  Thread = cytoscape.Thread;
-
   return _CoSELayout;
 };

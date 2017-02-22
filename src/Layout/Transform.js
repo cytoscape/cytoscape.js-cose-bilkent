@@ -1,3 +1,5 @@
+var PointD = require('./PointD');
+
 function Transform(x, y) {
   this.lworldOrgX = 0.0;
   this.lworldOrgY = 0.0;

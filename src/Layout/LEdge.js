@@ -1,4 +1,6 @@
 var LGraphObject = require('./LGraphObject');
+var IGeometry = require('./IGeometry');
+var IMath = require('./IMath');
 
 function LEdge(source, target, vEdge) {
   LGraphObject.call(this, vEdge);

@@ -1,6 +1,11 @@
 var LayoutConstants = require('./LayoutConstants');
 var HashMap = require('./HashMap');
 var LGraphManager = require('./LGraphManager');
+var LNode = require('./LNode');
+var LEdge = require('./LEdge');
+var LGraph = require('./LGraph');
+var PointD = require('./PointD');
+var Transform = require('./Transform');
 
 function Layout(isRemoteUse) {
   //Layout Quality: 0:proof, 1:default, 2:draft

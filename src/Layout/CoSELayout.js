@@ -3,6 +3,9 @@ var CoSEGraphManager = require('./CoSEGraphManager');
 var CoSEGraph = require('./CoSEGraph');
 var CoSENode = require('./CoSENode');
 var CoSEEdge = require('./CoSEEdge');
+var CoSEConstants = require('./CoSEConstants');
+var FDLayoutConstants = require('./FDLayoutConstants');
+var LayoutConstants = require('./LayoutConstants');
 
 function CoSELayout() {
   FDLayout.call(this);
