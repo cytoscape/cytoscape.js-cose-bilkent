@@ -6,8 +6,12 @@ var LEdge = require('./LEdge');
 var LGraph = require('./LGraph');
 var PointD = require('./PointD');
 var Transform = require('./Transform');
+var Emitter = require('./Emitter');
+var HashSet = require('./HashSet');
 
 function Layout(isRemoteUse) {
+  Emitter.call( this );
+
   //Layout Quality: 0:proof, 1:default, 2:draft
   this.layoutQuality = LayoutConstants.DEFAULT_QUALITY;
   //Whether layout should create bendpoints as needed or not
@@ -46,6 +50,8 @@ function Layout(isRemoteUse) {
 }
 
 Layout.RANDOM_SEED = 1;
+
+Layout.prototype = Object.create( Emitter.prototype );
 
 Layout.prototype.getGraphManager = function () {
   return this.graphManager;

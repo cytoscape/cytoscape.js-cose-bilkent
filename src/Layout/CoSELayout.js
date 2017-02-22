@@ -155,7 +155,7 @@ CoSELayout.prototype.runSpringEmbedder = function () {
           h: rect.height
         };
       }
-      broadcast({pData: pData});
+      this.emit('iterate', pData);
     }
   }
   while (this.totalIterations < this.maxIterations);

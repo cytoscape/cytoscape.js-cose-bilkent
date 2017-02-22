@@ -62,6 +62,8 @@ var defaults = {
   tile: true,
   // Type of layout animation. The option set is {'during', 'end', false}
   animate: 'end',
+  // Duration for animate:end
+  animationDuration: 500,
   // Represents the amount of the vertical space to put between the zero degree members during the tiling operation(can also be a function)
   tilingPaddingVertical: 10,
   // Represents the amount of the horizontal space to put between the zero degree members during the tiling operation(can also be a function)
@@ -223,21 +225,10 @@ _CoSELayout.prototype.run = function () {
 
   var ready = false;
 
-  var logListeners = [];
-
-  var log = function (msg) {
-    logListeners.forEach(function( l ){
-      l({ type: 'message', log: msg });
-    });
-  };
-
-  var onLog = function( cb ){
-    logListeners.push( cb );
-  };
+  var layout_t = new CoSELayout();
 
   var run = (function (pData) {
     // the layout will be run and the results are to be returned with the result map
-    var layout_t = new CoSELayout();
     var gm_t = layout_t.newGraphManager();
     var ngraph = gm_t.layout.newGraph();
     var nnode = gm_t.layout.newNode(null);
@@ -402,14 +393,8 @@ _CoSELayout.prototype.run = function () {
     after.options.eles.nodes().removeScratch('coseBilkent');
   });
 
-  onLog(function (e) {
-    var logMsg = e.message.log;
-    if (logMsg != null) {
-      console.log('Log: ' + logMsg);
-      return;
-    }
-    var pData = e.message.pData;
-    if (pData != null) {
+  layout_t.addListener('iterate', function (pData) {
+    if (pData != null && after.options.animate && after.options.animate !== 'end') {
       after.options.eles.nodes().positions(function (i, ele) {
         if (ele.scratch('coseBilkent') && ele.scratch('coseBilkent').dummy_parent_id) {
           var dummyParent = ele.scratch('coseBilkent').dummy_parent_id;
