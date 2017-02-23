@@ -13,4 +13,8 @@ if( typeof cytoscape !== 'undefined' ){ // expose to global cytoscape (i.e. wind
   register( cytoscape );
 }
 
+if( typeof define !== 'undefined' && define.amd ){
+  define( [], register );
+}
+
 module.exports = register;
