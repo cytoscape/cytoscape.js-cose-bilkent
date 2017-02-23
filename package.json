@@ -2,10 +2,7 @@
   "name": "cytoscape-cose-bilkent",
   "version": "1.4.0",
   "description": "The CoSE layout for Cytoscape.js by Bilkent",
-  "main": "cytoscape-cose-bilkent.js",
-  "spm": {
-    "main": "cytoscape-cose-bilkent.js"
-  },
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

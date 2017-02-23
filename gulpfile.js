@@ -70,7 +70,7 @@ var bundle = function( b ){
 };
 
 gulp.task('build', function(){
-  return bundle( transform( getBrowserified() ) )
+  return bundle( transform( getBrowserified({ fullPaths: false }) ) )
     .pipe( gulp.dest('./') )
   ;
 });
