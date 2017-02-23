@@ -1,6 +1,6 @@
 {
   "name": "cytoscape-cose-bilkent",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "The CoSE layout for Cytoscape.js by Bilkent",
   "main": "src/index.js",
   "scripts": {
