@@ -360,7 +360,10 @@ _CoSELayout.prototype.run = function () {
       after.options.eles.nodes().updateCompoundBounds();
     }
 
-    var getPositions = function(i ,ele){
+    var getPositions = function(ele, i){
+      if(typeof ele === "number") {
+        ele = i;
+      }
       var theId = ele.data('id');
       var lNode = _CoSELayout.idToLNode[theId];
 
@@ -440,7 +443,10 @@ _CoSELayout.getTopMostNodes = function(nodes) {
   for (var i = 0; i < nodes.length; i++) {
       nodesMap[nodes[i].id()] = true;
   }
-  var roots = nodes.filter(function (i, ele) {
+  var roots = nodes.filter(function (ele, i) {
+      if(typeof ele === "number") {
+        ele = i;
+      }
       var parent = ele.parent()[0];
       while(parent != null){
         if(nodesMap[parent.id()]){
@@ -494,7 +500,10 @@ _CoSELayout.prototype.getToBeTiled = function (node) {
 
 _CoSELayout.prototype.getNodeDegree = function (node) {
   var id = node.id();
-  var edges = this.options.eles.edges().filter(function (i, ele) {
+  var edges = this.options.eles.edges().filter(function (ele, i) {
+    if(typeof ele === "number") {
+      ele = i;
+    }
     var source = ele.data('source');
     var target = ele.data('target');
     if (source != target && (source == id || target == id)) {
@@ -526,7 +535,10 @@ _CoSELayout.prototype.groupZeroDegreeMembers = function () {
   }
 
   // Find all zero degree nodes which aren't covered by a compound
-  var zeroDegree = this.options.eles.nodes().filter(function (i, ele) {
+  var zeroDegree = this.options.eles.nodes().filter(function (ele, i) {
+    if(typeof ele === "number") {
+      ele = i;
+    }
     var pid = ele.data('parent');
     if(pid != undefined && !parentMap[pid]){
       pid = undefined;
