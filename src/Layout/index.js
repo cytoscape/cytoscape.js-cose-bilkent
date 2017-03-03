@@ -32,6 +32,7 @@ var CoSENode = require('./CoSENode');
 
 _CoSELayout.idToLNode = {};
 _CoSELayout.toBeTiled = {};
+var ready;
 
 var defaults = {
   // Called on `layoutready`
@@ -124,13 +125,10 @@ _CoSELayout.getUserOptions = function (options) {
 };
 
 _CoSELayout.prototype.run = function () {
-  var layout = this;
-
   _CoSELayout.idToLNode = {};
   _CoSELayout.toBeTiled = {};
   _CoSELayout.layout = new CoSELayout();
   this.cy = this.options.cy;
-  var after = this;
 
   this.cy.trigger('layoutstart');
 
@@ -141,6 +139,8 @@ _CoSELayout.prototype.run = function () {
   var edges = this.options.eles.edges();
 
   this.root = gm.addRoot();
+
+  this.addListeners();
 
   if (!this.options.tile) {
     this.processChildrenList(this.root, _CoSELayout.getTopMostNodes(nodes));
@@ -162,243 +162,76 @@ _CoSELayout.prototype.run = function () {
     var e1 = gm.add(_CoSELayout.layout.newEdge(), sourceNode, targetNode);
     e1.id = edge.id();
   }
+  
+   var getPositions = function(ele, i){
+    if(typeof ele === "number") {
+      ele = i;
+    }
+    var theId = ele.data('id');
+    var lNode = _CoSELayout.idToLNode[theId];
 
-  var nodes = this.options.eles.nodes();
-  var edges = this.options.eles.edges();
-
-  // First I need to create the data structure to pass to the worker
-  var pData = {
-    'nodes': [],
-    'edges': []
+    return {
+      x: lNode.getRect().getCenterX(),
+      y: lNode.getRect().getCenterY()
+    };
   };
-
-  //Map the ids of nodes in the list to check if a node is in the list in constant time
-  var nodeIdMap = {};
-
-  //Fill the map in linear time
-  for(var i = 0; i < nodes.length; i++){
-    nodeIdMap[nodes[i].id()] = true;
-  }
-
-  var lnodes = gm.getAllNodes();
-  for (var i = 0; i < lnodes.length; i++) {
-    var lnode = lnodes[i];
-    var nodeId = lnode.id;
-    var cyNode = this.options.cy.getElementById(nodeId);
-
-    var parentId = cyNode.data('parent');
-    parentId = nodeIdMap[parentId]?parentId:undefined;
-
-    var w = lnode.rect.width;
-    var posX = lnode.rect.x;
-    var posY = lnode.rect.y;
-    var h = lnode.rect.height;
-    var dummy_parent_id = null;
-    if(cyNode.scratch('coseBilkent') && cyNode.scratch('coseBilkent').dummy_parent_id)
-      dummy_parent_id = cyNode.scratch('coseBilkent').dummy_parent_id;
-
-    pData[ 'nodes' ].push({
-      id: nodeId,
-      pid: parentId,
-      x: posX,
-      y: posY,
-      width: w,
-      height: h,
-      dummy_parent_id: dummy_parent_id
-    });
-
-  }
-
-  var ledges = gm.getAllEdges();
-  for (var i = 0; i < ledges.length; i++) {
-    var ledge = ledges[i];
-    var edgeId = ledge.id;
-    var cyEdge = this.options.cy.getElementById(edgeId);
-    var srcNodeId = cyEdge.source().id();
-    var tgtNodeId = cyEdge.target().id();
-    pData[ 'edges' ].push({
-      id: edgeId,
-      source: srcNodeId,
-      target: tgtNodeId
-    });
-  }
-
-  var ready = false;
-
-  var layout_t = new CoSELayout();
-
-  var run = (function (pData) {
-    // the layout will be run and the results are to be returned with the result map
-    var gm_t = layout_t.newGraphManager();
-    var ngraph = gm_t.layout.newGraph();
-    var nnode = gm_t.layout.newNode(null);
-    var root = gm_t.add(ngraph, nnode);
-    root.graphManager = gm_t;
-    gm_t.setRootGraph(root);
-    var root_t = gm_t.rootGraph;
-
-    //maps for inner usage
-    var orphans_t = [];
-    var idToLNode_t = {};
-    var childrenMap = {};
-
-    //A map of node id to corresponding node position and sizes
-    //it is to be returned at the end of the function
-    var result = {};
-
-    //it is to process the nodes in correct order recursively
-    var processNodes = function (parent, children) {
-      var size = children.length;
-      for (var i = 0; i < size; i++) {
-        var theChild = children[i];
-        var children_of_children = childrenMap[theChild.id];
-        var theNode;
-
-        if (theChild.width != null
-                && theChild.height != null) {
-          theNode = parent.add(new CoSENode(gm_t,
-                  new PointD(theChild.x, theChild.y),
-                  new DimensionD(parseFloat(theChild.width),
-                          parseFloat(theChild.height))));
-        }
-        else {
-          theNode = parent.add(new CoSENode(gm_t));
-        }
-        theNode.id = theChild.id;
-        idToLNode_t[theChild.id] = theNode;
-
-        if (isNaN(theNode.rect.x)) {
-          theNode.rect.x = 0;
-        }
-
-        if (isNaN(theNode.rect.y)) {
-          theNode.rect.y = 0;
-        }
-
-        if (children_of_children != null && children_of_children.length > 0) {
-          var theNewGraph;
-          theNewGraph = layout_t.getGraphManager().add(layout_t.newGraph(), theNode);
-          theNewGraph.graphManager = gm_t;
-          processNodes(theNewGraph, children_of_children);
-        }
-      }
-    }
-
-    //fill the chidrenMap and orphans_t maps to process the nodes in the correct order
-    var nodes = pData.nodes;
+  
+  _CoSELayout.layout.runLayout();
+  
+  if (this.options.tile) {
+    //fill the toBeTiled map
     for (var i = 0; i < nodes.length; i++) {
-      var theNode = nodes[i];
-      var p_id = theNode.pid;
-      if (p_id != null) {
-        if (childrenMap[p_id] == null) {
-          childrenMap[p_id] = [];
-        }
-        childrenMap[p_id].push(theNode);
-      }
-      else {
-        orphans_t.push(theNode);
-      }
+      this.getToBeTiled(nodes[i]);
     }
 
-    processNodes(root_t, orphans_t);
+    // Repopulate members
+    this.repopulateZeroDegreeMembers(tiledZeroDegreeNodes);
 
-    //handle the edges
-    var edges = pData.edges;
-    for (var i = 0; i < edges.length; i++) {
-      var edge = edges[i];
-      var sourceNode = idToLNode_t[edge.source];
-      var targetNode = idToLNode_t[edge.target];
-      var e1 = gm_t.add(layout_t.newEdge(), sourceNode, targetNode);
+    this.repopulateCompounds(tiledMemberPack);
+
+    cy.nodes().updateCompoundBounds();
+  }
+  
+  /*
+   * If animate option is not 'during' ('end' or false) use layoutPositions().
+   * If it is 'during' layoutPositions() will be one more unintended animation at the end.
+   * Therefore in that case we do things manually.
+   */
+  if(this.options.animate !== 'during'){
+    this.options.eles.nodes().layoutPositions(this, this.options, getPositions);
+  }
+  else {
+    this.options.eles.nodes().positions(getPositions);
+
+    if (this.options.fit)
+      this.options.cy.fit(this.options.eles.nodes(), this.options.padding);
+
+    //trigger layoutready when each node has had its position set at least once
+    if (!ready) {
+      this.cy.one('layoutready', this.options.ready);
+      this.cy.trigger('layoutready');
     }
 
-    //run the layout
-    layout_t.runLayout();
+    // trigger layoutstop when the layout stops (e.g. finishes)
+    this.cy.one('layoutstop', this.options.stop);
+    this.cy.trigger('layoutstop');
+  }
 
-    //fill the result map
-    for (var id in idToLNode_t) {
-      var lNode = idToLNode_t[id];
-      var rect = lNode.rect;
-      result[id] = {
-        id: id,
-        x: rect.x,
-        y: rect.y,
-        w: rect.width,
-        h: rect.height
-      };
-    }
-    var seeds = {};
-    seeds.rsSeed = RandomSeed.seed;
-    seeds.rsX = RandomSeed.x;
+  this.options.eles.nodes().removeScratch('coseBilkent');
 
-    var pass = {
-      result: result,
-      seeds: seeds
-    };
+  ready = false;
 
-    //return the result map to pass it to the then function as parameter
-    return pass;
-  });
+  return this; // chaining
+};
 
-  var done = (function (pass) {
-    var result = pass.result;
-    var seeds = pass.seeds;
-    RandomSeed.seed = seeds.rsSeed;
-    RandomSeed.x = seeds.rsX;
-    //refresh the lnode positions and sizes by using result map
-    for (var id in result) {
-      var lNode = _CoSELayout.idToLNode[id];
-      var node = result[id];
-      lNode.rect.x = node.x;
-      lNode.rect.y = node.y;
-      lNode.rect.width = node.w;
-      lNode.rect.height = node.h;
-    }
-    if (after.options.tile) {
-      // Repopulate members
-      after.repopulateZeroDegreeMembers(tiledZeroDegreeNodes);
-      after.repopulateCompounds(tiledMemberPack);
-      after.options.eles.nodes().updateCompoundBounds();
-    }
-
-    var getPositions = function(ele, i){
-      if(typeof ele === "number") {
-        ele = i;
-      }
-      var theId = ele.data('id');
-      var lNode = _CoSELayout.idToLNode[theId];
-
-      return {
-        x: lNode.getRect().getCenterX(),
-        y: lNode.getRect().getCenterY()
-      };
-    };
-
-    if(after.options.animate !== 'during'){
-      after.options.eles.nodes().layoutPositions(after, after.options, getPositions);
-    }
-    else {
-      after.options.eles.nodes().positions(getPositions);
-
-      if (after.options.fit)
-        after.options.cy.fit(after.options.eles.nodes(), after.options.padding);
-
-      //trigger layoutready when each node has had its position set at least once
-      if (!ready) {
-        after.cy.one('layoutready', after.options.ready);
-        after.cy.trigger('layoutready');
-      }
-
-      // trigger layoutstop when the layout stops (e.g. finishes)
-      after.cy.one('layoutstop', after.options.stop);
-      after.cy.trigger('layoutstop');
-    }
-
-    after.options.eles.nodes().removeScratch('coseBilkent');
-  });
-
-  layout_t.addListener('iterate', function (pData) {
-    if (pData != null && after.options.animate && after.options.animate !== 'end') {
-      after.options.eles.nodes().positions(function (i, ele) {
+/*
+ * Listen 'iterate' event and when it is signaled position the nodes with their current positions on that iteration to have 'during' layout animation.
+ */
+_CoSELayout.prototype.addListeners = function () {
+  var self = this;
+  _CoSELayout.layout.addListener('iterate', function (pData) {
+    if (pData != null && self.options.animate && self.options.animate !== 'end') {
+      self.options.eles.nodes().positions(function (i, ele) {
         if (ele.scratch('coseBilkent') && ele.scratch('coseBilkent').dummy_parent_id) {
           var dummyParent = ele.scratch('coseBilkent').dummy_parent_id;
           return {
@@ -420,21 +253,17 @@ _CoSELayout.prototype.run = function () {
         };
       });
 
-      if (after.options.fit)
-        after.options.cy.fit(after.options.eles.nodes(), after.options.padding);
+      if (self.options.fit)
+        self.options.cy.fit(self.options.eles.nodes(), self.options.padding);
 
       if (!ready) {
         ready = true;
-        after.one('layoutready', after.options.ready);
-        after.trigger({type: 'layoutready', layout: after});
+        self.one('layoutready', self.options.ready);
+        self.trigger({type: 'layoutready', layout: self});
       }
       return;
     }
   });
-
-  done( run( pData ) );
-
-  return this; // chaining
 };
 
 //Get the top most ones of a list of nodes
