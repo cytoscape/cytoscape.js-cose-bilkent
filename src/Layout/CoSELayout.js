@@ -6,6 +6,13 @@ var CoSEEdge = require('./CoSEEdge');
 var CoSEConstants = require('./CoSEConstants');
 var FDLayoutConstants = require('./FDLayoutConstants');
 var LayoutConstants = require('./LayoutConstants');
+var Point = require('./Point');
+var PointD = require('./PointD');
+var Layout = require('./Layout');
+var Integer = require('./Integer');
+var IGeometry = require('./IGeometry');
+var LGraph = require('./LGraph');
+var Transform = require('./Transform');
 
 function CoSELayout() {
   FDLayout.call(this);
@@ -136,11 +143,11 @@ CoSELayout.prototype.runSpringEmbedder = function () {
     this.moveNodes();
     this.animate();
     if (FDLayoutConstants.ANIMATE === 'during' && this.totalIterations % animationPeriod == 0) {
-      for (var i = 0; i < 1e7; i++) {
-        if ((new Date().getTime() - lastFrame) > 25) {
-          break;
-        }
-      }
+//      for (var i = 0; i < 1e7; i++) {
+//        if ((new Date().getTime() - lastFrame) > 25) {
+//          break;
+//        }
+//      }
       lastFrame = new Date().getTime();
       var allNodes = this.graphManager.getAllNodes();
       var pData = {};

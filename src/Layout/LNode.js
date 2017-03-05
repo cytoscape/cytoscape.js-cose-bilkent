@@ -4,6 +4,7 @@ var RectangleD = require('./RectangleD');
 var LayoutConstants = require('./LayoutConstants');
 var RandomSeed = require('./RandomSeed');
 var PointD = require('./PointD');
+var HashSet = require('./HashSet');
 
 function LNode(gm, loc, size, vNode) {
   //Alternative constructor 1 : LNode(LGraphManager gm, Point loc, Dimension size, Object vNode)
