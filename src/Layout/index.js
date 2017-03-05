@@ -189,7 +189,7 @@ _CoSELayout.prototype.run = function () {
 
     this.repopulateCompounds(tiledMemberPack);
 
-    cy.nodes().updateCompoundBounds();
+    this.options.cy.nodes().updateCompoundBounds();
   }
   
   /*
