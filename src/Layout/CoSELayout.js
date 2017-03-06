@@ -143,26 +143,20 @@ CoSELayout.prototype.runSpringEmbedder = function () {
     this.moveNodes();
     this.animate();
     if (FDLayoutConstants.ANIMATE === 'during' && this.totalIterations % animationPeriod == 0) {
-//      for (var i = 0; i < 1e7; i++) {
-//        if ((new Date().getTime() - lastFrame) > 25) {
-//          break;
-//        }
-//      }
-      lastFrame = new Date().getTime();
-      var allNodes = this.graphManager.getAllNodes();
-      var pData = {};
-      for (var i = 0; i < allNodes.length; i++) {
-        var rect = allNodes[i].rect;
-        var id = allNodes[i].id;
-        pData[id] = {
-          id: id,
-          x: rect.getCenterX(),
-          y: rect.getCenterY(),
-          w: rect.width,
-          h: rect.height
-        };
-      }
-      this.emit('iterate', pData);
+        var allNodes = this.graphManager.getAllNodes();
+        var pData = {};
+        for (var i = 0; i < allNodes.length; i++) {
+          var rect = allNodes[i].rect;
+          var id = allNodes[i].id;
+          pData[id] = {
+            id: id,
+            x: rect.getCenterX(),
+            y: rect.getCenterY(),
+            w: rect.width,
+            h: rect.height
+          };
+        }
+        this.emit('iterate', pData); // Emit the data for during layout animation
     }
   }
   while (this.totalIterations < this.maxIterations);
