@@ -133,7 +133,10 @@ _CoSELayout.prototype.run = function () {
    * Reposition nodes in iterations animatedly
    */
   var iterateAnimated = function () {
-    options.eles.nodes().positions(function (i, ele) {
+    options.eles.nodes().positions(function (ele, i) {
+      if (typeof ele === "number") {
+        ele = i;
+      }
       if (ele.scratch('coseBilkent') && ele.scratch('coseBilkent').dummy_parent_id) {
         var dummyParent = ele.scratch('coseBilkent').dummy_parent_id;
         return {
