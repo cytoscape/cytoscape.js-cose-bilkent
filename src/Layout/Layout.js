@@ -119,8 +119,6 @@ Layout.prototype.runLayout = function ()
     {
       var endTime = new Date().getTime();
       var excTime = endTime - startTime;
-
-      console.log("Total execution time: " + excTime + " miliseconds.");
     }
   }
 

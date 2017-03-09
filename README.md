@@ -52,6 +52,8 @@ var defaultOptions = {
   // Called on `layoutstop`
   stop: function () {
   },
+  // number of ticks per frame; higher is faster but more jerky
+  refresh: 30, 
   // Whether to fit the network view after when done
   fit: true,
   // Padding on fit

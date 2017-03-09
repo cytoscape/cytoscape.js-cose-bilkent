@@ -109,59 +109,74 @@ CoSELayout.prototype.classicLayout = function () {
   this.initSpringEmbedder();
   this.runSpringEmbedder();
 
-  console.log("Classic CoSE layout finished after " +
-          this.totalIterations + " iterations");
-
   return true;
 };
 
-CoSELayout.prototype.runSpringEmbedder = function () {
-  var lastFrame = new Date().getTime();
-  var initialAnimationPeriod = 25;
-  var animationPeriod = initialAnimationPeriod;
-  do
-  {
-    this.totalIterations++;
-
-    if (this.totalIterations % FDLayoutConstants.CONVERGENCE_CHECK_PERIOD == 0)
-    {
-      if (this.isConverged())
-      {
-        break;
-      }
-
-      this.coolingFactor = this.initialCoolingFactor *
-              ((this.maxIterations - this.totalIterations) / this.maxIterations);
-      animationPeriod = Math.ceil(initialAnimationPeriod * Math.sqrt(this.coolingFactor));
-
-    }
-    this.totalDisplacement = 0;
-    this.graphManager.updateBounds();
-    this.calcSpringForces();
-    this.calcRepulsionForces();
-    this.calcGravitationalForces();
-    this.moveNodes();
-    this.animate();
-    if (FDLayoutConstants.ANIMATE === 'during' && this.totalIterations % animationPeriod == 0) {
-        var allNodes = this.graphManager.getAllNodes();
-        var pData = {};
-        for (var i = 0; i < allNodes.length; i++) {
-          var rect = allNodes[i].rect;
-          var id = allNodes[i].id;
-          pData[id] = {
-            id: id,
-            x: rect.getCenterX(),
-            y: rect.getCenterY(),
-            w: rect.width,
-            h: rect.height
-          };
-        }
-        this.emit('iterate', pData); // Emit the data for during layout animation
-    }
+CoSELayout.prototype.tick = function() {
+  this.totalIterations++;
+  
+  if (this.totalIterations === this.maxIterations) {
+    return true; // Layout is not ended return true
   }
-  while (this.totalIterations < this.maxIterations);
+  
+  if (this.totalIterations % FDLayoutConstants.CONVERGENCE_CHECK_PERIOD == 0)
+  {
+    if (this.isConverged())
+    {
+      return true; // Layout is not ended return true
+    }
 
+    this.coolingFactor = this.initialCoolingFactor *
+            ((this.maxIterations - this.totalIterations) / this.maxIterations);
+    this.animationPeriod = Math.ceil(this.initialAnimationPeriod * Math.sqrt(this.coolingFactor));
+
+  }
+  this.totalDisplacement = 0;
   this.graphManager.updateBounds();
+  this.calcSpringForces();
+  this.calcRepulsionForces();
+  this.calcGravitationalForces();
+  this.moveNodes();
+  this.animate();
+  
+  return false; // Layout is not ended yet return false
+};
+
+CoSELayout.prototype.getPositionsData = function() {
+  var allNodes = this.graphManager.getAllNodes();
+  var pData = {};
+  for (var i = 0; i < allNodes.length; i++) {
+    var rect = allNodes[i].rect;
+    var id = allNodes[i].id;
+    pData[id] = {
+      id: id,
+      x: rect.getCenterX(),
+      y: rect.getCenterY(),
+      w: rect.width,
+      h: rect.height
+    };
+  }
+  
+  return pData;
+};
+
+CoSELayout.prototype.runSpringEmbedder = function () {
+  this.initialAnimationPeriod = 25;
+  this.animationPeriod = this.initialAnimationPeriod;
+  var layoutEnded = false;
+  
+  // If aminate option is 'during' signal that layout is supposed to start iterating
+  if ( FDLayoutConstants.ANIMATE === 'during' ) {
+    this.emit('layoutstarted');
+  }
+  else {
+    // If aminate option is 'during' tick() function will be called on index.js
+    while (!layoutEnded) {
+      layoutEnded = this.tick();
+    }
+
+    this.graphManager.updateBounds();
+  }
 };
 
 CoSELayout.prototype.calculateNodesToApplyGravitationTo = function () {
