@@ -11,9 +11,7 @@ var register = function( cytoscape ){
 
 if( typeof cytoscape !== 'undefined' ){ // expose to global cytoscape (i.e. window.cytoscape)
   register( cytoscape );
-}
-
-if( typeof define !== 'undefined' && define.amd ){
+} else if( typeof define !== 'undefined' && define.amd ){
   define( [], register );
 }
 

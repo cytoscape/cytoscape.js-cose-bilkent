@@ -38,6 +38,8 @@ var defaults = {
   // Called on `layoutstop`
   stop: function () {
   },
+  // number of ticks per frame; higher is faster but more jerky
+  refresh: 30,
   // Whether to fit the network view after when done
   fit: true,
   // Padding on fit
@@ -123,52 +125,9 @@ _CoSELayout.prototype.run = function () {
   var ready;
   var frameId;
   var options = this.options;
-  var animationData; // Data to be rendered during animation
   var idToLNode = this.idToLNode = {};
   var layout = this.layout = new CoSELayout();
   var self = this;
-  var animationStarted = false;
-  
-  /*
-   * Reposition nodes in iterations animatedly
-   */
-  var iterateAnimated = function () {
-    options.eles.nodes().positions(function (ele, i) {
-      if (typeof ele === "number") {
-        ele = i;
-      }
-      if (ele.scratch('coseBilkent') && ele.scratch('coseBilkent').dummy_parent_id) {
-        var dummyParent = ele.scratch('coseBilkent').dummy_parent_id;
-        return {
-          x: dummyParent.x,
-          y: dummyParent.y
-        };
-      }
-      var theId = ele.data('id');
-      var pNode = animationData[theId];
-      var temp = this;
-      while (pNode == null) {
-        temp = temp.parent()[0];
-        pNode = animationData[temp.id()];
-        animationData[theId] = pNode;
-      }
-      return {
-        x: pNode.x,
-        y: pNode.y
-      };
-    });
-
-    if (options.fit)
-      options.cy.fit(options.eles.nodes(), options.padding);
-
-    if (!ready) {
-      ready = true;
-      self.cy.one('layoutready', options.ready);
-      self.cy.trigger({type: 'layoutready', layout: self});
-    }
-
-    frameId = requestAnimationFrame(iterateAnimated);
-  };
   
   this.cy = this.options.cy;
 
@@ -181,17 +140,6 @@ _CoSELayout.prototype.run = function () {
   var edges = this.options.eles.edges();
 
   this.root = gm.addRoot();
-
-  /*
-  * Listen 'iterate' event and when it is signaled position the nodes with their current positions on that iteration to have 'during' layout animation.
-  */
-  layout.addListener('iterate', function (_animationData) {
-     animationData = _animationData;
-     if (!animationStarted && options.animate && options.animate !== 'end') {
-       iterateAnimated();
-       animationStarted = true;
-     }
-   });
 
   if (!this.options.tile) {
     this.processChildrenList(this.root, this.getTopMostNodes(nodes), layout);
@@ -222,47 +170,109 @@ _CoSELayout.prototype.run = function () {
     };
   };
   
-  layout.runLayout();
-  
-  if (this.options.tile) {
-    this.postLayout();
-  }
+  /*
+   * Reposition nodes in iterations animatedly
+   */
+  var iterateAnimated = function () {
+    // Thigs to perform after nodes are repositioned on screen
+    var afterReposition = function() {
+      if (options.fit) {
+        options.cy.fit(options.eles.nodes(), options.padding);
+      }
+
+      if (!ready) {
+        ready = true;
+        self.cy.one('layoutready', options.ready);
+        self.cy.trigger({type: 'layoutready', layout: self});
+      }
+    };
+    
+    var ticksPerFrame = self.options.refresh;
+    var isDone;
+
+    for( var i = 0; i < ticksPerFrame && !isDone; i++ ){
+      isDone = self.layout.tick();
+    }
+    
+    // If layout is done
+    if (isDone) {
+      if (self.options.tile) {
+        self.postLayout();
+      }
+      self.options.eles.nodes().positions(getPositions);
+      
+      afterReposition();
+      
+      // trigger layoutstop when the layout stops (e.g. finishes)
+      self.cy.one('layoutstop', self.options.stop);
+      self.cy.trigger('layoutstop');
+
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+      
+      self.options.eles.nodes().removeScratch('coseBilkent');
+      ready = false;
+      return;
+    }
+    
+    var animationData = self.layout.getPositionsData(); // Get positions of layout nodes note that all nodes may not be layout nodes because of tiling
+    // Position nodes, for the nodes who are not passed to layout because of tiling return the position of their dummy compound
+    options.eles.nodes().positions(function (ele, i) {
+      if (typeof ele === "number") {
+        ele = i;
+      }
+      if (ele.scratch('coseBilkent') && ele.scratch('coseBilkent').dummy_parent_id) {
+        var dummyParent = ele.scratch('coseBilkent').dummy_parent_id;
+        return {
+          x: dummyParent.x,
+          y: dummyParent.y
+        };
+      }
+      var theId = ele.data('id');
+      var pNode = animationData[theId];
+      var temp = this;
+      while (pNode == null) {
+        temp = temp.parent()[0];
+        pNode = animationData[temp.id()];
+        animationData[theId] = pNode;
+      }
+      return {
+        x: pNode.x,
+        y: pNode.y
+      };
+    });
+
+    afterReposition();
+
+    frameId = requestAnimationFrame(iterateAnimated);
+  };
   
   /*
-   * If animate option is not 'during' ('end' or false) use layoutPositions().
-   * If it is 'during' layoutPositions() will be one more unintended animation at the end.
-   * Therefore in that case we do things manually.
+  * Listen 'layoutstarted' event and start animated iteration if animate option is 'during'
+  */
+  layout.addListener('layoutstarted', function () {
+    if (self.options.animate === 'during') {
+      frameId = requestAnimationFrame(iterateAnimated);
+    }
+  });
+  
+  layout.runLayout(); // Run cose layout
+  
+  /*
+   * If animate option is not 'during' ('end' or false) perform these here (If it is 'during' similar things are already performed)
    */
   if(this.options.animate !== 'during'){
-    this.options.eles.nodes().layoutPositions(this, this.options, getPositions);
-  }
-  else {
     setTimeout(function() {
-        self.options.eles.nodes().positions(getPositions);
-
-        if (self.options.fit)
-          self.options.cy.fit(self.options.eles.nodes(), self.options.padding);
-
-        //trigger layoutready when each node has had its position set at least once
-        if (!ready) {
-          self.cy.one('layoutready', self.options.ready);
-          self.cy.trigger('layoutready');
-        }
-
-        // trigger layoutstop when the layout stops (e.g. finishes)
-        self.cy.one('layoutstop', self.options.stop);
-        self.cy.trigger('layoutstop');
-
-        if (frameId) {
-          cancelAnimationFrame(frameId);
-        }
-        
-      }, 1000/60);
+      if (self.options.tile) {
+        self.postLayout();
+      }
+      self.options.eles.nodes().layoutPositions(self, self.options, getPositions); // Use layout positions to reposition the nodes it considers the options parameter
+      self.options.eles.nodes().removeScratch('coseBilkent');
+      ready = false;
+    }, 0);
+    
   }
-
-  this.options.eles.nodes().removeScratch('coseBilkent');
-  animationStarted = false;
-  ready = false;
 
   return this; // chaining
 };
