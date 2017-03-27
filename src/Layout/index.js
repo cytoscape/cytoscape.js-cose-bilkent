@@ -267,7 +267,7 @@ _CoSELayout.prototype.run = function () {
       if (self.options.tile) {
         self.postLayout();
       }
-      self.options.eles.nodes().layoutPositions(self, self.options, getPositions); // Use layout positions to reposition the nodes it considers the options parameter
+      self.options.eles.nodes().not(":parent").layoutPositions(self, self.options, getPositions); // Use layout positions to reposition the nodes it considers the options parameter
       self.options.eles.nodes().removeScratch('coseBilkent');
       ready = false;
     }, 0);
