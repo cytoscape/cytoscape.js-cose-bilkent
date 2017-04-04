@@ -10,7 +10,7 @@ U. Dogrusoz, E. Giral, A. Cetintas, A. Civril, and E. Demir, "[A Layout Algorith
 
 ## Dependencies
 
- * Cytoscape.js ^2.4.0
+ * Cytoscape.js ^2.4.0 || ^3.0.0
 
 
 ## Usage instructions
