@@ -43,7 +43,8 @@ var getBrowserified = function( opts ){
     packageCache: {},
     fullPaths: true,
     bundleExternal: true,
-    entries: [ './src' ]
+    entries: [ './src' ],
+    standalone: 'cytoscape-cose-bilkent'
   }, opts );
 
   return browserify( opts ).on( 'log', util.log );

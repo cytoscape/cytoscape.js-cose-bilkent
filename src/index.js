@@ -9,10 +9,9 @@ var register = function( cytoscape ){
   cytoscape('layout', 'cose-bilkent', Layout);
 };
 
-if( typeof cytoscape !== 'undefined' ){ // expose to global cytoscape (i.e. window.cytoscape)
+// auto reg for globals
+if( typeof cytoscape !== 'undefined' ){
   register( cytoscape );
-} else if( typeof define !== 'undefined' && define.amd ){
-  define( [], register );
 }
 
 module.exports = register;
