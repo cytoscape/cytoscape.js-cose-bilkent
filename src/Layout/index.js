@@ -231,7 +231,7 @@ _CoSELayout.prototype.run = function () {
       }
       var theId = ele.data('id');
       var pNode = animationData[theId];
-      var temp = this;
+      var temp = ele;
       while (pNode == null) {
         temp = temp.parent()[0];
         pNode = animationData[temp.id()];
