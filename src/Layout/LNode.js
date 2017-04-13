@@ -274,11 +274,8 @@ LNode.prototype.updateBounds = function () {
     this.rect.x = childGraph.getLeft();
     this.rect.y = childGraph.getTop();
 
-    this.setWidth(childGraph.getRight() - childGraph.getLeft() +
-            2 * LayoutConstants.COMPOUND_NODE_MARGIN);
-    this.setHeight(childGraph.getBottom() - childGraph.getTop() +
-            2 * LayoutConstants.COMPOUND_NODE_MARGIN +
-            LayoutConstants.LABEL_HEIGHT);
+    this.setWidth(childGraph.getRight() - childGraph.getLeft());
+    this.setHeight(childGraph.getBottom() - childGraph.getTop());
   }
 };
 

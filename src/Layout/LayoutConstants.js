@@ -26,21 +26,7 @@ LayoutConstants.DEFAULT_UNIFORM_LEAF_NODE_SIZES = false;
  * Margins of a graph to be applied on bouding rectangle of its contents. We
  * assume margins on all four sides to be uniform.
  */
-LayoutConstants.DEFAULT_GRAPH_MARGIN = 10;
-
-/*
- * The height of the label of a compound. We assume the label of a compound
- * node is placed at the bottom with a dynamic width same as the compound
- * itself.
- */
-LayoutConstants.LABEL_HEIGHT = 20;
-
-/*
- * Additional margins that we maintain as safety buffer for node-node
- * overlaps. Compound node labels as well as graph margins are handled
- * separately!
- */
-LayoutConstants.COMPOUND_NODE_MARGIN = 5;
+LayoutConstants.DEFAULT_GRAPH_MARGIN = 15;
 
 /*
  * Default dimension of a non-compound node.

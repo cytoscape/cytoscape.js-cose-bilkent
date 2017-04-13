@@ -58,6 +58,8 @@ var defaultOptions = {
   fit: true,
   // Padding on fit
   padding: 10,
+  // Padding for compounds
+  paddingCompound: 15,
   // Whether to enable incremental mode
   randomize: true,
   // Node repulsion (non overlapping) multiplier
