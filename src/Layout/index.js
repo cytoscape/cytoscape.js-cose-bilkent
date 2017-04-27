@@ -135,7 +135,7 @@ _CoSELayout.prototype.run = function () {
   
   this.cy = this.options.cy;
 
-  this.cy.trigger('layoutstart');
+  this.cy.trigger({ type: 'layoutstart', layout: this });
 
   var gm = layout.newGraphManager();
   this.gm = gm;
@@ -210,6 +210,7 @@ _CoSELayout.prototype.run = function () {
       // trigger layoutstop when the layout stops (e.g. finishes)
       self.cy.one('layoutstop', self.options.stop);
       self.cy.trigger('layoutstop');
+      self.cy.trigger({ type: 'layoutstop', layout: self });
 
       if (frameId) {
         cancelAnimationFrame(frameId);
