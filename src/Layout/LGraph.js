@@ -435,14 +435,13 @@ LGraph.prototype.updateConnected = function ()
     var noOfVisitedInThisGraph = 0;
 
     var s = visited.size();
-    for (var visitedId in visited.set)
-    {
+     Object.keys(visited.set).forEach(function(visitedId) {
       var visitedNode = visited.set[visitedId];
       if (visitedNode.owner == this)
       {
         noOfVisitedInThisGraph++;
       }
-    }
+    });
 
     if (noOfVisitedInThisGraph == this.nodes.length)
     {

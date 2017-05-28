@@ -629,8 +629,7 @@ Layout.findCenterOfTree = function (nodes)
 
       var neighbours = node.getNeighborsList();
 
-      for (var j in neighbours.set)
-      {
+      Object.keys(neighbours.set).forEach(function(j) {
         var neighbour = neighbours.set[j];
         if (removedNodes.indexOf(neighbour) < 0)
         {
@@ -644,7 +643,7 @@ Layout.findCenterOfTree = function (nodes)
 
           remainingDegrees.put(neighbour, newDegree);
         }
-      }
+      });
     }
 
     removedNodes = removedNodes.concat(tempList);
