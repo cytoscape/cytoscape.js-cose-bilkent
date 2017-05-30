@@ -138,19 +138,18 @@ LNode.prototype.getEdgeListToNode = function (to)
 {
   var edgeList = [];
   var edge;
+  var self = this;
 
-  for (var obj in this.edges)
-  {
-    edge = obj;
-
+  self.edges.forEach(function(edge) {
+    
     if (edge.target == to)
     {
-      if (edge.source != this)
+      if (edge.source != self)
         throw "Incorrect edge source!";
 
       edgeList.push(edge);
     }
-  }
+  });
 
   return edgeList;
 };
@@ -159,19 +158,18 @@ LNode.prototype.getEdgesBetween = function (other)
 {
   var edgeList = [];
   var edge;
+  
+  var self = this;
+  self.edges.forEach(function(edge) {
 
-  for (var obj in this.edges)
-  {
-    edge = this.edges[obj];
-
-    if (!(edge.source == this || edge.target == this))
+    if (!(edge.source == self || edge.target == self))
       throw "Incorrect edge source and/or target";
 
     if ((edge.target == other) || (edge.source == other))
     {
       edgeList.push(edge);
     }
-  }
+  });
 
   return edgeList;
 };
@@ -180,22 +178,23 @@ LNode.prototype.getNeighborsList = function ()
 {
   var neighbors = new HashSet();
   var edge;
+  
+  var self = this;
+  self.edges.forEach(function(edge) {
 
-  for (var obj in this.edges)
-  {
-    edge = this.edges[obj];
-
-    if (edge.source == this)
+    if (edge.source == self)
     {
       neighbors.add(edge.target);
     }
     else
     {
-      if (!edge.target == this)
+      if (edge.target != self) {
         throw "Incorrect incidency!";
+      }
+    
       neighbors.add(edge.source);
     }
-  }
+  });
 
   return neighbors;
 };

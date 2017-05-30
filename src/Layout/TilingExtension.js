@@ -108,7 +108,7 @@ module.exports = function (instance) {
     }
 
     // If there are at least two nodes at a level, create a dummy compound for them
-    for (var p_id in tempMemberGroups) {
+    Object.keys(tempMemberGroups).forEach(function(p_id) {
       if (tempMemberGroups[p_id].length > 1) {
         var dummyCompoundId = "DummyCompound_" + p_id;
         memberGroups[dummyCompoundId] = tempMemberGroups[p_id];
@@ -150,7 +150,7 @@ module.exports = function (instance) {
           }
         }
       }
-    }
+    });
 
     return memberGroups;
   };
@@ -201,7 +201,7 @@ module.exports = function (instance) {
   instance.clearZeroDegreeMembers = function (memberGroups) {
     var tiledZeroDegreePack = [];
 
-    for (var id in memberGroups) {
+    Object.keys(memberGroups).forEach(function(id) {
       var compoundNode = instance.idToLNode[id];
 
       tiledZeroDegreePack[id] = instance.tileNodes(memberGroups[id]);
@@ -209,7 +209,7 @@ module.exports = function (instance) {
       // Set the width and height of the dummy compound as calculated
       compoundNode.rect.width = tiledZeroDegreePack[id].width;
       compoundNode.rect.height = tiledZeroDegreePack[id].height;
-    }
+    });
     return tiledZeroDegreePack;
   };
 
@@ -225,7 +225,7 @@ module.exports = function (instance) {
   };
 
   instance.repopulateZeroDegreeMembers = function (tiledPack) {
-    for (var i in tiledPack) {
+    Object.keys(tiledPack).forEach(function(i) {
       var compound = instance.cy.getElementById(i);
       var compoundNode = instance.idToLNode[i];
       var horizontalMargin = parseInt(compound.css('padding-left'));
@@ -241,7 +241,7 @@ module.exports = function (instance) {
 
       // Remove the dummy compound
       compound.remove();
-    }
+    });
   };
 
   /**
@@ -278,7 +278,7 @@ module.exports = function (instance) {
   instance.tileCompoundMembers = function (childGraphMap) {
     var tiledMemberPack = [];
 
-    for (var id in childGraphMap) {
+    Object.keys(childGraphMap).forEach(function(id) {
       // Access layoutInfo nodes to set the width and height of compounds
       var compoundNode = instance.idToLNode[id];
 
@@ -286,7 +286,7 @@ module.exports = function (instance) {
 
       compoundNode.rect.width = tiledMemberPack[id].width + 20;
       compoundNode.rect.height = tiledMemberPack[id].height + 20;
-    }
+    });
 
     return tiledMemberPack;
   };
