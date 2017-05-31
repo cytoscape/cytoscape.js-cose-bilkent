@@ -392,6 +392,7 @@ LGraph.prototype.calcEstimatedSize = function ()
 
 LGraph.prototype.updateConnected = function ()
 {
+  var self = this;
   if (this.nodes.length == 0)
   {
     this.isConnected = true;
@@ -433,11 +434,11 @@ LGraph.prototype.updateConnected = function ()
   if (visited.size() >= this.nodes.length)
   {
     var noOfVisitedInThisGraph = 0;
-
+    
     var s = visited.size();
      Object.keys(visited.set).forEach(function(visitedId) {
       var visitedNode = visited.set[visitedId];
-      if (visitedNode.owner == this)
+      if (visitedNode.owner == self)
       {
         noOfVisitedInThisGraph++;
       }
