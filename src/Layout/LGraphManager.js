@@ -1,4 +1,8 @@
+var LGraph;
+var LEdge = require('./LEdge');
+
 function LGraphManager(layout) {
+  LGraph = require('./LGraph'); // It may be better to initilize this out of this function but it gives an error (Right-hand side of 'instanceof' is not callable) now.
   this.layout = layout;
 
   this.graphs = [];

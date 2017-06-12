@@ -29,7 +29,6 @@ var CoSEGraph = require('./CoSEGraph');
 var CoSEGraphManager = require('./CoSEGraphManager');
 var CoSELayout = require('./CoSELayout');
 var CoSENode = require('./CoSENode');
-var TilingExtension = require('./TilingExtension');
 
 var defaults = {
   // Called on `layoutready`
@@ -93,7 +92,6 @@ function extend(defaults, options) {
 };
 
 function _CoSELayout(_options) {
-  TilingExtension(this); // Extend this instance with tiling functions
   this.options = extend(defaults, _options);
   getUserOptions(this.options);
 }
@@ -123,6 +121,11 @@ var getUserOptions = function (options) {
   CoSEConstants.DEFAULT_INCREMENTAL = FDLayoutConstants.DEFAULT_INCREMENTAL = LayoutConstants.DEFAULT_INCREMENTAL =
           !(options.randomize);
   CoSEConstants.ANIMATE = FDLayoutConstants.ANIMATE = options.animate;
+  CoSEConstants.TILE = options.tile;
+  CoSEConstants.TILING_PADDING_VERTICAL = 
+          typeof options.tilingPaddingVertical === 'function' ? options.tilingPaddingVertical.call() : options.tilingPaddingVertical;
+  CoSEConstants.TILING_PADDING_HORIZONTAL = 
+          typeof options.tilingPaddingHorizontal === 'function' ? options.tilingPaddingHorizontal.call() : options.tilingPaddingHorizontal;
 };
 
 _CoSELayout.prototype.run = function () {
@@ -144,13 +147,7 @@ _CoSELayout.prototype.run = function () {
   var edges = this.options.eles.edges();
 
   this.root = gm.addRoot();
-
-  if (!this.options.tile) {
-    this.processChildrenList(this.root, this.getTopMostNodes(nodes), layout);
-  }
-  else {
-    this.preLayout();
-  }
+  this.processChildrenList(this.root, this.getTopMostNodes(nodes), layout);
 
 
   for (var i = 0; i < edges.length; i++) {
@@ -200,9 +197,6 @@ _CoSELayout.prototype.run = function () {
     
     // If layout is done
     if (isDone) {
-      if (self.options.tile) {
-        self.postLayout();
-      }
       self.options.eles.nodes().positions(getPositions);
       
       afterReposition();
@@ -222,25 +216,21 @@ _CoSELayout.prototype.run = function () {
     }
     
     var animationData = self.layout.getPositionsData(); // Get positions of layout nodes note that all nodes may not be layout nodes because of tiling
-    // Position nodes, for the nodes who are not passed to layout because of tiling return the position of their dummy compound
+    
+    // Position nodes, for the nodes whose id does not included in data (because they are removed from their parents and included in dummy compounds)
+    // use position of their ancestors or dummy ancestors
     options.eles.nodes().positions(function (ele, i) {
       if (typeof ele === "number") {
         ele = i;
       }
-      if (ele.scratch('coseBilkent') && ele.scratch('coseBilkent').dummy_parent_id) {
-        var dummyParent = ele.scratch('coseBilkent').dummy_parent_id;
-        return {
-          x: dummyParent.x,
-          y: dummyParent.y
-        };
-      }
-      var theId = ele.data('id');
+      var theId = ele.id();
       var pNode = animationData[theId];
       var temp = ele;
+      // If pNode is undefined search until finding position data of its first ancestor (It may be dummy as well)
       while (pNode == null) {
-        temp = temp.parent()[0];
-        pNode = animationData[temp.id()];
+        pNode = animationData[temp.data('parent')] || animationData['DummyCompound_' + temp.data('parent')];
         animationData[theId] = pNode;
+        temp = temp.parent()[0];
       }
       return {
         x: pNode.x,
@@ -269,9 +259,6 @@ _CoSELayout.prototype.run = function () {
    */
   if(this.options.animate !== 'during'){
     setTimeout(function() {
-      if (self.options.tile) {
-        self.postLayout();
-      }
       self.options.eles.nodes().not(":parent").layoutPositions(self, self.options, getPositions); // Use layout positions to reposition the nodes it considers the options parameter
       self.options.eles.nodes().removeScratch('coseBilkent');
       ready = false;
@@ -316,14 +303,21 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
     if (theChild.width() != null
             && theChild.height() != null) {
       theNode = parent.add(new CoSENode(layout.graphManager,
-              new PointD(theChild.position('x'), theChild.position('y')),
+              new PointD(theChild.position('x') - theChild.width() / 2, theChild.position('y') - theChild.height() / 2),
               new DimensionD(parseFloat(theChild.width()),
                       parseFloat(theChild.height()))));
     }
     else {
       theNode = parent.add(new CoSENode(this.graphManager));
     }
+    // Attach id to the layout node
     theNode.id = theChild.data("id");
+    // Attach the paddings of cy node to layout node
+    theNode.paddingLeft = parseInt( theChild.css('padding-left') );
+    theNode.paddingTop = parseInt( theChild.css('padding-top') );
+    theNode.paddingRight = parseInt( theChild.css('padding-right') );
+    theNode.paddingBottom = parseInt( theChild.css('padding-bottom') );
+    // Map the layout node
     this.idToLNode[theChild.data("id")] = theNode;
 
     if (isNaN(theNode.rect.x)) {

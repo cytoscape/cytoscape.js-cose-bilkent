@@ -16,6 +16,8 @@ var Transform = require('./Transform');
 
 function CoSELayout() {
   FDLayout.call(this);
+  
+  this.toBeTiled = {}; // Memorize if a node is to be tiled or is tiled
 }
 
 CoSELayout.prototype = Object.create(FDLayout.prototype);
@@ -439,6 +441,498 @@ CoSELayout.maxDiagonalInTree = function (tree) {
 CoSELayout.prototype.calcRepulsionRange = function () {
   // formula is 2 x (level + 1) x idealEdgeLength
   return (2 * (this.level + 1) * this.idealEdgeLength);
+};
+
+// Tiling methods
+
+// Group zero degree members whose parents are not to be tiled, create dummy parents where needed and fill memberGroups by their dummp parent id's
+CoSELayout.prototype.groupZeroDegreeMembers = function () {
+  var self = this;
+  // array of [parent_id x oneDegreeNode_id]
+  var tempMemberGroups = {}; // A temporary map of parent node and its zero degree members
+  this.memberGroups = {}; // A map of dummy parent node and its zero degree members whose parents are not to be tiled
+  this.idToDummyNode = {}; // A map of id to dummy node 
+  
+  var zeroDegree = []; // List of zero degree nodes whose parents are not to be tiled
+  var allNodes = this.graphManager.getAllNodes();
+
+  // Fill zero degree list
+  for (var i = 0; i < allNodes.length; i++) {
+    var node = allNodes[i];
+    var parent = node.getParent();
+    // If a node has zero degree and its parent is not to be tiled if exists add that node to zeroDegres list
+    if (this.getNodeDegreeWithChildren(node) === 0 && ( parent.id == undefined || !this.getToBeTiled(parent) ) ) {
+      zeroDegree.push(node);
+    }
+  }
+
+  // Create a map of parent node and its zero degree members
+  for (var i = 0; i < zeroDegree.length; i++)
+  {
+    var node = zeroDegree[i]; // Zero degree node itself
+    var p_id = node.getParent().id; // Parent id
+
+    if (typeof tempMemberGroups[p_id] === "undefined")
+      tempMemberGroups[p_id] = [];
+
+    tempMemberGroups[p_id] = tempMemberGroups[p_id].concat(node); // Push node to the list belongs to its parent in tempMemberGroups
+  }
+
+  // If there are at least two nodes at a level, create a dummy compound for them
+  Object.keys(tempMemberGroups).forEach(function(p_id) {
+    if (tempMemberGroups[p_id].length > 1) {
+      var dummyCompoundId = "DummyCompound_" + p_id; // The id of dummy compound which will be created soon
+      self.memberGroups[dummyCompoundId] = tempMemberGroups[p_id]; // Add dummy compound to memberGroups
+
+      var parent = tempMemberGroups[p_id][0].getParent(); // The parent of zero degree nodes will be the parent of new dummy compound
+
+      // Create a dummy compound with calculated id
+      var dummyCompound = new CoSENode(self.graphManager);
+      dummyCompound.id = dummyCompoundId;
+      dummyCompound.paddingLeft = parent.paddingLeft || 0;
+      dummyCompound.paddingRight = parent.paddingRight || 0;
+      dummyCompound.paddingBottom = parent.paddingBottom || 0;
+      dummyCompound.paddingTop = parent.paddingTop || 0;
+      
+      self.idToDummyNode[dummyCompoundId] = dummyCompound;
+      
+      var dummyParentGraph = self.getGraphManager().add(self.newGraph(), dummyCompound);
+      var parentGraph = parent.getChild();
+
+      // Add dummy compound to parent the graph
+      parentGraph.add(dummyCompound);
+
+      // For each zero degree node in this level remove it from its parent graph and add it to the graph of dummy parent
+      for (var i = 0; i < tempMemberGroups[p_id].length; i++) {
+        var node = tempMemberGroups[p_id][i];
+        
+        parentGraph.remove(node);
+        dummyParentGraph.add(node);
+      }
+    }
+  });
+};
+
+CoSELayout.prototype.clearCompounds = function () {
+  var childGraphMap = {};
+  var idToNode = {};
+
+  // Get compound ordering by finding the inner one first
+  this.performDFSOnCompounds();
+
+  for (var i = 0; i < this.compoundOrder.length; i++) {
+    
+    idToNode[this.compoundOrder[i].id] = this.compoundOrder[i];
+    childGraphMap[this.compoundOrder[i].id] = [].concat(this.compoundOrder[i].getChild().getNodes());
+
+    // Remove children of compounds
+    this.graphManager.remove(this.compoundOrder[i].getChild());
+    this.compoundOrder[i].child = null;
+  }
+  
+  this.graphManager.resetAllNodes();
+  
+  // Tile the removed children
+  this.tileCompoundMembers(childGraphMap, idToNode);
+};
+
+CoSELayout.prototype.clearZeroDegreeMembers = function () {
+  var self = this;
+  var tiledZeroDegreePack = this.tiledZeroDegreePack = [];
+
+  Object.keys(this.memberGroups).forEach(function(id) {
+    var compoundNode = self.idToDummyNode[id]; // Get the dummy compound
+
+    tiledZeroDegreePack[id] = self.tileNodes(self.memberGroups[id], compoundNode.paddingLeft + compoundNode.paddingRight);
+
+    // Set the width and height of the dummy compound as calculated
+    compoundNode.rect.width = tiledZeroDegreePack[id].width;
+    compoundNode.rect.height = tiledZeroDegreePack[id].height;
+  });
+};
+
+CoSELayout.prototype.repopulateCompounds = function () {
+  for (var i = this.compoundOrder.length - 1; i >= 0; i--) {
+    var lCompoundNode = this.compoundOrder[i];
+    var id = lCompoundNode.id;
+    var horizontalMargin = lCompoundNode.paddingLeft;
+    var verticalMargin = lCompoundNode.paddingTop;
+
+    this.adjustLocations(this.tiledMemberPack[id], lCompoundNode.rect.x, lCompoundNode.rect.y, horizontalMargin, verticalMargin);
+  }
+};
+
+CoSELayout.prototype.repopulateZeroDegreeMembers = function () {
+  var self = this;
+  var tiledPack = this.tiledZeroDegreePack;
+  
+  Object.keys(tiledPack).forEach(function(id) {
+    var compoundNode = self.idToDummyNode[id]; // Get the dummy compound by its id
+    var horizontalMargin = compoundNode.paddingLeft;
+    var verticalMargin = compoundNode.paddingTop;
+
+    // Adjust the positions of nodes wrt its compound
+    self.adjustLocations(tiledPack[id], compoundNode.rect.x, compoundNode.rect.y, horizontalMargin, verticalMargin);
+  });
+};
+
+CoSELayout.prototype.getToBeTiled = function (node) {
+  var id = node.id;
+  //firstly check the previous results
+  if (this.toBeTiled[id] != null) {
+    return this.toBeTiled[id];
+  }
+
+  //only compound nodes are to be tiled
+  var childGraph = node.getChild();
+  if (childGraph == null) {
+    this.toBeTiled[id] = false;
+    return false;
+  }
+
+  var children = childGraph.getNodes(); // Get the children nodes
+
+  //a compound node is not to be tiled if all of its compound children are not to be tiled
+  for (var i = 0; i < children.length; i++) {
+    var theChild = children[i];
+
+    if (this.getNodeDegree(theChild) > 0) {
+      this.toBeTiled[id] = false;
+      return false;
+    }
+
+    //pass the children not having the compound structure
+    if (theChild.getChild() == null) {
+      this.toBeTiled[theChild.id] = false;
+      continue;
+    }
+
+    if (!this.getToBeTiled(theChild)) {
+      this.toBeTiled[id] = false;
+      return false;
+    }
+  }
+  this.toBeTiled[id] = true;
+  return true;
+};
+
+// Get degree of a node depending of its edges and independent of its children
+CoSELayout.prototype.getNodeDegree = function (node) {
+  var id = node.id;
+  var edges = node.getEdges();
+  var degree = 0;
+  
+  // For the edges connected
+  for (var i = 0; i < edges.length; i++) {
+    var edge = edges[i];
+    if (edge.getSource().id !== edge.getTarget().id) {
+      degree = degree + 1;
+    }
+  }
+  return degree;
+};
+
+// Get degree of a node with its children
+CoSELayout.prototype.getNodeDegreeWithChildren = function (node) {
+  var degree = this.getNodeDegree(node);
+  if (node.getChild() == null) {
+    return degree;
+  }
+  var children = node.getChild().getNodes();
+  for (var i = 0; i < children.length; i++) {
+    var child = children[i];
+    degree += this.getNodeDegreeWithChildren(child);
+  }
+  return degree;
+};
+
+CoSELayout.prototype.performDFSOnCompounds = function () {
+  this.compoundOrder = [];
+  this.fillCompexOrderByDFS(this.graphManager.getRoot().getNodes());
+};
+
+CoSELayout.prototype.fillCompexOrderByDFS = function (children) {
+  for (var i = 0; i < children.length; i++) {
+    var child = children[i];
+    if (child.getChild() != null) {
+      this.fillCompexOrderByDFS(child.getChild().getNodes());
+    }
+    if (this.getToBeTiled(child)) {
+      this.compoundOrder.push(child);
+    }
+  }
+};
+
+/**
+* This method places each zero degree member wrt given (x,y) coordinates (top left).
+*/
+CoSELayout.prototype.adjustLocations = function (organization, x, y, compoundHorizontalMargin, compoundVerticalMargin) {
+  x += compoundHorizontalMargin;
+  y += compoundVerticalMargin;
+
+  var left = x;
+
+  for (var i = 0; i < organization.rows.length; i++) {
+    var row = organization.rows[i];
+    x = left;
+    var maxHeight = 0;
+
+    for (var j = 0; j < row.length; j++) {
+      var lnode = row[j];
+
+      lnode.rect.x = x;// + lnode.rect.width / 2;
+      lnode.rect.y = y;// + lnode.rect.height / 2;
+
+      x += lnode.rect.width + organization.horizontalPadding;
+
+      if (lnode.rect.height > maxHeight)
+        maxHeight = lnode.rect.height;
+    }
+
+    y += maxHeight + organization.verticalPadding;
+  }
+};
+
+CoSELayout.prototype.tileCompoundMembers = function (childGraphMap, idToNode) {
+  var self = this;
+  this.tiledMemberPack = [];
+
+  Object.keys(childGraphMap).forEach(function(id) {
+    // Get the compound node
+    var compoundNode = idToNode[id];
+
+    self.tiledMemberPack[id] = self.tileNodes(childGraphMap[id], compoundNode.paddingLeft + compoundNode.paddingRight);
+
+    compoundNode.rect.width = self.tiledMemberPack[id].width + 20;
+    compoundNode.rect.height = self.tiledMemberPack[id].height + 20;
+  });
+};
+
+CoSELayout.prototype.tileNodes = function (nodes, minWidth) {
+  var verticalPadding = CoSEConstants.TILING_PADDING_VERTICAL;
+  var horizontalPadding = CoSEConstants.TILING_PADDING_HORIZONTAL;
+  var organization = {
+    rows: [],
+    rowWidth: [],
+    rowHeight: [],
+    width: 20,
+    height: 20,
+    verticalPadding: verticalPadding,
+    horizontalPadding: horizontalPadding
+  };
+
+  // Sort the nodes in ascending order of their areas
+  nodes.sort(function (n1, n2) {
+    if (n1.rect.width * n1.rect.height > n2.rect.width * n2.rect.height)
+      return -1;
+    if (n1.rect.width * n1.rect.height < n2.rect.width * n2.rect.height)
+      return 1;
+    return 0;
+  });
+
+  // Create the organization -> tile members
+  for (var i = 0; i < nodes.length; i++) {
+    var lNode = nodes[i];
+    
+    if (organization.rows.length == 0) {
+      this.insertNodeToRow(organization, lNode, 0, minWidth);
+    }
+    else if (this.canAddHorizontal(organization, lNode.rect.width, lNode.rect.height)) {
+      this.insertNodeToRow(organization, lNode, this.getShortestRowIndex(organization), minWidth);
+    }
+    else {
+      this.insertNodeToRow(organization, lNode, organization.rows.length, minWidth);
+    }
+
+    this.shiftToLastRow(organization);
+  }
+
+  return organization;
+};
+
+CoSELayout.prototype.insertNodeToRow = function (organization, node, rowIndex, minWidth) {
+  var minCompoundSize = minWidth;
+
+  // Add new row if needed
+  if (rowIndex == organization.rows.length) {
+    var secondDimension = [];
+
+    organization.rows.push(secondDimension);
+    organization.rowWidth.push(minCompoundSize);
+    organization.rowHeight.push(0);
+  }
+
+  // Update row width
+  var w = organization.rowWidth[rowIndex] + node.rect.width;
+
+  if (organization.rows[rowIndex].length > 0) {
+    w += organization.horizontalPadding;
+  }
+
+  organization.rowWidth[rowIndex] = w;
+  // Update compound width
+  if (organization.width < w) {
+    organization.width = w;
+  }
+
+  // Update height
+  var h = node.rect.height;
+  if (rowIndex > 0)
+    h += organization.verticalPadding;
+
+  var extraHeight = 0;
+  if (h > organization.rowHeight[rowIndex]) {
+    extraHeight = organization.rowHeight[rowIndex];
+    organization.rowHeight[rowIndex] = h;
+    extraHeight = organization.rowHeight[rowIndex] - extraHeight;
+  }
+
+  organization.height += extraHeight;
+
+  // Insert node
+  organization.rows[rowIndex].push(node);
+};
+
+//Scans the rows of an organization and returns the one with the min width
+CoSELayout.prototype.getShortestRowIndex = function (organization) {
+  var r = -1;
+  var min = Number.MAX_VALUE;
+
+  for (var i = 0; i < organization.rows.length; i++) {
+    if (organization.rowWidth[i] < min) {
+      r = i;
+      min = organization.rowWidth[i];
+    }
+  }
+  return r;
+};
+
+//Scans the rows of an organization and returns the one with the max width
+CoSELayout.prototype.getLongestRowIndex = function (organization) {
+  var r = -1;
+  var max = Number.MIN_VALUE;
+
+  for (var i = 0; i < organization.rows.length; i++) {
+
+    if (organization.rowWidth[i] > max) {
+      r = i;
+      max = organization.rowWidth[i];
+    }
+  }
+
+  return r;
+};
+
+/**
+* This method checks whether adding extra width to the organization violates
+* the aspect ratio(1) or not.
+*/
+CoSELayout.prototype.canAddHorizontal = function (organization, extraWidth, extraHeight) {
+
+  var sri = this.getShortestRowIndex(organization);
+
+  if (sri < 0) {
+    return true;
+  }
+
+  var min = organization.rowWidth[sri];
+
+  if (min + organization.horizontalPadding + extraWidth <= organization.width)
+    return true;
+
+  var hDiff = 0;
+
+  // Adding to an existing row
+  if (organization.rowHeight[sri] < extraHeight) {
+    if (sri > 0)
+      hDiff = extraHeight + organization.verticalPadding - organization.rowHeight[sri];
+  }
+
+  var add_to_row_ratio;
+  if (organization.width - min >= extraWidth + organization.horizontalPadding) {
+    add_to_row_ratio = (organization.height + hDiff) / (min + extraWidth + organization.horizontalPadding);
+  } else {
+    add_to_row_ratio = (organization.height + hDiff) / organization.width;
+  }
+
+  // Adding a new row for this node
+  hDiff = extraHeight + organization.verticalPadding;
+  var add_new_row_ratio;
+  if (organization.width < extraWidth) {
+    add_new_row_ratio = (organization.height + hDiff) / extraWidth;
+  } else {
+    add_new_row_ratio = (organization.height + hDiff) / organization.width;
+  }
+
+  if (add_new_row_ratio < 1)
+    add_new_row_ratio = 1 / add_new_row_ratio;
+
+  if (add_to_row_ratio < 1)
+    add_to_row_ratio = 1 / add_to_row_ratio;
+
+  return add_to_row_ratio < add_new_row_ratio;
+};
+
+//If moving the last node from the longest row and adding it to the last
+//row makes the bounding box smaller, do it.
+CoSELayout.prototype.shiftToLastRow = function (organization) {
+  var longest = this.getLongestRowIndex(organization);
+  var last = organization.rowWidth.length - 1;
+  var row = organization.rows[longest];
+  var node = row[row.length - 1];
+
+  var diff = node.width + organization.horizontalPadding;
+
+  // Check if there is enough space on the last row
+  if (organization.width - organization.rowWidth[last] > diff && longest != last) {
+    // Remove the last element of the longest row
+    row.splice(-1, 1);
+
+    // Push it to the last row
+    organization.rows[last].push(node);
+
+    organization.rowWidth[longest] = organization.rowWidth[longest] - diff;
+    organization.rowWidth[last] = organization.rowWidth[last] + diff;
+    organization.width = organization.rowWidth[instance.getLongestRowIndex(organization)];
+
+    // Update heights of the organization
+    var maxHeight = Number.MIN_VALUE;
+    for (var i = 0; i < row.length; i++) {
+      if (row[i].height > maxHeight)
+        maxHeight = row[i].height;
+    }
+    if (longest > 0)
+      maxHeight += organization.verticalPadding;
+
+    var prevTotal = organization.rowHeight[longest] + organization.rowHeight[last];
+
+    organization.rowHeight[longest] = maxHeight;
+    if (organization.rowHeight[last] < node.height + organization.verticalPadding)
+      organization.rowHeight[last] = node.height + organization.verticalPadding;
+
+    var finalTotal = organization.rowHeight[longest] + organization.rowHeight[last];
+    organization.height += (finalTotal - prevTotal);
+
+    this.shiftToLastRow(organization);
+  }
+};
+
+CoSELayout.prototype.tilingPreLayout = function() {
+  if (CoSEConstants.TILE) {
+    // Find zero degree nodes and create a compound for each level
+    this.groupZeroDegreeMembers();
+    // Tile and clear children of each compound
+    this.clearCompounds();
+    // Separately tile and clear zero degree nodes for each level
+    this.clearZeroDegreeMembers();
+  }
+};
+
+CoSELayout.prototype.tilingPostLayout = function() {
+  if (CoSEConstants.TILE) {
+    this.repopulateZeroDegreeMembers();
+    this.repopulateCompounds();
+  }
 };
 
 module.exports = CoSELayout;
