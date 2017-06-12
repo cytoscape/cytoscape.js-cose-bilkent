@@ -93,6 +93,10 @@ Layout.prototype.newEdge = function (vEdge)
 Layout.prototype.runLayout = function ()
 {
   this.isLayoutFinished = false;
+  
+  if (this.tilingPreLayout) {
+    this.tilingPreLayout();
+  }
 
   this.initParameters();
   var isLayoutSuccessfull;
@@ -128,6 +132,10 @@ Layout.prototype.runLayout = function ()
     {
       this.doPostLayout();
     }
+  }
+
+  if (this.tilingPostLayout) {
+    this.tilingPostLayout();
   }
 
   this.isLayoutFinished = true;
