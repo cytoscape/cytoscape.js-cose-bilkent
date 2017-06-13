@@ -87,7 +87,9 @@ var defaultOptions = {
   // Gravity force (constant) for compounds
   gravityCompound: 1.0,
   // Gravity range (constant)
-  gravityRange: 3.8
+  gravityRange: 3.8,
+  // Initial cooling factor for incremental layout
+  initialEnergyOnIncremental:0.8
 };
 ```
 

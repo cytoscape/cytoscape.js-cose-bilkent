@@ -16,8 +16,8 @@ function FDLayout() {
   this.gravityRangeFactor = FDLayoutConstants.DEFAULT_GRAVITY_RANGE_FACTOR;
   this.compoundGravityRangeFactor = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR;
   this.displacementThresholdPerNode = (3.0 * FDLayoutConstants.DEFAULT_EDGE_LENGTH) / 100;
-  this.coolingFactor = 1.0;
-  this.initialCoolingFactor = 1.0;
+  this.coolingFactor = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL;
+  this.initialCoolingFactor = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL;
   this.totalDisplacement = 0.0;
   this.oldTotalDisplacement = 0.0;
   this.maxIterations = FDLayoutConstants.MAX_ITERATIONS;
@@ -92,8 +92,6 @@ FDLayout.prototype.initSpringEmbedder = function () {
 
   if (this.incremental)
   {
-    this.coolingFactor = 0.8;
-    this.initialCoolingFactor = 0.8;
     this.maxNodeDisplacement =
             FDLayoutConstants.MAX_NODE_DISPLACEMENT_INCREMENTAL;
   }
