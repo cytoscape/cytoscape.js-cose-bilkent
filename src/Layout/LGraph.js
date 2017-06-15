@@ -3,9 +3,12 @@ var Integer = require('./Integer');
 var LayoutConstants = require('./LayoutConstants');
 var LGraphManager = require('./LGraphManager');
 var LNode = require('./LNode');
+var LEdge = require('./LEdge');
 var HashSet = require('./HashSet');
 var RectangleD = require('./RectangleD');
 var Point = require('./Point');
+
+console.log(LEdge);
 
 function LGraph(parent, obj2, vGraph) {
   LGraphObject.call(this, vGraph);
