@@ -8,8 +8,6 @@ var HashSet = require('./HashSet');
 var RectangleD = require('./RectangleD');
 var Point = require('./Point');
 
-console.log(LEdge);
-
 function LGraph(parent, obj2, vGraph) {
   LGraphObject.call(this, vGraph);
   this.estimatedSize = Integer.MIN_VALUE;
