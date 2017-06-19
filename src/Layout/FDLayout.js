@@ -277,10 +277,23 @@ FDLayout.prototype.calcRepulsionForce = function (nodeA, nodeB) {
   }
 
   // Apply forces on the two nodes
-  nodeA.repulsionForceX -= repulsionForceX;
-  nodeA.repulsionForceY -= repulsionForceY;
-  nodeB.repulsionForceX += repulsionForceX;
-  nodeB.repulsionForceY += repulsionForceY;
+  // If one node is simple and the other is not, then apply the force only to the simple one
+  if((nodeA.getChild() != null && nodeB.getChild() == null) || (nodeB.getChild() != null && nodeA.getChild() == null) ){
+    if(nodeB.getChild() == null){
+      nodeB.repulsionForceX += repulsionForceX;
+      nodeB.repulsionForceY += repulsionForceY;
+    }
+    else{
+      nodeA.repulsionForceX -= repulsionForceX;
+      nodeA.repulsionForceY -= repulsionForceY;
+    }
+  }
+  else{
+   nodeA.repulsionForceX -= repulsionForceX;
+   nodeA.repulsionForceY -= repulsionForceY;
+   nodeB.repulsionForceX += repulsionForceX;
+   nodeB.repulsionForceY += repulsionForceY;  
+  }
 };
 
 FDLayout.prototype.calcGravitationalForce = function (node) {
