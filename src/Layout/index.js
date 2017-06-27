@@ -304,12 +304,12 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
     var children_of_children = theChild.children();
     var theNode;
 
-    if (theChild.width() != null
-            && theChild.height() != null) {
+    if (theChild.outerWidth() != null
+            && theChild.outerHeight() != null) {
       theNode = parent.add(new CoSENode(layout.graphManager,
-              new PointD(theChild.position('x') - theChild.width() / 2, theChild.position('y') - theChild.height() / 2),
-              new DimensionD(parseFloat(theChild.width()),
-                      parseFloat(theChild.height()))));
+              new PointD(theChild.position('x') - theChild.outerWidth() / 2, theChild.position('y') - theChild.outerHeight() / 2),
+              new DimensionD(parseFloat(theChild.outerWidth()),
+                      parseFloat(theChild.outerHeight()))));
     }
     else {
       theNode = parent.add(new CoSENode(this.graphManager));
@@ -317,10 +317,10 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
     // Attach id to the layout node
     theNode.id = theChild.data("id");
     // Attach the paddings of cy node to layout node
-    theNode.paddingLeft = parseInt( theChild.css('padding-left') );
-    theNode.paddingTop = parseInt( theChild.css('padding-top') );
-    theNode.paddingRight = parseInt( theChild.css('padding-right') );
-    theNode.paddingBottom = parseInt( theChild.css('padding-bottom') );
+    theNode.paddingLeft = parseInt( theChild.css('padding') );
+    theNode.paddingTop = parseInt( theChild.css('padding') );
+    theNode.paddingRight = parseInt( theChild.css('padding') );
+    theNode.paddingBottom = parseInt( theChild.css('padding') );
     // Map the layout node
     this.idToLNode[theChild.data("id")] = theNode;
 
