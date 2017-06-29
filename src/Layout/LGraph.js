@@ -203,6 +203,7 @@ LGraph.prototype.updateLeftTop = function ()
   var left = Integer.MAX_VALUE;
   var nodeTop;
   var nodeLeft;
+  var margin;
 
   var nodes = this.getNodes();
   var s = nodes.length;
@@ -229,9 +230,16 @@ LGraph.prototype.updateLeftTop = function ()
   {
     return null;
   }
+  
+  if(nodes[0].getParent().paddingLeft != undefined){
+    margin = nodes[0].getParent().paddingLeft;
+  }
+  else{
+    margin = this.margin;
+  }
 
-  this.left = left - this.margin;
-  this.top = top - this.margin;
+  this.left = left - margin;
+  this.top = top - margin;
 
   // Apply the margins and return the result
   return new Point(this.left, this.top);
@@ -248,6 +256,7 @@ LGraph.prototype.updateBounds = function (recursive)
   var nodeRight;
   var nodeTop;
   var nodeBottom;
+  var margin;
 
   var nodes = this.nodes;
   var s = nodes.length;
@@ -293,11 +302,18 @@ LGraph.prototype.updateBounds = function (recursive)
     this.top = Math.floor(this.parent.getTop());
     this.bottom = Math.floor(this.parent.getBottom());
   }
+  
+  if(nodes[0].getParent().paddingLeft != undefined){
+    margin = nodes[0].getParent().paddingLeft;
+  }
+  else{
+    margin = this.margin;
+  }
 
-  this.left = boundingRect.x - this.margin;
-  this.right = boundingRect.x + boundingRect.width + this.margin;
-  this.top = boundingRect.y - this.margin;
-  this.bottom = boundingRect.y + boundingRect.height + this.margin;
+  this.left = boundingRect.x - margin;
+  this.right = boundingRect.x + boundingRect.width + margin;
+  this.top = boundingRect.y - margin;
+  this.bottom = boundingRect.y + boundingRect.height + margin;
 };
 
 LGraph.calculateBounds = function (nodes)
