@@ -43,8 +43,6 @@ var defaults = {
   fit: true,
   // Padding on fit
   padding: 10,
-  // Padding for compounds
-  paddingCompound: 15,
   // Whether to enable incremental mode
   randomize: true,
   // Node repulsion (non overlapping) multiplier
@@ -111,8 +109,6 @@ var getUserOptions = function (options) {
     CoSEConstants.DEFAULT_GRAVITY_STRENGTH = FDLayoutConstants.DEFAULT_GRAVITY_STRENGTH = options.gravity;
   if (options.numIter != null)
     CoSEConstants.MAX_ITERATIONS = FDLayoutConstants.MAX_ITERATIONS = options.numIter;
-  if (options.paddingCompound != null)
-    CoSEConstants.DEFAULT_GRAPH_MARGIN = FDLayoutConstants.DEFAULT_GRAPH_MARGIN = LayoutConstants.DEFAULT_GRAPH_MARGIN = options.paddingCompound;
   if (options.gravityRange != null)
     CoSEConstants.DEFAULT_GRAVITY_RANGE_FACTOR = FDLayoutConstants.DEFAULT_GRAVITY_RANGE_FACTOR = options.gravityRange;
   if(options.gravityCompound != null)
