@@ -258,12 +258,9 @@ _CoSELayout.prototype.run = function () {
    * If animate option is not 'during' ('end' or false) perform these here (If it is 'during' similar things are already performed)
    */
   if(this.options.animate !== 'during'){
-    setTimeout(function() {
       self.options.eles.nodes().not(":parent").layoutPositions(self, self.options, getPositions); // Use layout positions to reposition the nodes it considers the options parameter
       self.options.eles.nodes().removeScratch('coseBilkent');
       ready = false;
-    }, 0);
-    
   }
 
   return this; // chaining
