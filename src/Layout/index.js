@@ -120,7 +120,7 @@ var getUserOptions = function (options) {
 
   CoSEConstants.DEFAULT_INCREMENTAL = FDLayoutConstants.DEFAULT_INCREMENTAL = LayoutConstants.DEFAULT_INCREMENTAL =
           !(options.randomize);
-  CoSEConstants.ANIMATE = FDLayoutConstants.ANIMATE = options.animate;
+  CoSEConstants.ANIMATE = FDLayoutConstants.ANIMATE = LayoutConstants.ANIMATE = options.animate;
   CoSEConstants.TILE = options.tile;
   CoSEConstants.TILING_PADDING_VERTICAL = 
           typeof options.tilingPaddingVertical === 'function' ? options.tilingPaddingVertical.call() : options.tilingPaddingVertical;
@@ -197,6 +197,18 @@ _CoSELayout.prototype.run = function () {
     
     // If layout is done
     if (isDone) {
+      // If the layout is not a sublayout and it is successful perform post layout.
+      if (layout.checkLayoutSuccess() && !layout.isSubLayout) {
+        layout.doPostLayout();
+      }
+      
+      // If layout has a tilingPostLayout function property call it.
+      if (layout.tilingPostLayout) {
+        layout.tilingPostLayout();
+      }
+      
+      layout.isLayoutFinished = true;
+      
       self.options.eles.nodes().positions(getPositions);
       
       afterReposition();
@@ -210,7 +222,6 @@ _CoSELayout.prototype.run = function () {
         cancelAnimationFrame(frameId);
       }
       
-      self.options.eles.nodes().removeScratch('coseBilkent');
       ready = false;
       return;
     }
@@ -259,7 +270,6 @@ _CoSELayout.prototype.run = function () {
    */
   if(this.options.animate !== 'during'){
       self.options.eles.nodes().not(":parent").layoutPositions(self, self.options, getPositions); // Use layout positions to reposition the nodes it considers the options parameter
-      self.options.eles.nodes().removeScratch('coseBilkent');
       ready = false;
   }
 

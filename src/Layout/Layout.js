@@ -90,6 +90,12 @@ Layout.prototype.newEdge = function (vEdge)
   return new LEdge(null, null, vEdge);
 };
 
+Layout.prototype.checkLayoutSuccess = function() {
+  return (this.graphManager.getRoot() == null)
+          || this.graphManager.getRoot().getNodes().length == 0
+          || this.graphManager.includesInvalidEdge();
+};
+
 Layout.prototype.runLayout = function ()
 {
   this.isLayoutFinished = false;
@@ -101,31 +107,21 @@ Layout.prototype.runLayout = function ()
   this.initParameters();
   var isLayoutSuccessfull;
 
-  if ((this.graphManager.getRoot() == null)
-          || this.graphManager.getRoot().getNodes().length == 0
-          || this.graphManager.includesInvalidEdge())
+  if (this.checkLayoutSuccess())
   {
     isLayoutSuccessfull = false;
   }
   else
   {
-    // calculate execution time
-    var startTime = 0;
-
-    if (!this.isSubLayout)
-    {
-      startTime = new Date().getTime()
-    }
-
     isLayoutSuccessfull = this.layout();
-
-    if (!this.isSubLayout)
-    {
-      var endTime = new Date().getTime();
-      var excTime = endTime - startTime;
-    }
   }
-
+  
+  if (LayoutConstants.ANIMATE === 'during') {
+    // If this is a 'during' layout animation. Layout is not finished yet. 
+    // We need to perform these in index.js when layout is really finished.
+    return false;
+  }
+  
   if (isLayoutSuccessfull)
   {
     if (!this.isSubLayout)
