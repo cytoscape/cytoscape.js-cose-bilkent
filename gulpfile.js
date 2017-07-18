@@ -16,7 +16,6 @@ var watchify = require('watchify');
 var babelify = require('babelify');
 var buffer = require('vinyl-buffer');
 var source = require('vinyl-source-stream');
-var notifier = require('node-notifier');
 var derequire = require('gulp-derequire');
 var server = require('http-server');
 var livereload = require('gulp-livereload');
