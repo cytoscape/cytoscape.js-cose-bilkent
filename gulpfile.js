@@ -51,12 +51,11 @@ var getBrowserified = function( opts ){
 
 var transform = function( b ){
   return ( b
-    // can't use babel because cose-bilkent does just use pure functions in workers...
-    // .transform( babelify.configure({
-    //   presets: ['es2015'],
-    //   ignore: 'node_modules/**/*',
-    //   sourceMaps: 'inline'
-    // }) )
+    .transform( babelify.configure({
+      presets: ['es2015'],
+      ignore: 'node_modules/**/*',
+      sourceMaps: 'inline'
+    }) )
   ) ;
 };
 
