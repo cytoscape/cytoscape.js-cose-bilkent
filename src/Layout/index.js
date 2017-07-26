@@ -215,7 +215,6 @@ _CoSELayout.prototype.run = function () {
       
       // trigger layoutstop when the layout stops (e.g. finishes)
       self.cy.one('layoutstop', self.options.stop);
-      self.cy.trigger('layoutstop');
       self.cy.trigger({ type: 'layoutstop', layout: self });
 
       if (frameId) {
