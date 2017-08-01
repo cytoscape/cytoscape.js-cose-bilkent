@@ -146,7 +146,9 @@ Layout.prototype.doPostLayout = function ()
 {
   //assert !isSubLayout : "Should not be called on sub-layout!";
   // Propagate geometric changes to v-level objects
-  this.transform();
+  if(!this.incremental){
+    this.transform();
+  }
   this.update();
 };
 
