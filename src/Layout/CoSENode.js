@@ -15,9 +15,9 @@ CoSENode.prototype.move = function ()
 {
   var layout = this.graphManager.getLayout();
   this.displacementX = layout.coolingFactor *
-          (this.springForceX + this.repulsionForceX + this.gravitationForceX);
+          (this.springForceX + this.repulsionForceX + this.gravitationForceX) / this.noOfChildren;
   this.displacementY = layout.coolingFactor *
-          (this.springForceY + this.repulsionForceY + this.gravitationForceY);
+          (this.springForceY + this.repulsionForceY + this.gravitationForceY) / this.noOfChildren;
 
 
   if (Math.abs(this.displacementX) > layout.coolingFactor * layout.maxNodeDisplacement)

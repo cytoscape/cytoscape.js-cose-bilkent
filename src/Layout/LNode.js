@@ -220,6 +220,29 @@ LNode.prototype.withChildren = function ()
   return withNeighborsList;
 };
 
+LNode.prototype.getNoOfChildren = function ()
+{
+  var noOfChildren;
+  var childNode;
+
+  if(this.child == null){
+    noOfChildren = 1;
+    return noOfChildren;
+  }
+  else
+  {
+    noOfChildren = 0;
+    var nodes = this.child.getNodes();
+    for (var i = 0; i < nodes.length; i++)
+    {
+      childNode = nodes[i];
+
+      noOfChildren += childNode.getNoOfChildren();
+    }
+    return noOfChildren;
+  }
+};
+
 LNode.prototype.getEstimatedSize = function () {
   if (this.estimatedSize == Integer.MIN_VALUE) {
     throw "assert failed";

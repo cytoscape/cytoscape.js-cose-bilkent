@@ -232,8 +232,16 @@ FDLayout.prototype.calcRepulsionForce = function (nodeA, nodeB) {
             overlapAmount,
             FDLayoutConstants.DEFAULT_EDGE_LENGTH / 2.0);
 
-    repulsionForceX = overlapAmount[0];
-    repulsionForceY = overlapAmount[1];
+    repulsionForceX = 2 * overlapAmount[0];
+    repulsionForceY = 2 * overlapAmount[1];
+    
+    var childrenConstant = nodeA.noOfChildren * nodeB.noOfChildren / (nodeA.noOfChildren + nodeB.noOfChildren);
+    
+    // Apply forces on the two nodes
+    nodeA.repulsionForceX -= childrenConstant * repulsionForceX;
+    nodeA.repulsionForceY -= childrenConstant * repulsionForceY;
+    nodeB.repulsionForceX += childrenConstant * repulsionForceX;
+    nodeB.repulsionForceY += childrenConstant * repulsionForceY;
   }
   else// no overlap
   {
@@ -269,30 +277,17 @@ FDLayout.prototype.calcRepulsionForce = function (nodeA, nodeB) {
     distanceSquared = distanceX * distanceX + distanceY * distanceY;
     distance = Math.sqrt(distanceSquared);
 
-    repulsionForce = this.repulsionConstant / distanceSquared;
+    repulsionForce = this.repulsionConstant * nodeA.noOfChildren * nodeB.noOfChildren / distanceSquared;
 
     // Project force onto x and y axes
     repulsionForceX = repulsionForce * distanceX / distance;
     repulsionForceY = repulsionForce * distanceY / distance;
-  }
-
-  // Apply forces on the two nodes
-  // If one node is simple and the other is not, then apply the force only to the simple one
-  if((nodeA.getChild() != null && nodeB.getChild() == null) || (nodeB.getChild() != null && nodeA.getChild() == null) ){
-    if(nodeB.getChild() == null){
-      nodeB.repulsionForceX += repulsionForceX;
-      nodeB.repulsionForceY += repulsionForceY;
-    }
-    else{
-      nodeA.repulsionForceX -= repulsionForceX;
-      nodeA.repulsionForceY -= repulsionForceY;
-    }
-  }
-  else{
-   nodeA.repulsionForceX -= repulsionForceX;
-   nodeA.repulsionForceY -= repulsionForceY;
-   nodeB.repulsionForceX += repulsionForceX;
-   nodeB.repulsionForceY += repulsionForceY;  
+     
+    // Apply forces on the two nodes    
+    nodeA.repulsionForceX -= repulsionForceX;
+    nodeA.repulsionForceY -= repulsionForceY;
+    nodeB.repulsionForceX += repulsionForceX;
+    nodeB.repulsionForceY += repulsionForceY;
   }
 };
 
@@ -311,8 +306,8 @@ FDLayout.prototype.calcGravitationalForce = function (node) {
   ownerCenterY = (ownerGraph.getTop() + ownerGraph.getBottom()) / 2;
   distanceX = node.getCenterX() - ownerCenterX;
   distanceY = node.getCenterY() - ownerCenterY;
-  absDistanceX = Math.abs(distanceX);
-  absDistanceY = Math.abs(distanceY);
+  absDistanceX = Math.abs(distanceX) + node.getWidth() / 2;
+  absDistanceY = Math.abs(distanceY) + node.getHeight() / 2;
 
   if (node.getOwner() == this.graphManager.getRoot())// in the root graph
   {

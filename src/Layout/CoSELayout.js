@@ -87,6 +87,7 @@ CoSELayout.prototype.layout = function () {
 
 CoSELayout.prototype.classicLayout = function () {
   this.calculateNodesToApplyGravitationTo();
+  this.calcNoOfChildrenForAllNodes();
   this.graphManager.calcLowestCommonAncestors();
   this.graphManager.calcInclusionTreeDepths();
   this.graphManager.getRoot().calcEstimatedSize();
@@ -202,6 +203,18 @@ CoSELayout.prototype.calculateNodesToApplyGravitationTo = function () {
 
   this.graphManager.setAllNodesToApplyGravitation(nodeList);
 };
+
+CoSELayout.prototype.calcNoOfChildrenForAllNodes = function ()
+{
+  var node;
+  var allNodes = this.graphManager.getAllNodes();
+  
+  for(i = 0; i < allNodes.length; i++)
+  {
+      node = allNodes[i];
+      node.noOfChildren = node.getNoOfChildren();
+  }
+}
 
 CoSELayout.prototype.createBendpoints = function () {
   var edges = [];
