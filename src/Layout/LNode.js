@@ -222,16 +222,14 @@ LNode.prototype.withChildren = function ()
 
 LNode.prototype.getNoOfChildren = function ()
 {
-  var noOfChildren;
+  var noOfChildren = 0;
   var childNode;
 
   if(this.child == null){
     noOfChildren = 1;
-    return noOfChildren;
   }
   else
   {
-    noOfChildren = 0;
     var nodes = this.child.getNodes();
     for (var i = 0; i < nodes.length; i++)
     {
@@ -239,8 +237,12 @@ LNode.prototype.getNoOfChildren = function ()
 
       noOfChildren += childNode.getNoOfChildren();
     }
-    return noOfChildren;
   }
+  
+  if(noOfChildren == 0){
+    noOfChildren = 1;
+  }
+  return noOfChildren;
 };
 
 LNode.prototype.getEstimatedSize = function () {
