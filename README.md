@@ -8,6 +8,10 @@ The CoSE layout for Cytoscape.js by the [i-Vis group](http://cs.bilkent.edu.tr/~
 
 U. Dogrusoz, E. Giral, A. Cetintas, A. Civril, and E. Demir, "[A Layout Algorithm For Undirected Compound Graphs](http://www.sciencedirect.com/science/article/pii/S0020025508004799)", Information Sciences, 179, pp. 980-994, 2009.
 
+## Demos
+
+Click [here](https://rawgit.com/cytoscape/cytoscape.js-cose-bilkent/unstable/demo.html) (simple) or [here](https://rawgit.com/cytoscape/cytoscape.js-cose-bilkent/unstable/demo-compound.html) (compound) for demos
+
 ## Dependencies
 
  * Cytoscape.js ^2.4.0 || ^3.0.0
