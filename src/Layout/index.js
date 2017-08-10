@@ -273,7 +273,7 @@ _CoSELayout.prototype.run = function () {
       ready = false;
     }, 0);
   }
-  else if(this.options.animate == 'false'){
+  else if(this.options.animate == false){
     self.options.eles.nodes().not(":parent").layoutPositions(self, self.options, getPositions); // Use layout positions to reposition the nodes it considers the options parameter
     ready = false;
   }
