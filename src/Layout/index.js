@@ -37,6 +37,8 @@ var defaults = {
   // Called on `layoutstop`
   stop: function () {
   },
+  // include labels in node dimensions
+  nodeDimensionsIncludeLabels: true,
   // number of ticks per frame; higher is faster but more jerky
   refresh: 30,
   // Whether to fit the network view after when done
@@ -310,14 +312,17 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
     var theChild = children[i];
     this.options.eles.nodes().length;
     var children_of_children = theChild.children();
-    var theNode;
+    var theNode;    
+
+    var dimensions = theChild.layoutDimensions({
+      nodeDimensionsIncludeLabels: this.options.nodeDimensionsIncludeLabels
+    });
 
     if (theChild.outerWidth() != null
             && theChild.outerHeight() != null) {
       theNode = parent.add(new CoSENode(layout.graphManager,
-              new PointD(theChild.position('x') - theChild.outerWidth() / 2, theChild.position('y') - theChild.outerHeight() / 2),
-              new DimensionD(parseFloat(theChild.outerWidth()),
-                      parseFloat(theChild.outerHeight()))));
+              new PointD(theChild.position('x') - dimensions.w / 2, theChild.position('y') - dimensions.h / 2),
+              new DimensionD(parseFloat(dimensions.w), parseFloat(dimensions.h))));
     }
     else {
       theNode = parent.add(new CoSENode(this.graphManager));
