@@ -38,7 +38,7 @@ var defaults = {
   stop: function () {
   },
   // include labels in node dimensions
-  nodeDimensionsIncludeLabels: true,
+  nodeDimensionsIncludeLabels: false,
   // number of ticks per frame; higher is faster but more jerky
   refresh: 30,
   // Whether to fit the network view after when done
