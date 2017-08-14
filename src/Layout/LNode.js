@@ -255,7 +255,7 @@ LNode.prototype.getEstimatedSize = function () {
 LNode.prototype.calcEstimatedSize = function () {
   if (this.child == null)
   {
-    return this.estimatedSize = Math.floor((this.rect.width + this.rect.height) / 2);
+    return this.estimatedSize = (this.rect.width + this.rect.height) / 2;
   }
   else
   {

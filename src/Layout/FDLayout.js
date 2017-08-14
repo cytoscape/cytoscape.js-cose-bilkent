@@ -342,9 +342,7 @@ FDLayout.prototype.calcGravitationalForce = function (node) {
 
   if (node.getOwner() == this.graphManager.getRoot())// in the root graph
   {
-    Math.floor(80);
-    estimatedSize = Math.floor(ownerGraph.getEstimatedSize() *
-            this.gravityRangeFactor);
+    estimatedSize = ownerGraph.getEstimatedSize() * this.gravityRangeFactor;
 
     if (absDistanceX > estimatedSize || absDistanceY > estimatedSize)
     {
@@ -354,8 +352,7 @@ FDLayout.prototype.calcGravitationalForce = function (node) {
   }
   else// inside a compound
   {
-    estimatedSize = Math.floor((ownerGraph.getEstimatedSize() *
-            this.compoundGravityRangeFactor));
+    estimatedSize = ownerGraph.getEstimatedSize() * this.compoundGravityRangeFactor;
 
     if (absDistanceX > estimatedSize || absDistanceY > estimatedSize)
     {
