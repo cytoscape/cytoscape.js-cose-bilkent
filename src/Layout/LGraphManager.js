@@ -373,6 +373,7 @@ LGraphManager.prototype.calcLowestCommonAncestors = function ()
 
     while (edge.lca == null)
     {
+      edge.targetInLca = targetNode;  
       targetAncestorGraph = targetNode.getOwner();
 
       while (edge.lca == null)
