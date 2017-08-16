@@ -300,6 +300,28 @@ LNode.prototype.updateBounds = function () {
 
     this.setWidth(childGraph.getRight() - childGraph.getLeft());
     this.setHeight(childGraph.getBottom() - childGraph.getTop());
+    
+    // Update compound bounds considering its label properties    
+    if(LayoutConstants.NODE_DIMENSIONS_INCLUDE_LABELS){
+        
+      var width = childGraph.getRight() - childGraph.getLeft();
+      var height = childGraph.getBottom() - childGraph.getTop();
+
+      if(this.labelWidth > width){
+        this.rect.x -= (this.labelWidth - width) / 2;
+        this.setWidth(this.labelWidth);
+      }
+
+      if(this.labelHeight > height){
+        if(this.labelPos == "center"){
+          this.rect.y -= (this.labelHeight - height) / 2;
+        }
+        else if(this.labelPos == "top"){
+          this.rect.y -= (this.labelHeight - height); 
+        }
+        this.setHeight(this.labelHeight);
+      }
+    }
   }
 };
 

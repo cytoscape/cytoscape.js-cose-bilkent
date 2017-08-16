@@ -120,6 +120,7 @@ var getUserOptions = function (options) {
   if (options.initialEnergyOnIncremental != null)
     CoSEConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = options.initialEnergyOnIncremental;
 
+  CoSEConstants.NODE_DIMENSIONS_INCLUDE_LABELS = FDLayoutConstants.NODE_DIMENSIONS_INCLUDE_LABELS = LayoutConstants.NODE_DIMENSIONS_INCLUDE_LABELS = options.nodeDimensionsIncludeLabels;
   CoSEConstants.DEFAULT_INCREMENTAL = FDLayoutConstants.DEFAULT_INCREMENTAL = LayoutConstants.DEFAULT_INCREMENTAL =
           !(options.randomize);
   CoSEConstants.ANIMATE = FDLayoutConstants.ANIMATE = LayoutConstants.ANIMATE = options.animate;
@@ -334,6 +335,19 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
     theNode.paddingTop = parseInt( theChild.css('padding') );
     theNode.paddingRight = parseInt( theChild.css('padding') );
     theNode.paddingBottom = parseInt( theChild.css('padding') );
+    
+    //Attach the label properties to compound if labels will be included in node dimensions  
+    if(this.options.nodeDimensionsIncludeLabels){
+      if(theChild.isParent()){
+          var labelWidth = theChild.boundingBox({ includeLabels: true, includeNodes: false }).w;          
+          var labelHeight = theChild.boundingBox({ includeLabels: true, includeNodes: false }).h;
+          var labelPos = theChild.css("text-halign");
+          theNode.labelWidth = labelWidth;
+          theNode.labelHeight = labelHeight;
+          theNode.labelPos = labelPos;
+      }
+    }
+    
     // Map the layout node
     this.idToLNode[theChild.data("id")] = theNode;
 
