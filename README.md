@@ -56,6 +56,8 @@ var defaultOptions = {
   // Called on `layoutstop`
   stop: function () {
   },
+  // Whether to include labels in node dimensions. Useful for avoiding label overlap
+  nodeDimensionsIncludeLabels: false,
   // number of ticks per frame; higher is faster but more jerky
   refresh: 30, 
   // Whether to fit the network view after when done
