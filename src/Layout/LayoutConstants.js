@@ -29,6 +29,11 @@ LayoutConstants.DEFAULT_UNIFORM_LEAF_NODE_SIZES = false;
 LayoutConstants.DEFAULT_GRAPH_MARGIN = 15;
 
 /*
+ * Whether to consider labels in node dimensions or not
+ */
+LayoutConstants.NODE_DIMENSIONS_INCLUDE_LABELS = false;
+
+/*
  * Default dimension of a non-compound node.
  */
 LayoutConstants.SIMPLE_NODE_SIZE = 40;

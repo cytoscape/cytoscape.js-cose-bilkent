@@ -211,8 +211,8 @@ LGraph.prototype.updateLeftTop = function ()
   for (var i = 0; i < s; i++)
   {
     var lNode = nodes[i];
-    nodeTop = Math.floor(lNode.getTop());
-    nodeLeft = Math.floor(lNode.getLeft());
+    nodeTop = lNode.getTop();
+    nodeLeft = lNode.getLeft();
 
     if (top > nodeTop)
     {
@@ -268,10 +268,10 @@ LGraph.prototype.updateBounds = function (recursive)
     {
       lNode.updateBounds();
     }
-    nodeLeft = Math.floor(lNode.getLeft());
-    nodeRight = Math.floor(lNode.getRight());
-    nodeTop = Math.floor(lNode.getTop());
-    nodeBottom = Math.floor(lNode.getBottom());
+    nodeLeft = lNode.getLeft();
+    nodeRight = lNode.getRight();
+    nodeTop = lNode.getTop();
+    nodeBottom = lNode.getBottom();
 
     if (left > nodeLeft)
     {
@@ -297,10 +297,10 @@ LGraph.prototype.updateBounds = function (recursive)
   var boundingRect = new RectangleD(left, top, right - left, bottom - top);
   if (left == Integer.MAX_VALUE)
   {
-    this.left = Math.floor(this.parent.getLeft());
-    this.right = Math.floor(this.parent.getRight());
-    this.top = Math.floor(this.parent.getTop());
-    this.bottom = Math.floor(this.parent.getBottom());
+    this.left = this.parent.getLeft();
+    this.right = this.parent.getRight();
+    this.top = this.parent.getTop();
+    this.bottom = this.parent.getBottom();
   }
   
   if(nodes[0].getParent().paddingLeft != undefined){
@@ -332,10 +332,10 @@ LGraph.calculateBounds = function (nodes)
   for (var i = 0; i < s; i++)
   {
     var lNode = nodes[i];
-    nodeLeft = Math.floor(lNode.getLeft());
-    nodeRight = Math.floor(lNode.getRight());
-    nodeTop = Math.floor(lNode.getTop());
-    nodeBottom = Math.floor(lNode.getBottom());
+    nodeLeft = lNode.getLeft();
+    nodeRight = lNode.getRight();
+    nodeTop = lNode.getTop();
+    nodeBottom = lNode.getBottom();
 
     if (left > nodeLeft)
     {
@@ -401,10 +401,10 @@ LGraph.prototype.calcEstimatedSize = function ()
   }
   else
   {
-    this.estimatedSize = Math.floor(size / Math.sqrt(this.nodes.length));
+    this.estimatedSize = size / Math.sqrt(this.nodes.length);
   }
 
-  return Math.floor(this.estimatedSize);
+  return this.estimatedSize;
 };
 
 LGraph.prototype.updateConnected = function ()

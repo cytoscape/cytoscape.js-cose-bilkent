@@ -37,6 +37,8 @@ var defaults = {
   // Called on `layoutstop`
   stop: function () {
   },
+  // include labels in node dimensions
+  nodeDimensionsIncludeLabels: false,
   // number of ticks per frame; higher is faster but more jerky
   refresh: 30,
   // Whether to fit the network view after when done
@@ -118,6 +120,7 @@ var getUserOptions = function (options) {
   if (options.initialEnergyOnIncremental != null)
     CoSEConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = options.initialEnergyOnIncremental;
 
+  CoSEConstants.NODE_DIMENSIONS_INCLUDE_LABELS = FDLayoutConstants.NODE_DIMENSIONS_INCLUDE_LABELS = LayoutConstants.NODE_DIMENSIONS_INCLUDE_LABELS = options.nodeDimensionsIncludeLabels;
   CoSEConstants.DEFAULT_INCREMENTAL = FDLayoutConstants.DEFAULT_INCREMENTAL = LayoutConstants.DEFAULT_INCREMENTAL =
           !(options.randomize);
   CoSEConstants.ANIMATE = FDLayoutConstants.ANIMATE = LayoutConstants.ANIMATE = options.animate;
@@ -310,14 +313,17 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
     var theChild = children[i];
     this.options.eles.nodes().length;
     var children_of_children = theChild.children();
-    var theNode;
+    var theNode;    
+
+    var dimensions = theChild.layoutDimensions({
+      nodeDimensionsIncludeLabels: this.options.nodeDimensionsIncludeLabels
+    });
 
     if (theChild.outerWidth() != null
             && theChild.outerHeight() != null) {
       theNode = parent.add(new CoSENode(layout.graphManager,
-              new PointD(theChild.position('x') - theChild.outerWidth() / 2, theChild.position('y') - theChild.outerHeight() / 2),
-              new DimensionD(parseFloat(theChild.outerWidth()),
-                      parseFloat(theChild.outerHeight()))));
+              new PointD(theChild.position('x') - dimensions.w / 2, theChild.position('y') - dimensions.h / 2),
+              new DimensionD(parseFloat(dimensions.w), parseFloat(dimensions.h))));
     }
     else {
       theNode = parent.add(new CoSENode(this.graphManager));
@@ -329,6 +335,19 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
     theNode.paddingTop = parseInt( theChild.css('padding') );
     theNode.paddingRight = parseInt( theChild.css('padding') );
     theNode.paddingBottom = parseInt( theChild.css('padding') );
+    
+    //Attach the label properties to compound if labels will be included in node dimensions  
+    if(this.options.nodeDimensionsIncludeLabels){
+      if(theChild.isParent()){
+          var labelWidth = theChild.boundingBox({ includeLabels: true, includeNodes: false }).w;          
+          var labelHeight = theChild.boundingBox({ includeLabels: true, includeNodes: false }).h;
+          var labelPos = theChild.css("text-halign");
+          theNode.labelWidth = labelWidth;
+          theNode.labelHeight = labelHeight;
+          theNode.labelPos = labelPos;
+      }
+    }
+    
     // Map the layout node
     this.idToLNode[theChild.data("id")] = theNode;
 
