@@ -157,8 +157,10 @@ _CoSELayout.prototype.run = function () {
     var edge = edges[i];
     var sourceNode = this.idToLNode[edge.data("source")];
     var targetNode = this.idToLNode[edge.data("target")];
-    var e1 = gm.add(layout.newEdge(), sourceNode, targetNode);
-    e1.id = edge.id();
+    if(sourceNode.getEdgesBetween(targetNode).length == 0){
+      var e1 = gm.add(layout.newEdge(), sourceNode, targetNode);
+      e1.id = edge.id();
+    }
   }
   
    var getPositions = function(ele, i){
