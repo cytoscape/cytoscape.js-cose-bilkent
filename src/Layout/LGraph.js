@@ -7,6 +7,7 @@ var LEdge = require('./LEdge');
 var HashSet = require('./HashSet');
 var RectangleD = require('./RectangleD');
 var Point = require('./Point');
+var LinkedList = require('linkedlist');
 
 function LGraph(parent, obj2, vGraph) {
   LGraphObject.call(this, vGraph);
@@ -416,12 +417,16 @@ LGraph.prototype.updateConnected = function ()
     return;
   }
 
-  var toBeVisited = [];
+  var toBeVisited = new LinkedList();
   var visited = new HashSet();
   var currentNode = this.nodes[0];
   var neighborEdges;
   var currentNeighbor;
-  toBeVisited = toBeVisited.concat(currentNode.withChildren());
+  var noOfChildrenOfNode = currentNode.withChildren().length;
+  var childrenOfNode = currentNode.withChildren();
+  for (var i = 0; i < noOfChildrenOfNode; i++) {
+    toBeVisited.push(childrenOfNode[i]);
+  }
 
   while (toBeVisited.length > 0)
   {
@@ -441,7 +446,11 @@ LGraph.prototype.updateConnected = function ()
       if (currentNeighbor != null &&
               !visited.contains(currentNeighbor))
       {
-        toBeVisited = toBeVisited.concat(currentNeighbor.withChildren());
+        var noOfChildrenOfNeighbor = currentNeighbor.withChildren().length;
+        var childrenOfNeighbor = currentNeighbor.withChildren();
+        for (var j = 0; j < noOfChildrenOfNeighbor; j++) {
+          toBeVisited.push(childrenOfNeighbor[j]);
+        }
       }
     }
   }
