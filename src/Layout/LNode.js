@@ -47,11 +47,11 @@ LNode.prototype.getChild = function ()
 
 LNode.prototype.getOwner = function ()
 {
-  if (this.owner != null) {
-    if (!(this.owner == null || this.owner.getNodes().indexOf(this) > -1)) {
-      throw "assert failed";
-    }
-  }
+//  if (this.owner != null) {
+//    if (!(this.owner == null || this.owner.getNodes().indexOf(this) > -1)) {
+//      throw "assert failed";
+//    }
+//  }
 
   return this.owner;
 };
