@@ -307,7 +307,6 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
   var size = children.length;
   for (var i = 0; i < size; i++) {
     var theChild = children[i];
-    this.options.eles.nodes().length;
     var children_of_children = theChild.children();
     var theNode;    
 
