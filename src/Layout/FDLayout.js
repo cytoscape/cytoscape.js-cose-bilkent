@@ -152,7 +152,7 @@ FDLayout.prototype.calcRepulsionForces = function () {
     for (i = 0; i < lNodes.length; i++)
     {
       nodeA = lNodes[i];
-      this.calculateRepulsionForceOfANode(grid, nodeA, processedNodeSet);
+      this.calculateRepulsionForceOfANode(nodeA, processedNodeSet);
       processedNodeSet.add(nodeA);
     }
 
@@ -427,7 +427,7 @@ FDLayout.prototype.calcGrid = function (graph){
   return grid;
 };
 
-FDLayout.prototype.addNodeToGrid = function (v, grid, left, top){
+FDLayout.prototype.addNodeToGrid = function (v, left, top){
     
   var startX = 0;
   var finishX = 0;
@@ -443,7 +443,7 @@ FDLayout.prototype.addNodeToGrid = function (v, grid, left, top){
   {
     for (var j = startY; j <= finishY; j++)
     {
-      grid[i][j].push(v);
+      this.grid[i][j].push(v);
       v.setGridCoordinates(startX, finishX, startY, finishY); 
     }
   }  
@@ -466,13 +466,14 @@ FDLayout.prototype.updateGrid = function() {
 
 };
 
-FDLayout.prototype.calculateRepulsionForceOfANode = function (grid, nodeA, processedNodeSet){
+FDLayout.prototype.calculateRepulsionForceOfANode = function (nodeA, processedNodeSet){
   
   if (this.totalIterations % FDLayoutConstants.GRID_CALCULATION_CHECK_PERIOD == 1)
   {
     var surrounding = new Set();
     nodeA.surrounding = new Array();
     var nodeB;
+    var grid = this.grid;
     
     for (var i = (nodeA.startX - 1); i < (nodeA.finishX + 2); i++)
     {
@@ -573,7 +574,7 @@ FDLayout.prototype.growTree = function(prunedNodesAll, isFirstGrowth)
   for(var i = 0; i < prunedNodesInStep.length; i++){
     nodeData = prunedNodesInStep[i];
 
-    this.findGridforPrunedNode(nodeData);
+    this.findPlaceforPrunedNode(nodeData);
     
     nodeData[2].add(nodeData[0]);
     nodeData[2].add(nodeData[1], nodeData[1].source, nodeData[1].target);
