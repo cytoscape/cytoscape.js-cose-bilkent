@@ -246,11 +246,22 @@ _CoSELayout.prototype.run = function () {
         pNode = animationData[temp.data('parent')] || animationData['DummyCompound_' + temp.data('parent')];
         animationData[theId] = pNode;
         temp = temp.parent()[0];
+        if(temp == undefined){
+          break;
+        }
       }
-      return {
-        x: pNode.x,
-        y: pNode.y
-      };
+      if(pNode != null){
+        return {
+          x: pNode.x,
+          y: pNode.y
+        };
+      }
+      else{
+        return {
+          x: ele.x,
+          y: ele.y
+        };
+      }
     });
 
     afterReposition();
