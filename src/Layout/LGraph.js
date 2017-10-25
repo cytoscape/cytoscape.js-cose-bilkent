@@ -422,11 +422,10 @@ LGraph.prototype.updateConnected = function ()
   var currentNode = this.nodes[0];
   var neighborEdges;
   var currentNeighbor;
-  var noOfChildrenOfNode = currentNode.withChildren().length;
   var childrenOfNode = currentNode.withChildren();
-  for (var i = 0; i < noOfChildrenOfNode; i++) {
-    toBeVisited.push(childrenOfNode[i]);
-  }
+  childrenOfNode.forEach(function(node) {
+    toBeVisited.push(node);
+  });
 
   while (toBeVisited.length > 0)
   {
@@ -446,11 +445,11 @@ LGraph.prototype.updateConnected = function ()
       if (currentNeighbor != null &&
               !visited.contains(currentNeighbor))
       {
-        var noOfChildrenOfNeighbor = currentNeighbor.withChildren().length;
         var childrenOfNeighbor = currentNeighbor.withChildren();
-        for (var j = 0; j < noOfChildrenOfNeighbor; j++) {
-          toBeVisited.push(childrenOfNeighbor[j]);
-        }
+        
+        childrenOfNeighbor.forEach(function(node) {
+          toBeVisited.push(node);
+        });
       }
     }
   }
