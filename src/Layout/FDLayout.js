@@ -468,7 +468,7 @@ FDLayout.prototype.updateGrid = function() {
 
 FDLayout.prototype.calculateRepulsionForceOfANode = function (nodeA, processedNodeSet){
   
-  if (this.totalIterations % FDLayoutConstants.GRID_CALCULATION_CHECK_PERIOD == 1)
+  if ((this.totalIterations % FDLayoutConstants.GRID_CALCULATION_CHECK_PERIOD == 1 && !this.isTreeGrowing && !this.isGrowthFinished) || (this.growTreeIterations % 10 == 1 && this.isTreeGrowing) || (this.afterGrowthIterations % 10 == 1 && this.isGrowthFinished))
   {
     var surrounding = new Set();
     nodeA.surrounding = new Array();
