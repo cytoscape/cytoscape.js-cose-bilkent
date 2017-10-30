@@ -4,7 +4,7 @@ cytoscape-cose-bilkent
 
 ## Description
 
-The CoSE layout for Cytoscape.js by the [i-Vis group](http://cs.bilkent.edu.tr/~ivis/) in Bilkent University. Please cite the following when using this layout:
+The CoSE layout for Cytoscape.js by the [i-Vis Lab](http://cs.bilkent.edu.tr/~ivis/) in Bilkent University. Please cite the following when using this layout:
 
 U. Dogrusoz, E. Giral, A. Cetintas, A. Civril, and E. Demir, "[A Layout Algorithm For Undirected Compound Graphs](http://www.sciencedirect.com/science/article/pii/S0020025508004799)", Information Sciences, 179, pp. 980-994, 2009.
 
@@ -44,6 +44,7 @@ require(['cytoscape', 'cytoscape-cose-bilkent'], function( cytoscape, regCose ){
 
 Plain HTML/JS has the extension registered for you automatically, because no `require()` is needed.
 
+Please note that Cytoscape.js rendering option *styleEnabled* must be true, if layout is running in headless mode.
 
 ## API
 

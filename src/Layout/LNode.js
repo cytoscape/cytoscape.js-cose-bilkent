@@ -47,11 +47,11 @@ LNode.prototype.getChild = function ()
 
 LNode.prototype.getOwner = function ()
 {
-  if (this.owner != null) {
-    if (!(this.owner == null || this.owner.getNodes().indexOf(this) > -1)) {
-      throw "assert failed";
-    }
-  }
+//  if (this.owner != null) {
+//    if (!(this.owner == null || this.owner.getNodes().indexOf(this) > -1)) {
+//      throw "assert failed";
+//    }
+//  }
 
   return this.owner;
 };
@@ -201,10 +201,11 @@ LNode.prototype.getNeighborsList = function ()
 
 LNode.prototype.withChildren = function ()
 {
-  var withNeighborsList = [];
+  var withNeighborsList = new Set();
   var childNode;
+  var children;
 
-  withNeighborsList.push(this);
+  withNeighborsList.add(this);
 
   if (this.child != null)
   {
@@ -212,8 +213,10 @@ LNode.prototype.withChildren = function ()
     for (var i = 0; i < nodes.length; i++)
     {
       childNode = nodes[i];
-
-      withNeighborsList = withNeighborsList.concat(childNode.withChildren());
+      children = childNode.withChildren();
+      children.forEach(function(node) {
+        withNeighborsList.add(node);
+      });
     }
   }
 

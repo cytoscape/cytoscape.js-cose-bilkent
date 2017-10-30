@@ -159,8 +159,10 @@ _CoSELayout.prototype.run = function () {
     var edge = edges[i];
     var sourceNode = this.idToLNode[edge.data("source")];
     var targetNode = this.idToLNode[edge.data("target")];
-    var e1 = gm.add(layout.newEdge(), sourceNode, targetNode);
-    e1.id = edge.id();
+    if(sourceNode.getEdgesBetween(targetNode).length == 0){
+      var e1 = gm.add(layout.newEdge(), sourceNode, targetNode);
+      e1.id = edge.id();
+    }
   }
   
    var getPositions = function(ele, i){
@@ -246,11 +248,22 @@ _CoSELayout.prototype.run = function () {
         pNode = animationData[temp.data('parent')] || animationData['DummyCompound_' + temp.data('parent')];
         animationData[theId] = pNode;
         temp = temp.parent()[0];
+        if(temp == undefined){
+          break;
+        }
       }
-      return {
-        x: pNode.x,
-        y: pNode.y
-      };
+      if(pNode != null){
+        return {
+          x: pNode.x,
+          y: pNode.y
+        };
+      }
+      else{
+        return {
+          x: ele.x,
+          y: ele.y
+        };
+      }
     });
 
     afterReposition();
@@ -272,13 +285,7 @@ _CoSELayout.prototype.run = function () {
   /*
    * If animate option is not 'during' ('end' or false) perform these here (If it is 'during' similar things are already performed)
    */
-  if(this.options.animate == 'end'){
-    setTimeout(function() {  
-      self.options.eles.nodes().not(":parent").layoutPositions(self, self.options, getPositions); // Use layout positions to reposition the nodes it considers the options parameter
-      ready = false;
-    }, 0);
-  }
-  else if(this.options.animate == false){
+  if(this.options.animate !== "during"){
     self.options.eles.nodes().not(":parent").layoutPositions(self, self.options, getPositions); // Use layout positions to reposition the nodes it considers the options parameter
     ready = false;
   }
@@ -313,7 +320,6 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
   var size = children.length;
   for (var i = 0; i < size; i++) {
     var theChild = children[i];
-    this.options.eles.nodes().length;
     var children_of_children = theChild.children();
     var theNode;    
 

@@ -92,6 +92,12 @@ CoSELayout.prototype.classicLayout = function () {
   this.graphManager.calcInclusionTreeDepths();
   this.graphManager.getRoot().calcEstimatedSize();
   this.calcIdealEdgeLengths();
+  
+  // Reduce the trees if graph is not a forest
+  if(!(this.getFlatForest().length > 0) && !this.incremental){
+    this.reduceTrees();
+  }
+  
   if (!this.incremental)
   {
     var forest = this.getFlatForest();
@@ -118,22 +124,63 @@ CoSELayout.prototype.classicLayout = function () {
 CoSELayout.prototype.tick = function() {
   this.totalIterations++;
   
-  if (this.totalIterations === this.maxIterations) {
-    return true; // Layout is not ended return true
+  if (this.totalIterations === this.maxIterations && !this.isTreeGrowing && !this.isGrowthFinished) {
+    if(this.prunedNodesAll.length > 0){
+      this.isTreeGrowing = true;
+    }
+    else {
+      return true;  
+    }
   }
   
-  if (this.totalIterations % FDLayoutConstants.CONVERGENCE_CHECK_PERIOD == 0)
+  if (this.totalIterations % FDLayoutConstants.CONVERGENCE_CHECK_PERIOD == 0  && !this.isTreeGrowing && !this.isGrowthFinished)
   {
     if (this.isConverged())
     {
-      return true; // Layout is not ended return true
+      if(this.prunedNodesAll.length > 0){
+        this.isTreeGrowing = true;
+      }
+      else {
+        return true;  
+      } 
     }
 
     this.coolingFactor = this.initialCoolingFactor *
             ((this.maxIterations - this.totalIterations) / this.maxIterations);
     this.animationPeriod = Math.ceil(this.initialAnimationPeriod * Math.sqrt(this.coolingFactor));
-
   }
+  // Operations while tree is growing again 
+  if(this.isTreeGrowing){
+    if(this.growTreeIterations % 10 == 0){
+      if(this.prunedNodesAll.length > 0) {
+        this.graphManager.updateBounds();
+        this.updateGrid();
+        this.growTree(this.prunedNodesAll, this.isFirstGrowth);
+        this.graphManager.updateBounds();
+        this.updateGrid(); 
+        this.coolingFactor = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL; 
+      }
+      else {
+        this.isTreeGrowing = false;  
+        this.isGrowthFinished = true; 
+      }
+    }
+    this.growTreeIterations++;
+  }
+  // Operations after growth is finished
+  if(this.isGrowthFinished){
+    if (this.isConverged())
+    {
+      return true;  
+    }
+    if(this.afterGrowthIterations % 10 == 0){
+      this.graphManager.updateBounds();
+      this.updateGrid(); 
+    }
+    this.coolingFactor = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL * ((100 - this.afterGrowthIterations) / 100);
+    this.afterGrowthIterations++;
+  }
+  
   this.totalDisplacement = 0;
   this.graphManager.updateBounds();
   this.calcSpringForces();
