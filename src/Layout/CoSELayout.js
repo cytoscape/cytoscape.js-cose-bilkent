@@ -93,24 +93,20 @@ CoSELayout.prototype.classicLayout = function () {
   this.graphManager.getRoot().calcEstimatedSize();
   this.calcIdealEdgeLengths();
   
-  // Reduce the trees if graph is not a forest
-  if(!(this.getFlatForest().length > 0) && !this.incremental){
-    this.reduceTrees();
-  }
-  
   if (!this.incremental)
   {
     var forest = this.getFlatForest();
 
     // The graph associated with this layout is flat and a forest
     if (forest.length > 0)
-
     {
       this.positionNodesRadially(forest);
     }
     // The graph associated with this layout is not flat or a forest
     else
     {
+      // Reduce the trees when incremental mode is not enabled and graph is not a forest 
+      this.reduceTrees();
       this.positionNodesRandomly();
     }
   }
