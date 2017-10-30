@@ -94,7 +94,7 @@ CoSELayout.prototype.classicLayout = function () {
   this.calcIdealEdgeLengths();
   
   // Reduce the trees if graph is not a forest
-  if(!(this.getFlatForest().length > 0)){
+  if(!(this.getFlatForest().length > 0) && !this.incremental){
     this.reduceTrees();
   }
   
