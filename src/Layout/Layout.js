@@ -261,9 +261,9 @@ Layout.prototype.initParameters = function () {
   if (!this.isSubLayout)
   {
     this.layoutQuality = LayoutConstants.DEFAULT_QUALITY;
-    this.animationDuringLayout = LayoutConstants.DEFAULT_ANIMATION_ON_LAYOUT;
+    this.animationDuringLayout = LayoutConstants.DEFAULT_ANIMATION_DURING_LAYOUT;
     this.animationPeriod = LayoutConstants.DEFAULT_ANIMATION_PERIOD;
-    this.animationOnLayout = LayoutConstants.DEFAULT_ANIMATION_DURING_LAYOUT;
+    this.animationOnLayout = LayoutConstants.DEFAULT_ANIMATION_ON_LAYOUT;
     this.incremental = LayoutConstants.DEFAULT_INCREMENTAL;
     this.createBendsAsNeeded = LayoutConstants.DEFAULT_CREATE_BENDS_AS_NEEDED;
     this.uniformLeafNodeSizes = LayoutConstants.DEFAULT_UNIFORM_LEAF_NODE_SIZES;
@@ -271,7 +271,7 @@ Layout.prototype.initParameters = function () {
 
   if (this.animationDuringLayout)
   {
-    animationOnLayout = false;
+    this.animationOnLayout = false;
   }
 };
 

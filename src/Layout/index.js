@@ -139,6 +139,8 @@ _CoSELayout.prototype.run = function () {
   var layout = this.layout = new CoSELayout();
   var self = this;
   
+  self.stopped = false;
+
   this.cy = this.options.cy;
 
   this.cy.trigger({ type: 'layoutstart', layout: this });
@@ -197,7 +199,7 @@ _CoSELayout.prototype.run = function () {
     var isDone;
 
     for( var i = 0; i < ticksPerFrame && !isDone; i++ ){
-      isDone = self.layout.tick();
+      isDone = self.stopped || self.layout.tick();
     }
     
     // If layout is done
@@ -378,8 +380,6 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
  */
 _CoSELayout.prototype.stop = function () {
   this.stopped = true;
-  
-  this.trigger('layoutstop');
 
   return this; // chaining
 };

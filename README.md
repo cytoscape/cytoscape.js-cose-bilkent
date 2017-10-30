@@ -15,6 +15,7 @@ Click [here](https://rawgit.com/cytoscape/cytoscape.js-cose-bilkent/unstable/dem
 ## Dependencies
 
  * Cytoscape.js ^2.4.0 || ^3.0.0
+ * Versions after 2.0.4 are not compatible with versions before Cytoscape.js 3.1.0
 
 
 ## Usage instructions

@@ -1,4 +1,5 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.cytoscapeCoseBilkent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+
 (function (process){
 module.exports = process.env.LINKEDLIST_COV
    ? require('./lib-cov/linkedlist')
@@ -731,10 +732,10 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],5:[function(require,module,exports){
+
 var FDLayoutConstants = require('./FDLayoutConstants');
 
-function CoSEConstants() {
-}
+function CoSEConstants() {}
 
 //CoSEConstants inherits static props in FDLayoutConstants
 for (var prop in FDLayoutConstants) {
@@ -751,6 +752,7 @@ CoSEConstants.TILING_PADDING_HORIZONTAL = 10;
 module.exports = CoSEConstants;
 
 },{"./FDLayoutConstants":14}],6:[function(require,module,exports){
+
 var FDLayoutEdge = require('./FDLayoutEdge');
 
 function CoSEEdge(source, target, vEdge) {
@@ -762,9 +764,10 @@ for (var prop in FDLayoutEdge) {
   CoSEEdge[prop] = FDLayoutEdge[prop];
 }
 
-module.exports = CoSEEdge
+module.exports = CoSEEdge;
 
 },{"./FDLayoutEdge":15}],7:[function(require,module,exports){
+
 var LGraph = require('./LGraph');
 
 function CoSEGraph(parent, graphMgr, vGraph) {
@@ -779,6 +782,7 @@ for (var prop in LGraph) {
 module.exports = CoSEGraph;
 
 },{"./LGraph":23}],8:[function(require,module,exports){
+  
 var LGraphManager = require('./LGraphManager');
 
 function CoSEGraphManager(layout) {
@@ -793,6 +797,7 @@ for (var prop in LGraphManager) {
 module.exports = CoSEGraphManager;
 
 },{"./LGraphManager":24}],9:[function(require,module,exports){
+
 var FDLayout = require('./FDLayout');
 var CoSEGraphManager = require('./CoSEGraphManager');
 var CoSEGraph = require('./CoSEGraph');
@@ -811,7 +816,7 @@ var Transform = require('./Transform');
 
 function CoSELayout() {
   FDLayout.call(this);
-  
+
   this.toBeTiled = {}; // Memorize if a node is to be tiled or is tiled
 }
 
@@ -842,36 +847,25 @@ CoSELayout.prototype.newEdge = function (vEdge) {
 CoSELayout.prototype.initParameters = function () {
   FDLayout.prototype.initParameters.call(this, arguments);
   if (!this.isSubLayout) {
-    if (CoSEConstants.DEFAULT_EDGE_LENGTH < 10)
-    {
+    if (CoSEConstants.DEFAULT_EDGE_LENGTH < 10) {
       this.idealEdgeLength = 10;
-    }
-    else
-    {
+    } else {
       this.idealEdgeLength = CoSEConstants.DEFAULT_EDGE_LENGTH;
     }
 
-    this.useSmartIdealEdgeLengthCalculation =
-            CoSEConstants.DEFAULT_USE_SMART_IDEAL_EDGE_LENGTH_CALCULATION;
-    this.springConstant =
-            FDLayoutConstants.DEFAULT_SPRING_STRENGTH;
-    this.repulsionConstant =
-            FDLayoutConstants.DEFAULT_REPULSION_STRENGTH;
-    this.gravityConstant =
-            FDLayoutConstants.DEFAULT_GRAVITY_STRENGTH;
-    this.compoundGravityConstant =
-            FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_STRENGTH;
-    this.gravityRangeFactor =
-            FDLayoutConstants.DEFAULT_GRAVITY_RANGE_FACTOR;
-    this.compoundGravityRangeFactor =
-            FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR;
+    this.useSmartIdealEdgeLengthCalculation = CoSEConstants.DEFAULT_USE_SMART_IDEAL_EDGE_LENGTH_CALCULATION;
+    this.springConstant = FDLayoutConstants.DEFAULT_SPRING_STRENGTH;
+    this.repulsionConstant = FDLayoutConstants.DEFAULT_REPULSION_STRENGTH;
+    this.gravityConstant = FDLayoutConstants.DEFAULT_GRAVITY_STRENGTH;
+    this.compoundGravityConstant = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_STRENGTH;
+    this.gravityRangeFactor = FDLayoutConstants.DEFAULT_GRAVITY_RANGE_FACTOR;
+    this.compoundGravityRangeFactor = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR;
   }
 };
 
 CoSELayout.prototype.layout = function () {
   var createBendsAsNeeded = LayoutConstants.DEFAULT_CREATE_BENDS_AS_NEEDED;
-  if (createBendsAsNeeded)
-  {
+  if (createBendsAsNeeded) {
     this.createBendpoints();
     this.graphManager.resetAllEdges();
   }
@@ -898,16 +892,13 @@ CoSELayout.prototype.classicLayout = function () {
     var forest = this.getFlatForest();
 
     // The graph associated with this layout is flat and a forest
-    if (forest.length > 0)
-
-    {
+    if (forest.length > 0) {
       this.positionNodesRadially(forest);
     }
     // The graph associated with this layout is not flat or a forest
-    else
-    {
-      this.positionNodesRandomly();
-    }
+    else {
+        this.positionNodesRandomly();
+      }
   }
 
   this.initSpringEmbedder();
@@ -916,7 +907,7 @@ CoSELayout.prototype.classicLayout = function () {
   return true;
 };
 
-CoSELayout.prototype.tick = function() {
+CoSELayout.prototype.tick = function () {
   this.totalIterations++;
   
   if (this.totalIterations === this.maxIterations && !this.isTreeGrowing && !this.isGrowthFinished) {
@@ -940,8 +931,7 @@ CoSELayout.prototype.tick = function() {
       } 
     }
 
-    this.coolingFactor = this.initialCoolingFactor *
-            ((this.maxIterations - this.totalIterations) / this.maxIterations);
+    this.coolingFactor = this.initialCoolingFactor * ((this.maxIterations - this.totalIterations) / this.maxIterations);
     this.animationPeriod = Math.ceil(this.initialAnimationPeriod * Math.sqrt(this.coolingFactor));
   }
   // Operations while tree is growing again 
@@ -983,11 +973,11 @@ CoSELayout.prototype.tick = function() {
   this.calcGravitationalForces();
   this.moveNodes();
   this.animate();
-  
+
   return false; // Layout is not ended yet return false
 };
 
-CoSELayout.prototype.getPositionsData = function() {
+CoSELayout.prototype.getPositionsData = function () {
   var allNodes = this.graphManager.getAllNodes();
   var pData = {};
   for (var i = 0; i < allNodes.length; i++) {
@@ -1001,7 +991,7 @@ CoSELayout.prototype.getPositionsData = function() {
       h: rect.height
     };
   }
-  
+
   return pData;
 };
 
@@ -1009,12 +999,11 @@ CoSELayout.prototype.runSpringEmbedder = function () {
   this.initialAnimationPeriod = 25;
   this.animationPeriod = this.initialAnimationPeriod;
   var layoutEnded = false;
-  
+
   // If aminate option is 'during' signal that layout is supposed to start iterating
-  if ( FDLayoutConstants.ANIMATE === 'during' ) {
+  if (FDLayoutConstants.ANIMATE === 'during') {
     this.emit('layoutstarted');
-  }
-  else {
+  } else {
     // If aminate option is 'during' tick() function will be called on index.js
     while (!layoutEnded) {
       layoutEnded = this.tick();
@@ -1031,14 +1020,12 @@ CoSELayout.prototype.calculateNodesToApplyGravitationTo = function () {
   var graphs = this.graphManager.getGraphs();
   var size = graphs.length;
   var i;
-  for (i = 0; i < size; i++)
-  {
+  for (i = 0; i < size; i++) {
     graph = graphs[i];
 
     graph.updateConnected();
 
-    if (!graph.isConnected)
-    {
+    if (!graph.isConnected) {
       nodeList = nodeList.concat(graph.getNodes());
     }
   }
@@ -1046,53 +1033,43 @@ CoSELayout.prototype.calculateNodesToApplyGravitationTo = function () {
   this.graphManager.setAllNodesToApplyGravitation(nodeList);
 };
 
-CoSELayout.prototype.calcNoOfChildrenForAllNodes = function ()
-{
+CoSELayout.prototype.calcNoOfChildrenForAllNodes = function () {
   var node;
   var allNodes = this.graphManager.getAllNodes();
-  
-  for(i = 0; i < allNodes.length; i++)
-  {
-      node = allNodes[i];
-      node.noOfChildren = node.getNoOfChildren();
+
+  for (var i = 0; i < allNodes.length; i++) {
+    node = allNodes[i];
+    node.noOfChildren = node.getNoOfChildren();
   }
-}
+};
 
 CoSELayout.prototype.createBendpoints = function () {
   var edges = [];
   edges = edges.concat(this.graphManager.getAllEdges());
   var visited = new HashSet();
   var i;
-  for (i = 0; i < edges.length; i++)
-  {
+  for (i = 0; i < edges.length; i++) {
     var edge = edges[i];
 
-    if (!visited.contains(edge))
-    {
+    if (!visited.contains(edge)) {
       var source = edge.getSource();
       var target = edge.getTarget();
 
-      if (source == target)
-      {
+      if (source == target) {
         edge.getBendpoints().push(new PointD());
         edge.getBendpoints().push(new PointD());
         this.createDummyNodesForBendpoints(edge);
         visited.add(edge);
-      }
-      else
-      {
+      } else {
         var edgeList = [];
 
         edgeList = edgeList.concat(source.getEdgeListToNode(target));
         edgeList = edgeList.concat(target.getEdgeListToNode(source));
 
-        if (!visited.contains(edgeList[0]))
-        {
-          if (edgeList.length > 1)
-          {
+        if (!visited.contains(edgeList[0])) {
+          if (edgeList.length > 1) {
             var k;
-            for (k = 0; k < edgeList.length; k++)
-            {
+            for (k = 0; k < edgeList.length; k++) {
               var multiEdge = edgeList[k];
               multiEdge.getBendpoints().push(new PointD());
               this.createDummyNodesForBendpoints(multiEdge);
@@ -1103,8 +1080,7 @@ CoSELayout.prototype.createBendpoints = function () {
       }
     }
 
-    if (visited.size() == edges.length)
-    {
+    if (visited.size() == edges.length) {
       break;
     }
   }
@@ -1119,17 +1095,14 @@ CoSELayout.prototype.positionNodesRadially = function (forest) {
   var currentX = 0;
   var point = new PointD(0, 0);
 
-  for (var i = 0; i < forest.length; i++)
-  {
-    if (i % numberOfColumns == 0)
-    {
+  for (var i = 0; i < forest.length; i++) {
+    if (i % numberOfColumns == 0) {
       // Start of a new row, make the x coordinate 0, increment the
       // y coordinate with the max height of the previous row
       currentX = 0;
       currentY = height;
 
-      if (i != 0)
-      {
+      if (i != 0) {
         currentY += CoSEConstants.DEFAULT_COMPONENT_SEPERATION;
       }
 
@@ -1146,25 +1119,20 @@ CoSELayout.prototype.positionNodesRadially = function (forest) {
     currentStartingPoint.y = currentY;
 
     // Do a radial layout starting with the center
-    point =
-            CoSELayout.radialLayout(tree, centerNode, currentStartingPoint);
+    point = CoSELayout.radialLayout(tree, centerNode, currentStartingPoint);
 
-    if (point.y > height)
-    {
+    if (point.y > height) {
       height = Math.floor(point.y);
     }
 
     currentX = Math.floor(point.x + CoSEConstants.DEFAULT_COMPONENT_SEPERATION);
   }
 
-  this.transform(
-          new PointD(LayoutConstants.WORLD_CENTER_X - point.x / 2,
-                  LayoutConstants.WORLD_CENTER_Y - point.y / 2));
+  this.transform(new PointD(LayoutConstants.WORLD_CENTER_X - point.x / 2, LayoutConstants.WORLD_CENTER_Y - point.y / 2));
 };
 
 CoSELayout.radialLayout = function (tree, centerNode, startingPoint) {
-  var radialSep = Math.max(this.maxDiagonalInTree(tree),
-          CoSEConstants.DEFAULT_RADIAL_SEPARATION);
+  var radialSep = Math.max(this.maxDiagonalInTree(tree), CoSEConstants.DEFAULT_RADIAL_SEPARATION);
   CoSELayout.branchRadialLayout(centerNode, null, 0, 359, 0, radialSep);
   var bounds = LGraph.calculateBounds(tree);
 
@@ -1174,29 +1142,26 @@ CoSELayout.radialLayout = function (tree, centerNode, startingPoint) {
   transform.setWorldOrgX(startingPoint.x);
   transform.setWorldOrgY(startingPoint.y);
 
-  for (var i = 0; i < tree.length; i++)
-  {
+  for (var i = 0; i < tree.length; i++) {
     var node = tree[i];
     node.transform(transform);
   }
 
-  var bottomRight =
-          new PointD(bounds.getMaxX(), bounds.getMaxY());
+  var bottomRight = new PointD(bounds.getMaxX(), bounds.getMaxY());
 
   return transform.inverseTransformPoint(bottomRight);
 };
 
 CoSELayout.branchRadialLayout = function (node, parentOfNode, startAngle, endAngle, distance, radialSeparation) {
   // First, position this node by finding its angle.
-  var halfInterval = ((endAngle - startAngle) + 1) / 2;
+  var halfInterval = (endAngle - startAngle + 1) / 2;
 
-  if (halfInterval < 0)
-  {
+  if (halfInterval < 0) {
     halfInterval += 180;
   }
 
   var nodeAngle = (halfInterval + startAngle) % 360;
-  var teta = (nodeAngle * IGeometry.TWO_PI) / 360;
+  var teta = nodeAngle * IGeometry.TWO_PI / 360;
 
   // Make polar to java cordinate conversion.
   var cos_teta = Math.cos(teta);
@@ -1211,8 +1176,7 @@ CoSELayout.branchRadialLayout = function (node, parentOfNode, startAngle, endAng
   neighborEdges = neighborEdges.concat(node.getEdges());
   var childCount = neighborEdges.length;
 
-  if (parentOfNode != null)
-  {
+  if (parentOfNode != null) {
     childCount--;
   }
 
@@ -1225,8 +1189,7 @@ CoSELayout.branchRadialLayout = function (node, parentOfNode, startAngle, endAng
 
   // If there are multiple edges, prune them until there remains only one
   // edge.
-  while (edges.length > 1)
-  {
+  while (edges.length > 1) {
     //neighborEdges.remove(edges.remove(0));
     var temp = edges[0];
     edges.splice(0, 1);
@@ -1238,39 +1201,27 @@ CoSELayout.branchRadialLayout = function (node, parentOfNode, startAngle, endAng
     childCount--;
   }
 
-  if (parentOfNode != null)
-  {
+  if (parentOfNode != null) {
     //assert edges.length == 1;
     startIndex = (neighborEdges.indexOf(edges[0]) + 1) % incEdgesCount;
-  }
-  else
-  {
+  } else {
     startIndex = 0;
   }
 
   var stepAngle = Math.abs(endAngle - startAngle) / childCount;
 
-  for (var i = startIndex;
-          branchCount != childCount;
-          i = (++i) % incEdgesCount)
-  {
-    var currentNeighbor =
-            neighborEdges[i].getOtherEnd(node);
+  for (var i = startIndex; branchCount != childCount; i = ++i % incEdgesCount) {
+    var currentNeighbor = neighborEdges[i].getOtherEnd(node);
 
     // Don't back traverse to root node in current tree.
-    if (currentNeighbor == parentOfNode)
-    {
+    if (currentNeighbor == parentOfNode) {
       continue;
     }
 
-    var childStartAngle =
-            (startAngle + branchCount * stepAngle) % 360;
+    var childStartAngle = (startAngle + branchCount * stepAngle) % 360;
     var childEndAngle = (childStartAngle + stepAngle) % 360;
 
-    CoSELayout.branchRadialLayout(currentNeighbor,
-            node,
-            childStartAngle, childEndAngle,
-            distance + radialSeparation, radialSeparation);
+    CoSELayout.branchRadialLayout(currentNeighbor, node, childStartAngle, childEndAngle, distance + radialSeparation, radialSeparation);
 
     branchCount++;
   }
@@ -1279,13 +1230,11 @@ CoSELayout.branchRadialLayout = function (node, parentOfNode, startAngle, endAng
 CoSELayout.maxDiagonalInTree = function (tree) {
   var maxDiagonal = Integer.MIN_VALUE;
 
-  for (var i = 0; i < tree.length; i++)
-  {
+  for (var i = 0; i < tree.length; i++) {
     var node = tree[i];
     var diagonal = node.getDiagonal();
 
-    if (diagonal > maxDiagonal)
-    {
+    if (diagonal > maxDiagonal) {
       maxDiagonal = diagonal;
     }
   }
@@ -1295,7 +1244,7 @@ CoSELayout.maxDiagonalInTree = function (tree) {
 
 CoSELayout.prototype.calcRepulsionRange = function () {
   // formula is 2 x (level + 1) x idealEdgeLength
-  return (2 * (this.level + 1) * this.idealEdgeLength);
+  return 2 * (this.level + 1) * this.idealEdgeLength;
 };
 
 // Tiling methods
@@ -1307,7 +1256,7 @@ CoSELayout.prototype.groupZeroDegreeMembers = function () {
   var tempMemberGroups = {}; // A temporary map of parent node and its zero degree members
   this.memberGroups = {}; // A map of dummy parent node and its zero degree members whose parents are not to be tiled
   this.idToDummyNode = {}; // A map of id to dummy node 
-  
+
   var zeroDegree = []; // List of zero degree nodes whose parents are not to be tiled
   var allNodes = this.graphManager.getAllNodes();
 
@@ -1316,25 +1265,23 @@ CoSELayout.prototype.groupZeroDegreeMembers = function () {
     var node = allNodes[i];
     var parent = node.getParent();
     // If a node has zero degree and its parent is not to be tiled if exists add that node to zeroDegres list
-    if (this.getNodeDegreeWithChildren(node) === 0 && ( parent.id == undefined || !this.getToBeTiled(parent) ) ) {
+    if (this.getNodeDegreeWithChildren(node) === 0 && (parent.id == undefined || !this.getToBeTiled(parent))) {
       zeroDegree.push(node);
     }
   }
 
   // Create a map of parent node and its zero degree members
-  for (var i = 0; i < zeroDegree.length; i++)
-  {
+  for (var i = 0; i < zeroDegree.length; i++) {
     var node = zeroDegree[i]; // Zero degree node itself
     var p_id = node.getParent().id; // Parent id
 
-    if (typeof tempMemberGroups[p_id] === "undefined")
-      tempMemberGroups[p_id] = [];
+    if (typeof tempMemberGroups[p_id] === "undefined") tempMemberGroups[p_id] = [];
 
     tempMemberGroups[p_id] = tempMemberGroups[p_id].concat(node); // Push node to the list belongs to its parent in tempMemberGroups
   }
 
   // If there are at least two nodes at a level, create a dummy compound for them
-  Object.keys(tempMemberGroups).forEach(function(p_id) {
+  Object.keys(tempMemberGroups).forEach(function (p_id) {
     if (tempMemberGroups[p_id].length > 1) {
       var dummyCompoundId = "DummyCompound_" + p_id; // The id of dummy compound which will be created soon
       self.memberGroups[dummyCompoundId] = tempMemberGroups[p_id]; // Add dummy compound to memberGroups
@@ -1348,9 +1295,9 @@ CoSELayout.prototype.groupZeroDegreeMembers = function () {
       dummyCompound.paddingRight = parent.paddingRight || 0;
       dummyCompound.paddingBottom = parent.paddingBottom || 0;
       dummyCompound.paddingTop = parent.paddingTop || 0;
-      
+
       self.idToDummyNode[dummyCompoundId] = dummyCompound;
-      
+
       var dummyParentGraph = self.getGraphManager().add(self.newGraph(), dummyCompound);
       var parentGraph = parent.getChild();
 
@@ -1360,7 +1307,7 @@ CoSELayout.prototype.groupZeroDegreeMembers = function () {
       // For each zero degree node in this level remove it from its parent graph and add it to the graph of dummy parent
       for (var i = 0; i < tempMemberGroups[p_id].length; i++) {
         var node = tempMemberGroups[p_id][i];
-        
+
         parentGraph.remove(node);
         dummyParentGraph.add(node);
       }
@@ -1376,7 +1323,7 @@ CoSELayout.prototype.clearCompounds = function () {
   this.performDFSOnCompounds();
 
   for (var i = 0; i < this.compoundOrder.length; i++) {
-    
+
     idToNode[this.compoundOrder[i].id] = this.compoundOrder[i];
     childGraphMap[this.compoundOrder[i].id] = [].concat(this.compoundOrder[i].getChild().getNodes());
 
@@ -1384,9 +1331,9 @@ CoSELayout.prototype.clearCompounds = function () {
     this.graphManager.remove(this.compoundOrder[i].getChild());
     this.compoundOrder[i].child = null;
   }
-  
+
   this.graphManager.resetAllNodes();
-  
+
   // Tile the removed children
   this.tileCompoundMembers(childGraphMap, idToNode);
 };
@@ -1395,7 +1342,7 @@ CoSELayout.prototype.clearZeroDegreeMembers = function () {
   var self = this;
   var tiledZeroDegreePack = this.tiledZeroDegreePack = [];
 
-  Object.keys(this.memberGroups).forEach(function(id) {
+  Object.keys(this.memberGroups).forEach(function (id) {
     var compoundNode = self.idToDummyNode[id]; // Get the dummy compound
 
     tiledZeroDegreePack[id] = self.tileNodes(self.memberGroups[id], compoundNode.paddingLeft + compoundNode.paddingRight);
@@ -1420,8 +1367,8 @@ CoSELayout.prototype.repopulateCompounds = function () {
 CoSELayout.prototype.repopulateZeroDegreeMembers = function () {
   var self = this;
   var tiledPack = this.tiledZeroDegreePack;
-  
-  Object.keys(tiledPack).forEach(function(id) {
+
+  Object.keys(tiledPack).forEach(function (id) {
     var compoundNode = self.idToDummyNode[id]; // Get the dummy compound by its id
     var horizontalMargin = compoundNode.paddingLeft;
     var verticalMargin = compoundNode.paddingTop;
@@ -1476,7 +1423,7 @@ CoSELayout.prototype.getNodeDegree = function (node) {
   var id = node.id;
   var edges = node.getEdges();
   var degree = 0;
-  
+
   // For the edges connected
   for (var i = 0; i < edges.length; i++) {
     var edge = edges[i];
@@ -1535,13 +1482,12 @@ CoSELayout.prototype.adjustLocations = function (organization, x, y, compoundHor
     for (var j = 0; j < row.length; j++) {
       var lnode = row[j];
 
-      lnode.rect.x = x;// + lnode.rect.width / 2;
-      lnode.rect.y = y;// + lnode.rect.height / 2;
+      lnode.rect.x = x; // + lnode.rect.width / 2;
+      lnode.rect.y = y; // + lnode.rect.height / 2;
 
       x += lnode.rect.width + organization.horizontalPadding;
 
-      if (lnode.rect.height > maxHeight)
-        maxHeight = lnode.rect.height;
+      if (lnode.rect.height > maxHeight) maxHeight = lnode.rect.height;
     }
 
     y += maxHeight + organization.verticalPadding;
@@ -1552,7 +1498,7 @@ CoSELayout.prototype.tileCompoundMembers = function (childGraphMap, idToNode) {
   var self = this;
   this.tiledMemberPack = [];
 
-  Object.keys(childGraphMap).forEach(function(id) {
+  Object.keys(childGraphMap).forEach(function (id) {
     // Get the compound node
     var compoundNode = idToNode[id];
 
@@ -1578,24 +1524,20 @@ CoSELayout.prototype.tileNodes = function (nodes, minWidth) {
 
   // Sort the nodes in ascending order of their areas
   nodes.sort(function (n1, n2) {
-    if (n1.rect.width * n1.rect.height > n2.rect.width * n2.rect.height)
-      return -1;
-    if (n1.rect.width * n1.rect.height < n2.rect.width * n2.rect.height)
-      return 1;
+    if (n1.rect.width * n1.rect.height > n2.rect.width * n2.rect.height) return -1;
+    if (n1.rect.width * n1.rect.height < n2.rect.width * n2.rect.height) return 1;
     return 0;
   });
 
   // Create the organization -> tile members
   for (var i = 0; i < nodes.length; i++) {
     var lNode = nodes[i];
-    
+
     if (organization.rows.length == 0) {
       this.insertNodeToRow(organization, lNode, 0, minWidth);
-    }
-    else if (this.canAddHorizontal(organization, lNode.rect.width, lNode.rect.height)) {
+    } else if (this.canAddHorizontal(organization, lNode.rect.width, lNode.rect.height)) {
       this.insertNodeToRow(organization, lNode, this.getShortestRowIndex(organization), minWidth);
-    }
-    else {
+    } else {
       this.insertNodeToRow(organization, lNode, organization.rows.length, minWidth);
     }
 
@@ -1632,8 +1574,7 @@ CoSELayout.prototype.insertNodeToRow = function (organization, node, rowIndex, m
 
   // Update height
   var h = node.rect.height;
-  if (rowIndex > 0)
-    h += organization.verticalPadding;
+  if (rowIndex > 0) h += organization.verticalPadding;
 
   var extraHeight = 0;
   if (h > organization.rowHeight[rowIndex]) {
@@ -1692,15 +1633,13 @@ CoSELayout.prototype.canAddHorizontal = function (organization, extraWidth, extr
 
   var min = organization.rowWidth[sri];
 
-  if (min + organization.horizontalPadding + extraWidth <= organization.width)
-    return true;
+  if (min + organization.horizontalPadding + extraWidth <= organization.width) return true;
 
   var hDiff = 0;
 
   // Adding to an existing row
   if (organization.rowHeight[sri] < extraHeight) {
-    if (sri > 0)
-      hDiff = extraHeight + organization.verticalPadding - organization.rowHeight[sri];
+    if (sri > 0) hDiff = extraHeight + organization.verticalPadding - organization.rowHeight[sri];
   }
 
   var add_to_row_ratio;
@@ -1719,11 +1658,9 @@ CoSELayout.prototype.canAddHorizontal = function (organization, extraWidth, extr
     add_new_row_ratio = (organization.height + hDiff) / organization.width;
   }
 
-  if (add_new_row_ratio < 1)
-    add_new_row_ratio = 1 / add_new_row_ratio;
+  if (add_new_row_ratio < 1) add_new_row_ratio = 1 / add_new_row_ratio;
 
-  if (add_to_row_ratio < 1)
-    add_to_row_ratio = 1 / add_to_row_ratio;
+  if (add_to_row_ratio < 1) add_to_row_ratio = 1 / add_to_row_ratio;
 
   return add_to_row_ratio < add_new_row_ratio;
 };
@@ -1753,26 +1690,23 @@ CoSELayout.prototype.shiftToLastRow = function (organization) {
     // Update heights of the organization
     var maxHeight = Number.MIN_VALUE;
     for (var i = 0; i < row.length; i++) {
-      if (row[i].height > maxHeight)
-        maxHeight = row[i].height;
+      if (row[i].height > maxHeight) maxHeight = row[i].height;
     }
-    if (longest > 0)
-      maxHeight += organization.verticalPadding;
+    if (longest > 0) maxHeight += organization.verticalPadding;
 
     var prevTotal = organization.rowHeight[longest] + organization.rowHeight[last];
 
     organization.rowHeight[longest] = maxHeight;
-    if (organization.rowHeight[last] < node.height + organization.verticalPadding)
-      organization.rowHeight[last] = node.height + organization.verticalPadding;
+    if (organization.rowHeight[last] < node.height + organization.verticalPadding) organization.rowHeight[last] = node.height + organization.verticalPadding;
 
     var finalTotal = organization.rowHeight[longest] + organization.rowHeight[last];
-    organization.height += (finalTotal - prevTotal);
+    organization.height += finalTotal - prevTotal;
 
     this.shiftToLastRow(organization);
   }
 };
 
-CoSELayout.prototype.tilingPreLayout = function() {
+CoSELayout.prototype.tilingPreLayout = function () {
   if (CoSEConstants.TILE) {
     // Find zero degree nodes and create a compound for each level
     this.groupZeroDegreeMembers();
@@ -1783,7 +1717,7 @@ CoSELayout.prototype.tilingPreLayout = function() {
   }
 };
 
-CoSELayout.prototype.tilingPostLayout = function() {
+CoSELayout.prototype.tilingPostLayout = function () {
   if (CoSEConstants.TILE) {
     this.repopulateZeroDegreeMembers();
     this.repopulateCompounds();
@@ -1793,6 +1727,7 @@ CoSELayout.prototype.tilingPostLayout = function() {
 module.exports = CoSELayout;
 
 },{"./CoSEConstants":5,"./CoSEEdge":6,"./CoSEGraph":7,"./CoSEGraphManager":8,"./CoSENode":10,"./FDLayout":13,"./FDLayoutConstants":14,"./IGeometry":19,"./Integer":21,"./LGraph":23,"./Layout":27,"./LayoutConstants":28,"./Point":29,"./PointD":30,"./Transform":33}],10:[function(require,module,exports){
+
 var FDLayoutNode = require('./FDLayoutNode');
 var IMath = require('./IMath');
 
@@ -1800,52 +1735,38 @@ function CoSENode(gm, loc, size, vNode) {
   FDLayoutNode.call(this, gm, loc, size, vNode);
 }
 
-
 CoSENode.prototype = Object.create(FDLayoutNode.prototype);
 for (var prop in FDLayoutNode) {
   CoSENode[prop] = FDLayoutNode[prop];
 }
 
-CoSENode.prototype.move = function ()
-{
+CoSENode.prototype.move = function () {
   var layout = this.graphManager.getLayout();
-  this.displacementX = layout.coolingFactor *
-          (this.springForceX + this.repulsionForceX + this.gravitationForceX) / this.noOfChildren;
-  this.displacementY = layout.coolingFactor *
-          (this.springForceY + this.repulsionForceY + this.gravitationForceY) / this.noOfChildren;
+  this.displacementX = layout.coolingFactor * (this.springForceX + this.repulsionForceX + this.gravitationForceX) / this.noOfChildren;
+  this.displacementY = layout.coolingFactor * (this.springForceY + this.repulsionForceY + this.gravitationForceY) / this.noOfChildren;
 
-
-  if (Math.abs(this.displacementX) > layout.coolingFactor * layout.maxNodeDisplacement)
-  {
-    this.displacementX = layout.coolingFactor * layout.maxNodeDisplacement *
-            IMath.sign(this.displacementX);
+  if (Math.abs(this.displacementX) > layout.coolingFactor * layout.maxNodeDisplacement) {
+    this.displacementX = layout.coolingFactor * layout.maxNodeDisplacement * IMath.sign(this.displacementX);
   }
 
-  if (Math.abs(this.displacementY) > layout.coolingFactor * layout.maxNodeDisplacement)
-  {
-    this.displacementY = layout.coolingFactor * layout.maxNodeDisplacement *
-            IMath.sign(this.displacementY);
+  if (Math.abs(this.displacementY) > layout.coolingFactor * layout.maxNodeDisplacement) {
+    this.displacementY = layout.coolingFactor * layout.maxNodeDisplacement * IMath.sign(this.displacementY);
   }
 
   // a simple node, just move it
-  if (this.child == null)
-  {
+  if (this.child == null) {
     this.moveBy(this.displacementX, this.displacementY);
   }
   // an empty compound node, again just move it
-  else if (this.child.getNodes().length == 0)
-  {
-    this.moveBy(this.displacementX, this.displacementY);
-  }
-  // non-empty compound node, propogate movement to children as well
-  else
-  {
-    this.propogateDisplacementToChildren(this.displacementX,
-            this.displacementY);
-  }
+  else if (this.child.getNodes().length == 0) {
+      this.moveBy(this.displacementX, this.displacementY);
+    }
+    // non-empty compound node, propogate movement to children as well
+    else {
+        this.propogateDisplacementToChildren(this.displacementX, this.displacementY);
+      }
 
-  layout.totalDisplacement +=
-          Math.abs(this.displacementX) + Math.abs(this.displacementY);
+  layout.totalDisplacement += Math.abs(this.displacementX) + Math.abs(this.displacementY);
 
   this.springForceX = 0;
   this.springForceY = 0;
@@ -1857,64 +1778,53 @@ CoSENode.prototype.move = function ()
   this.displacementY = 0;
 };
 
-CoSENode.prototype.propogateDisplacementToChildren = function (dX, dY)
-{
+CoSENode.prototype.propogateDisplacementToChildren = function (dX, dY) {
   var nodes = this.getChild().getNodes();
   var node;
-  for (var i = 0; i < nodes.length; i++)
-  {
+  for (var i = 0; i < nodes.length; i++) {
     node = nodes[i];
-    if (node.getChild() == null)
-    {
+    if (node.getChild() == null) {
       node.moveBy(dX, dY);
       node.displacementX += dX;
       node.displacementY += dY;
-    }
-    else
-    {
+    } else {
       node.propogateDisplacementToChildren(dX, dY);
     }
   }
 };
 
-CoSENode.prototype.setPred1 = function (pred1)
-{
+CoSENode.prototype.setPred1 = function (pred1) {
   this.pred1 = pred1;
 };
 
-CoSENode.prototype.getPred1 = function ()
-{
+CoSENode.prototype.getPred1 = function () {
   return pred1;
 };
 
-CoSENode.prototype.getPred2 = function ()
-{
+CoSENode.prototype.getPred2 = function () {
   return pred2;
 };
 
-CoSENode.prototype.setNext = function (next)
-{
+CoSENode.prototype.setNext = function (next) {
   this.next = next;
 };
 
-CoSENode.prototype.getNext = function ()
-{
+CoSENode.prototype.getNext = function () {
   return next;
 };
 
-CoSENode.prototype.setProcessed = function (processed)
-{
+CoSENode.prototype.setProcessed = function (processed) {
   this.processed = processed;
 };
 
-CoSENode.prototype.isProcessed = function ()
-{
+CoSENode.prototype.isProcessed = function () {
   return processed;
 };
 
 module.exports = CoSENode;
 
 },{"./FDLayoutNode":16,"./IMath":20}],11:[function(require,module,exports){
+
 function DimensionD(width, height) {
   this.width = 0;
   this.height = 0;
@@ -1924,23 +1834,19 @@ function DimensionD(width, height) {
   }
 }
 
-DimensionD.prototype.getWidth = function ()
-{
+DimensionD.prototype.getWidth = function () {
   return this.width;
 };
 
-DimensionD.prototype.setWidth = function (width)
-{
+DimensionD.prototype.setWidth = function (width) {
   this.width = width;
 };
 
-DimensionD.prototype.getHeight = function ()
-{
+DimensionD.prototype.getHeight = function () {
   return this.height;
 };
 
-DimensionD.prototype.setHeight = function (height)
-{
+DimensionD.prototype.setHeight = function (height) {
   this.height = height;
 };
 
@@ -1953,29 +1859,29 @@ function Emitter(){
 
 var p = Emitter.prototype;
 
-p.addListener = function( event, callback ){
+p.addListener = function (event, callback) {
   this.listeners.push({
     event: event,
     callback: callback
   });
 };
 
-p.removeListener = function( event, callback ){
-  for( var i = this.listeners.length; i >= 0; i-- ){
+p.removeListener = function (event, callback) {
+  for (var i = this.listeners.length; i >= 0; i--) {
     var l = this.listeners[i];
 
-    if( l.event === event && l.callback === callback ){
-      this.listeners.splice( i, 1 );
+    if (l.event === event && l.callback === callback) {
+      this.listeners.splice(i, 1);
     }
   }
 };
 
-p.emit = function( event, data ){
-  for( var i = 0; i < this.listeners.length; i++ ){
+p.emit = function (event, data) {
+  for (var i = 0; i < this.listeners.length; i++) {
     var l = this.listeners[i];
 
-    if( event === l.event ){
-      l.callback( data );
+    if (event === l.event) {
+      l.callback(data);
     }
   }
 };
@@ -1983,6 +1889,7 @@ p.emit = function( event, data ){
 module.exports = Emitter;
 
 },{}],13:[function(require,module,exports){
+
 var Layout = require('./Layout');
 var FDLayoutConstants = require('./FDLayoutConstants');
 var LayoutConstants = require('./LayoutConstants');
@@ -2001,7 +1908,7 @@ function FDLayout() {
   this.compoundGravityConstant = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_STRENGTH;
   this.gravityRangeFactor = FDLayoutConstants.DEFAULT_GRAVITY_RANGE_FACTOR;
   this.compoundGravityRangeFactor = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR;
-  this.displacementThresholdPerNode = (3.0 * FDLayoutConstants.DEFAULT_EDGE_LENGTH) / 100;
+  this.displacementThresholdPerNode = 3.0 * FDLayoutConstants.DEFAULT_EDGE_LENGTH / 100;
   this.coolingFactor = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL;
   this.initialCoolingFactor = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL;
   this.totalDisplacement = 0.0;
@@ -2018,13 +1925,10 @@ for (var prop in Layout) {
 FDLayout.prototype.initParameters = function () {
   Layout.prototype.initParameters.call(this, arguments);
 
-  if (this.layoutQuality == LayoutConstants.DRAFT_QUALITY)
-  {
+  if (this.layoutQuality == LayoutConstants.DRAFT_QUALITY) {
     this.displacementThresholdPerNode += 0.30;
     this.maxIterations *= 0.8;
-  }
-  else if (this.layoutQuality == LayoutConstants.PROOF_QUALITY)
-  {
+  } else if (this.layoutQuality == LayoutConstants.PROOF_QUALITY) {
     this.displacementThresholdPerNode -= 0.30;
     this.maxIterations *= 1.2;
   }
@@ -2052,56 +1956,42 @@ FDLayout.prototype.calcIdealEdgeLengths = function () {
   var sizeOfTargetInLca;
 
   var allEdges = this.getGraphManager().getAllEdges();
-  for (var i = 0; i < allEdges.length; i++)
-  {
+  for (var i = 0; i < allEdges.length; i++) {
     edge = allEdges[i];
 
     edge.idealLength = this.idealEdgeLength;
 
-    if (edge.isInterGraph)
-    {
+    if (edge.isInterGraph) {
       source = edge.getSource();
       target = edge.getTarget();
 
       sizeOfSourceInLca = edge.getSourceInLca().getEstimatedSize();
       sizeOfTargetInLca = edge.getTargetInLca().getEstimatedSize();
 
-      if (this.useSmartIdealEdgeLengthCalculation)
-      {
-        edge.idealLength += sizeOfSourceInLca + sizeOfTargetInLca -
-                2 * LayoutConstants.SIMPLE_NODE_SIZE;
+      if (this.useSmartIdealEdgeLengthCalculation) {
+        edge.idealLength += sizeOfSourceInLca + sizeOfTargetInLca - 2 * LayoutConstants.SIMPLE_NODE_SIZE;
       }
 
       lcaDepth = edge.getLca().getInclusionTreeDepth();
 
-      edge.idealLength += FDLayoutConstants.DEFAULT_EDGE_LENGTH *
-              FDLayoutConstants.PER_LEVEL_IDEAL_EDGE_LENGTH_FACTOR *
-              (source.getInclusionTreeDepth() +
-                      target.getInclusionTreeDepth() - 2 * lcaDepth);
+      edge.idealLength += FDLayoutConstants.DEFAULT_EDGE_LENGTH * FDLayoutConstants.PER_LEVEL_IDEAL_EDGE_LENGTH_FACTOR * (source.getInclusionTreeDepth() + target.getInclusionTreeDepth() - 2 * lcaDepth);
     }
   }
 };
 
 FDLayout.prototype.initSpringEmbedder = function () {
 
-  if (this.incremental)
-  {
-    this.maxNodeDisplacement =
-            FDLayoutConstants.MAX_NODE_DISPLACEMENT_INCREMENTAL;
-  }
-  else
-  {
+  if (this.incremental) {
+    this.maxNodeDisplacement = FDLayoutConstants.MAX_NODE_DISPLACEMENT_INCREMENTAL;
+  } else {
     this.coolingFactor = 1.0;
     this.initialCoolingFactor = 1.0;
-    this.maxNodeDisplacement =
-            FDLayoutConstants.MAX_NODE_DISPLACEMENT;
+    this.maxNodeDisplacement = FDLayoutConstants.MAX_NODE_DISPLACEMENT;
   }
 
-  this.maxIterations =
-          Math.max(this.getAllNodes().length * 5, this.maxIterations);
+  this.maxIterations = Math.max(this.getAllNodes().length * 5, this.maxIterations);
 
-  this.totalDisplacementThreshold =
-          this.displacementThresholdPerNode * this.getAllNodes().length;
+  this.totalDisplacementThreshold = this.displacementThresholdPerNode * this.getAllNodes().length;
 
   this.repulsionRange = this.calcRepulsionRange();
 };
@@ -2110,8 +2000,7 @@ FDLayout.prototype.calcSpringForces = function () {
   var lEdges = this.getAllEdges();
   var edge;
 
-  for (var i = 0; i < lEdges.length; i++)
-  {
+  for (var i = 0; i < lEdges.length; i++) {
     edge = lEdges[i];
 
     this.calcSpringForce(edge, edge.idealLength);
@@ -2134,28 +2023,21 @@ FDLayout.prototype.calcRepulsionForces = function () {
     processedNodeSet = new Set();
     
     // calculate repulsion forces between each nodes and its surrounding
-    for (i = 0; i < lNodes.length; i++)
-    {
+    for (i = 0; i < lNodes.length; i++) {
       nodeA = lNodes[i];
       this.calculateRepulsionForceOfANode(nodeA, processedNodeSet);
       processedNodeSet.add(nodeA);
     }
+  } else {
 
-  }
-  else
-  {
-  
-    for (i = 0; i < lNodes.length; i++)
-    {
+    for (i = 0; i < lNodes.length; i++) {
       nodeA = lNodes[i];
 
-      for (j = i + 1; j < lNodes.length; j++)
-      {
+      for (j = i + 1; j < lNodes.length; j++) {
         nodeB = lNodes[j];
 
         // If both nodes are not members of the same graph, skip.
-        if (nodeA.getOwner() != nodeB.getOwner())
-        {
+        if (nodeA.getOwner() != nodeB.getOwner()) {
           continue;
         }
 
@@ -2183,12 +2065,11 @@ FDLayout.prototype.moveNodes = function () {
   var lNodes = this.getAllNodes();
   var node;
 
-  for (var i = 0; i < lNodes.length; i++)
-  {
+  for (var i = 0; i < lNodes.length; i++) {
     node = lNodes[i];
     node.move();
   }
-}
+};
 
 FDLayout.prototype.calcSpringForce = function (edge, idealLength) {
   var sourceNode = edge.getSource();
@@ -2200,17 +2081,12 @@ FDLayout.prototype.calcSpringForce = function (edge, idealLength) {
   var springForceY;
 
   // Update edge length
-  if (this.uniformLeafNodeSizes &&
-          sourceNode.getChild() == null && targetNode.getChild() == null)
-  {
+  if (this.uniformLeafNodeSizes && sourceNode.getChild() == null && targetNode.getChild() == null) {
     edge.updateLengthSimple();
-  }
-  else
-  {
+  } else {
     edge.updateLength();
 
-    if (edge.isOverlapingSourceAndTarget)
-    {
+    if (edge.isOverlapingSourceAndTarget) {
       return;
     }
   }
@@ -2244,71 +2120,61 @@ FDLayout.prototype.calcRepulsionForce = function (nodeA, nodeB) {
   var repulsionForceX;
   var repulsionForceY;
 
-  if (rectA.intersects(rectB))// two nodes overlap
-  {
-    // calculate separation amount in x and y directions
-    IGeometry.calcSeparationAmount(rectA,
-            rectB,
-            overlapAmount,
-            FDLayoutConstants.DEFAULT_EDGE_LENGTH / 2.0);
-
-    repulsionForceX = 2 * overlapAmount[0];
-    repulsionForceY = 2 * overlapAmount[1];
-    
-    var childrenConstant = nodeA.noOfChildren * nodeB.noOfChildren / (nodeA.noOfChildren + nodeB.noOfChildren);
-    
-    // Apply forces on the two nodes
-    nodeA.repulsionForceX -= childrenConstant * repulsionForceX;
-    nodeA.repulsionForceY -= childrenConstant * repulsionForceY;
-    nodeB.repulsionForceX += childrenConstant * repulsionForceX;
-    nodeB.repulsionForceY += childrenConstant * repulsionForceY;
-  }
-  else// no overlap
-  {
-    // calculate distance
-
-    if (this.uniformLeafNodeSizes &&
-            nodeA.getChild() == null && nodeB.getChild() == null)// simply base repulsion on distance of node centers
+  if (rectA.intersects(rectB)) // two nodes overlap
     {
-      distanceX = rectB.getCenterX() - rectA.getCenterX();
-      distanceY = rectB.getCenterY() - rectA.getCenterY();
-    }
-    else// use clipping points
+      // calculate separation amount in x and y directions
+      IGeometry.calcSeparationAmount(rectA, rectB, overlapAmount, FDLayoutConstants.DEFAULT_EDGE_LENGTH / 2.0);
+
+      repulsionForceX = 2 * overlapAmount[0];
+      repulsionForceY = 2 * overlapAmount[1];
+
+      var childrenConstant = nodeA.noOfChildren * nodeB.noOfChildren / (nodeA.noOfChildren + nodeB.noOfChildren);
+
+      // Apply forces on the two nodes
+      nodeA.repulsionForceX -= childrenConstant * repulsionForceX;
+      nodeA.repulsionForceY -= childrenConstant * repulsionForceY;
+      nodeB.repulsionForceX += childrenConstant * repulsionForceX;
+      nodeB.repulsionForceY += childrenConstant * repulsionForceY;
+    } else // no overlap
     {
-      IGeometry.getIntersection(rectA, rectB, clipPoints);
+      // calculate distance
 
-      distanceX = clipPoints[2] - clipPoints[0];
-      distanceY = clipPoints[3] - clipPoints[1];
+      if (this.uniformLeafNodeSizes && nodeA.getChild() == null && nodeB.getChild() == null) // simply base repulsion on distance of node centers
+        {
+          distanceX = rectB.getCenterX() - rectA.getCenterX();
+          distanceY = rectB.getCenterY() - rectA.getCenterY();
+        } else // use clipping points
+        {
+          IGeometry.getIntersection(rectA, rectB, clipPoints);
+
+          distanceX = clipPoints[2] - clipPoints[0];
+          distanceY = clipPoints[3] - clipPoints[1];
+        }
+
+      // No repulsion range. FR grid variant should take care of this.
+      if (Math.abs(distanceX) < FDLayoutConstants.MIN_REPULSION_DIST) {
+        distanceX = IMath.sign(distanceX) * FDLayoutConstants.MIN_REPULSION_DIST;
+      }
+
+      if (Math.abs(distanceY) < FDLayoutConstants.MIN_REPULSION_DIST) {
+        distanceY = IMath.sign(distanceY) * FDLayoutConstants.MIN_REPULSION_DIST;
+      }
+
+      distanceSquared = distanceX * distanceX + distanceY * distanceY;
+      distance = Math.sqrt(distanceSquared);
+
+      repulsionForce = this.repulsionConstant * nodeA.noOfChildren * nodeB.noOfChildren / distanceSquared;
+
+      // Project force onto x and y axes
+      repulsionForceX = repulsionForce * distanceX / distance;
+      repulsionForceY = repulsionForce * distanceY / distance;
+
+      // Apply forces on the two nodes    
+      nodeA.repulsionForceX -= repulsionForceX;
+      nodeA.repulsionForceY -= repulsionForceY;
+      nodeB.repulsionForceX += repulsionForceX;
+      nodeB.repulsionForceY += repulsionForceY;
     }
-
-    // No repulsion range. FR grid variant should take care of this.
-    if (Math.abs(distanceX) < FDLayoutConstants.MIN_REPULSION_DIST)
-    {
-      distanceX = IMath.sign(distanceX) *
-              FDLayoutConstants.MIN_REPULSION_DIST;
-    }
-
-    if (Math.abs(distanceY) < FDLayoutConstants.MIN_REPULSION_DIST)
-    {
-      distanceY = IMath.sign(distanceY) *
-              FDLayoutConstants.MIN_REPULSION_DIST;
-    }
-
-    distanceSquared = distanceX * distanceX + distanceY * distanceY;
-    distance = Math.sqrt(distanceSquared);
-
-    repulsionForce = this.repulsionConstant * nodeA.noOfChildren * nodeB.noOfChildren / distanceSquared;
-
-    // Project force onto x and y axes
-    repulsionForceX = repulsionForce * distanceX / distance;
-    repulsionForceY = repulsionForce * distanceY / distance;
-     
-    // Apply forces on the two nodes    
-    nodeA.repulsionForceX -= repulsionForceX;
-    nodeA.repulsionForceY -= repulsionForceY;
-    nodeB.repulsionForceX += repulsionForceX;
-    nodeB.repulsionForceY += repulsionForceY;
-  }
 };
 
 FDLayout.prototype.calcGravitationalForce = function (node) {
@@ -2329,38 +2195,31 @@ FDLayout.prototype.calcGravitationalForce = function (node) {
   absDistanceX = Math.abs(distanceX) + node.getWidth() / 2;
   absDistanceY = Math.abs(distanceY) + node.getHeight() / 2;
 
-  if (node.getOwner() == this.graphManager.getRoot())// in the root graph
-  {
-    estimatedSize = ownerGraph.getEstimatedSize() * this.gravityRangeFactor;
-
-    if (absDistanceX > estimatedSize || absDistanceY > estimatedSize)
+  if (node.getOwner() == this.graphManager.getRoot()) // in the root graph
     {
-      node.gravitationForceX = -this.gravityConstant * distanceX;
-      node.gravitationForceY = -this.gravityConstant * distanceY;
-    }
-  }
-  else// inside a compound
-  {
-    estimatedSize = ownerGraph.getEstimatedSize() * this.compoundGravityRangeFactor;
+      estimatedSize = ownerGraph.getEstimatedSize() * this.gravityRangeFactor;
 
-    if (absDistanceX > estimatedSize || absDistanceY > estimatedSize)
+      if (absDistanceX > estimatedSize || absDistanceY > estimatedSize) {
+        node.gravitationForceX = -this.gravityConstant * distanceX;
+        node.gravitationForceY = -this.gravityConstant * distanceY;
+      }
+    } else // inside a compound
     {
-      node.gravitationForceX = -this.gravityConstant * distanceX *
-              this.compoundGravityConstant;
-      node.gravitationForceY = -this.gravityConstant * distanceY *
-              this.compoundGravityConstant;
+      estimatedSize = ownerGraph.getEstimatedSize() * this.compoundGravityRangeFactor;
+
+      if (absDistanceX > estimatedSize || absDistanceY > estimatedSize) {
+        node.gravitationForceX = -this.gravityConstant * distanceX * this.compoundGravityConstant;
+        node.gravitationForceY = -this.gravityConstant * distanceY * this.compoundGravityConstant;
+      }
     }
-  }
 };
 
 FDLayout.prototype.isConverged = function () {
   var converged;
   var oscilating = false;
 
-  if (this.totalIterations > this.maxIterations / 3)
-  {
-    oscilating =
-            Math.abs(this.totalDisplacement - this.oldTotalDisplacement) < 2;
+  if (this.totalIterations > this.maxIterations / 3) {
+    oscilating = Math.abs(this.totalDisplacement - this.oldTotalDisplacement) < 2;
   }
 
   converged = this.totalDisplacement < this.totalDisplacementThreshold;
@@ -2371,15 +2230,11 @@ FDLayout.prototype.isConverged = function () {
 };
 
 FDLayout.prototype.animate = function () {
-  if (this.animationDuringLayout && !this.isSubLayout)
-  {
-    if (this.notAnimatedIterations == this.animationPeriod)
-    {
+  if (this.animationDuringLayout && !this.isSubLayout) {
+    if (this.notAnimatedIterations == this.animationPeriod) {
       this.update();
       this.notAnimatedIterations = 0;
-    }
-    else
-    {
+    } else {
       this.notAnimatedIterations++;
     }
   }
@@ -2389,36 +2244,35 @@ FDLayout.prototype.animate = function () {
 // Section: FR-Grid Variant Repulsion Force Calculation
 // -----------------------------------------------------------------------------
 
-FDLayout.prototype.calcGrid = function (graph){
+FDLayout.prototype.calcGrid = function (graph) {
 
-  var sizeX = 0; 
+  var sizeX = 0;
   var sizeY = 0;
-  
+
   sizeX = parseInt(Math.ceil((graph.getRight() - graph.getLeft()) / this.repulsionRange));
   sizeY = parseInt(Math.ceil((graph.getBottom() - graph.getTop()) / this.repulsionRange));
-  
+
   var grid = new Array(sizeX);
-  
-  for(var i = 0; i < sizeX; i++){
-    grid[i] = new Array(sizeY);    
+
+  for (var i = 0; i < sizeX; i++) {
+    grid[i] = new Array(sizeY);
   }
-  
-  for(var i = 0; i < sizeX; i++){
-    for(var j = 0; j < sizeY; j++){
-      grid[i][j] = new Array();    
+
+  for (var i = 0; i < sizeX; i++) {
+    for (var j = 0; j < sizeY; j++) {
+      grid[i][j] = new Array();
     }
   }
-  
+
   return grid;
 };
 
-FDLayout.prototype.addNodeToGrid = function (v, left, top){
-    
+FDLayout.prototype.addNodeToGrid = function (v, left, top){  
   var startX = 0;
   var finishX = 0;
   var startY = 0;
   var finishY = 0;
-  
+
   startX = parseInt(Math.floor((v.getRect().x - left) / this.repulsionRange));
   finishX = parseInt(Math.floor((v.getRect().width + v.getRect().x - left) / this.repulsionRange));
   startY = parseInt(Math.floor((v.getRect().y - top) / this.repulsionRange));
@@ -2431,8 +2285,7 @@ FDLayout.prototype.addNodeToGrid = function (v, left, top){
       this.grid[i][j].push(v);
       v.setGridCoordinates(startX, finishX, startY, finishY); 
     }
-  }  
-
+  }
 };
 
 FDLayout.prototype.updateGrid = function() {
@@ -2471,11 +2324,10 @@ FDLayout.prototype.calculateRepulsionForceOfANode = function (nodeA, processedNo
 
             // If both nodes are not members of the same graph, 
             // or both nodes are the same, skip.
-            if ((nodeA.getOwner() != nodeB.getOwner()) || (nodeA == nodeB))
-            {
+            if (nodeA.getOwner() != nodeB.getOwner() || nodeA == nodeB) {
               continue;
             }
-            
+
             // check if the repulsion force between
             // nodeA and nodeB has already been calculated
             if (!processedNodeSet.has(nodeB) && !surrounding.has(nodeB))
@@ -2487,24 +2339,21 @@ FDLayout.prototype.calculateRepulsionForceOfANode = function (nodeA, processedNo
             
               // if the distance between nodeA and nodeB 
               // is less then calculation range
-              if ((distanceX <= this.repulsionRange) && (distanceY <= this.repulsionRange))
-              {
+              if (distanceX <= this.repulsionRange && distanceY <= this.repulsionRange) {
                 //then add nodeB to surrounding of nodeA
                 surrounding.add(nodeB);
-              }              
-            }    
+              }
+            }
           }
-        }          
+        }
       }
     }
 
     nodeA.surrounding = [...surrounding];
-	
   }
-  for (i = 0; i < nodeA.surrounding.length; i++)
-  {
+  for (i = 0; i < nodeA.surrounding.length; i++) {
     this.calcRepulsionForce(nodeA, nodeA.surrounding[i]);
-  }	
+  }
 };
 
 FDLayout.prototype.calcRepulsionRange = function () {
@@ -2724,8 +2573,7 @@ module.exports = FDLayout;
 },{"./FDLayoutConstants":14,"./IGeometry":19,"./IMath":20,"./Integer":21,"./Layout":27,"./LayoutConstants":28}],14:[function(require,module,exports){
 var LayoutConstants = require('./LayoutConstants');
 
-function FDLayoutConstants() {
-}
+function FDLayoutConstants() {}
 
 //FDLayoutConstants inherits static props in LayoutConstants
 for (var prop in LayoutConstants) {
@@ -2755,6 +2603,7 @@ FDLayoutConstants.GRID_CALCULATION_CHECK_PERIOD = 10;
 module.exports = FDLayoutConstants;
 
 },{"./LayoutConstants":28}],15:[function(require,module,exports){
+
 var LEdge = require('./LEdge');
 var FDLayoutConstants = require('./FDLayoutConstants');
 
@@ -2772,6 +2621,7 @@ for (var prop in LEdge) {
 module.exports = FDLayoutEdge;
 
 },{"./FDLayoutConstants":14,"./LEdge":22}],16:[function(require,module,exports){
+
 var LNode = require('./LNode');
 
 function FDLayoutNode(gm, loc, size, vNode) {
@@ -2804,18 +2654,17 @@ for (var prop in LNode) {
   FDLayoutNode[prop] = LNode[prop];
 }
 
-FDLayoutNode.prototype.setGridCoordinates = function (_startX, _finishX, _startY, _finishY)
-{
+FDLayoutNode.prototype.setGridCoordinates = function (_startX, _finishX, _startY, _finishY) {
   this.startX = _startX;
   this.finishX = _finishX;
   this.startY = _startY;
   this.finishY = _finishY;
-
 };
 
 module.exports = FDLayoutNode;
 
 },{"./LNode":26}],17:[function(require,module,exports){
+
 var UniqueIDGeneretor = require('./UniqueIDGeneretor');
 
 function HashMap() {
@@ -2848,6 +2697,7 @@ HashMap.prototype.keySet = function () {
 module.exports = HashMap;
 
 },{"./UniqueIDGeneretor":34}],18:[function(require,module,exports){
+
 var UniqueIDGeneretor = require('./UniqueIDGeneretor');
 
 function HashSet() {
@@ -2857,8 +2707,7 @@ function HashSet() {
 
 HashSet.prototype.add = function (obj) {
   var theId = UniqueIDGeneretor.createID(obj);
-  if (!this.contains(theId))
-    this.set[theId] = obj;
+  if (!this.contains(theId)) this.set[theId] = obj;
 };
 
 HashSet.prototype.remove = function (obj) {
@@ -2908,89 +2757,64 @@ module.exports = HashSet;
 function IGeometry() {
 }
 
-IGeometry.calcSeparationAmount = function (rectA, rectB, overlapAmount, separationBuffer)
-{
+function IGeometry() {}
+
+IGeometry.calcSeparationAmount = function (rectA, rectB, overlapAmount, separationBuffer) {
   if (!rectA.intersects(rectB)) {
     throw "assert failed";
   }
   var directions = new Array(2);
   IGeometry.decideDirectionsForOverlappingNodes(rectA, rectB, directions);
-  overlapAmount[0] = Math.min(rectA.getRight(), rectB.getRight()) -
-          Math.max(rectA.x, rectB.x);
-  overlapAmount[1] = Math.min(rectA.getBottom(), rectB.getBottom()) -
-          Math.max(rectA.y, rectB.y);
+  overlapAmount[0] = Math.min(rectA.getRight(), rectB.getRight()) - Math.max(rectA.x, rectB.x);
+  overlapAmount[1] = Math.min(rectA.getBottom(), rectB.getBottom()) - Math.max(rectA.y, rectB.y);
   // update the overlapping amounts for the following cases:
-  if ((rectA.getX() <= rectB.getX()) && (rectA.getRight() >= rectB.getRight()))
-  {
-    overlapAmount[0] += Math.min((rectB.getX() - rectA.getX()),
-            (rectA.getRight() - rectB.getRight()));
+  if (rectA.getX() <= rectB.getX() && rectA.getRight() >= rectB.getRight()) {
+    overlapAmount[0] += Math.min(rectB.getX() - rectA.getX(), rectA.getRight() - rectB.getRight());
+  } else if (rectB.getX() <= rectA.getX() && rectB.getRight() >= rectA.getRight()) {
+    overlapAmount[0] += Math.min(rectA.getX() - rectB.getX(), rectB.getRight() - rectA.getRight());
   }
-  else if ((rectB.getX() <= rectA.getX()) && (rectB.getRight() >= rectA.getRight()))
-  {
-    overlapAmount[0] += Math.min((rectA.getX() - rectB.getX()),
-            (rectB.getRight() - rectA.getRight()));
-  }
-  if ((rectA.getY() <= rectB.getY()) && (rectA.getBottom() >= rectB.getBottom()))
-  {
-    overlapAmount[1] += Math.min((rectB.getY() - rectA.getY()),
-            (rectA.getBottom() - rectB.getBottom()));
-  }
-  else if ((rectB.getY() <= rectA.getY()) && (rectB.getBottom() >= rectA.getBottom()))
-  {
-    overlapAmount[1] += Math.min((rectA.getY() - rectB.getY()),
-            (rectB.getBottom() - rectA.getBottom()));
+  if (rectA.getY() <= rectB.getY() && rectA.getBottom() >= rectB.getBottom()) {
+    overlapAmount[1] += Math.min(rectB.getY() - rectA.getY(), rectA.getBottom() - rectB.getBottom());
+  } else if (rectB.getY() <= rectA.getY() && rectB.getBottom() >= rectA.getBottom()) {
+    overlapAmount[1] += Math.min(rectA.getY() - rectB.getY(), rectB.getBottom() - rectA.getBottom());
   }
 
   // find slope of the line passes two centers
-  var slope = Math.abs((rectB.getCenterY() - rectA.getCenterY()) /
-          (rectB.getCenterX() - rectA.getCenterX()));
+  var slope = Math.abs((rectB.getCenterY() - rectA.getCenterY()) / (rectB.getCenterX() - rectA.getCenterX()));
   // if centers are overlapped
-  if ((rectB.getCenterY() == rectA.getCenterY()) &&
-          (rectB.getCenterX() == rectA.getCenterX()))
-  {
+  if (rectB.getCenterY() == rectA.getCenterY() && rectB.getCenterX() == rectA.getCenterX()) {
     // assume the slope is 1 (45 degree)
     slope = 1.0;
   }
 
   var moveByY = slope * overlapAmount[0];
   var moveByX = overlapAmount[1] / slope;
-  if (overlapAmount[0] < moveByX)
-  {
+  if (overlapAmount[0] < moveByX) {
     moveByX = overlapAmount[0];
-  }
-  else
-  {
+  } else {
     moveByY = overlapAmount[1];
   }
   // return half the amount so that if each rectangle is moved by these
   // amounts in opposite directions, overlap will be resolved
-  overlapAmount[0] = -1 * directions[0] * ((moveByX / 2) + separationBuffer);
-  overlapAmount[1] = -1 * directions[1] * ((moveByY / 2) + separationBuffer);
-}
+  overlapAmount[0] = -1 * directions[0] * (moveByX / 2 + separationBuffer);
+  overlapAmount[1] = -1 * directions[1] * (moveByY / 2 + separationBuffer);
+};
 
-IGeometry.decideDirectionsForOverlappingNodes = function (rectA, rectB, directions)
-{
-  if (rectA.getCenterX() < rectB.getCenterX())
-  {
+IGeometry.decideDirectionsForOverlappingNodes = function (rectA, rectB, directions) {
+  if (rectA.getCenterX() < rectB.getCenterX()) {
     directions[0] = -1;
-  }
-  else
-  {
+  } else {
     directions[0] = 1;
   }
 
-  if (rectA.getCenterY() < rectB.getCenterY())
-  {
+  if (rectA.getCenterY() < rectB.getCenterY()) {
     directions[1] = -1;
-  }
-  else
-  {
+  } else {
     directions[1] = 1;
   }
-}
+};
 
-IGeometry.getIntersection2 = function (rectA, rectB, result)
-{
+IGeometry.getIntersection2 = function (rectA, rectB, result) {
   //result[0-1] will contain clipPoint of rectA, result[2-3] will contain clipPoint of rectB
   var p1x = rectA.getCenterX();
   var p1y = rectA.getCenterY();
@@ -2998,8 +2822,7 @@ IGeometry.getIntersection2 = function (rectA, rectB, result)
   var p2y = rectB.getCenterY();
 
   //if two rectangles intersect, then clipping points are centers
-  if (rectA.intersects(rectB))
-  {
+  if (rectA.intersects(rectB)) {
     result[0] = p1x;
     result[1] = p1y;
     result[2] = p2x;
@@ -3029,244 +2852,193 @@ IGeometry.getIntersection2 = function (rectA, rectB, result)
   var clipPointBFound = false;
 
   // line is vertical
-  if (p1x == p2x)
-  {
-    if (p1y > p2y)
-    {
+  if (p1x == p2x) {
+    if (p1y > p2y) {
       result[0] = p1x;
       result[1] = topLeftAy;
       result[2] = p2x;
       result[3] = bottomLeftBy;
       return false;
-    }
-    else if (p1y < p2y)
-    {
+    } else if (p1y < p2y) {
       result[0] = p1x;
       result[1] = bottomLeftAy;
       result[2] = p2x;
       result[3] = topLeftBy;
       return false;
-    }
-    else
-    {
+    } else {
       //not line, return null;
     }
   }
   // line is horizontal
-  else if (p1y == p2y)
-  {
-    if (p1x > p2x)
-    {
-      result[0] = topLeftAx;
-      result[1] = p1y;
-      result[2] = topRightBx;
-      result[3] = p2y;
-      return false;
-    }
-    else if (p1x < p2x)
-    {
-      result[0] = topRightAx;
-      result[1] = p1y;
-      result[2] = topLeftBx;
-      result[3] = p2y;
-      return false;
-    }
-    else
-    {
-      //not valid line, return null;
-    }
-  }
-  else
-  {
-    //slopes of rectA's and rectB's diagonals
-    var slopeA = rectA.height / rectA.width;
-    var slopeB = rectB.height / rectB.width;
-
-    //slope of line between center of rectA and center of rectB
-    var slopePrime = (p2y - p1y) / (p2x - p1x);
-    var cardinalDirectionA;
-    var cardinalDirectionB;
-    var tempPointAx;
-    var tempPointAy;
-    var tempPointBx;
-    var tempPointBy;
-
-    //determine whether clipping point is the corner of nodeA
-    if ((-slopeA) == slopePrime)
-    {
-      if (p1x > p2x)
-      {
-        result[0] = bottomLeftAx;
-        result[1] = bottomLeftAy;
-        clipPointAFound = true;
-      }
-      else
-      {
-        result[0] = topRightAx;
-        result[1] = topLeftAy;
-        clipPointAFound = true;
-      }
-    }
-    else if (slopeA == slopePrime)
-    {
-      if (p1x > p2x)
-      {
+  else if (p1y == p2y) {
+      if (p1x > p2x) {
         result[0] = topLeftAx;
-        result[1] = topLeftAy;
-        clipPointAFound = true;
-      }
-      else
-      {
-        result[0] = bottomRightAx;
-        result[1] = bottomLeftAy;
-        clipPointAFound = true;
-      }
-    }
-
-    //determine whether clipping point is the corner of nodeB
-    if ((-slopeB) == slopePrime)
-    {
-      if (p2x > p1x)
-      {
-        result[2] = bottomLeftBx;
-        result[3] = bottomLeftBy;
-        clipPointBFound = true;
-      }
-      else
-      {
+        result[1] = p1y;
         result[2] = topRightBx;
-        result[3] = topLeftBy;
-        clipPointBFound = true;
-      }
-    }
-    else if (slopeB == slopePrime)
-    {
-      if (p2x > p1x)
-      {
+        result[3] = p2y;
+        return false;
+      } else if (p1x < p2x) {
+        result[0] = topRightAx;
+        result[1] = p1y;
         result[2] = topLeftBx;
-        result[3] = topLeftBy;
-        clipPointBFound = true;
+        result[3] = p2y;
+        return false;
+      } else {
+        //not valid line, return null;
       }
-      else
-      {
-        result[2] = bottomRightBx;
-        result[3] = bottomLeftBy;
-        clipPointBFound = true;
-      }
-    }
+    } else {
+      //slopes of rectA's and rectB's diagonals
+      var slopeA = rectA.height / rectA.width;
+      var slopeB = rectB.height / rectB.width;
 
-    //if both clipping points are corners
-    if (clipPointAFound && clipPointBFound)
-    {
-      return false;
-    }
+      //slope of line between center of rectA and center of rectB
+      var slopePrime = (p2y - p1y) / (p2x - p1x);
+      var cardinalDirectionA;
+      var cardinalDirectionB;
+      var tempPointAx;
+      var tempPointAy;
+      var tempPointBx;
+      var tempPointBy;
 
-    //determine Cardinal Direction of rectangles
-    if (p1x > p2x)
-    {
-      if (p1y > p2y)
-      {
-        cardinalDirectionA = IGeometry.getCardinalDirection(slopeA, slopePrime, 4);
-        cardinalDirectionB = IGeometry.getCardinalDirection(slopeB, slopePrime, 2);
+      //determine whether clipping point is the corner of nodeA
+      if (-slopeA == slopePrime) {
+        if (p1x > p2x) {
+          result[0] = bottomLeftAx;
+          result[1] = bottomLeftAy;
+          clipPointAFound = true;
+        } else {
+          result[0] = topRightAx;
+          result[1] = topLeftAy;
+          clipPointAFound = true;
+        }
+      } else if (slopeA == slopePrime) {
+        if (p1x > p2x) {
+          result[0] = topLeftAx;
+          result[1] = topLeftAy;
+          clipPointAFound = true;
+        } else {
+          result[0] = bottomRightAx;
+          result[1] = bottomLeftAy;
+          clipPointAFound = true;
+        }
       }
-      else
-      {
-        cardinalDirectionA = IGeometry.getCardinalDirection(-slopeA, slopePrime, 3);
-        cardinalDirectionB = IGeometry.getCardinalDirection(-slopeB, slopePrime, 1);
+
+      //determine whether clipping point is the corner of nodeB
+      if (-slopeB == slopePrime) {
+        if (p2x > p1x) {
+          result[2] = bottomLeftBx;
+          result[3] = bottomLeftBy;
+          clipPointBFound = true;
+        } else {
+          result[2] = topRightBx;
+          result[3] = topLeftBy;
+          clipPointBFound = true;
+        }
+      } else if (slopeB == slopePrime) {
+        if (p2x > p1x) {
+          result[2] = topLeftBx;
+          result[3] = topLeftBy;
+          clipPointBFound = true;
+        } else {
+          result[2] = bottomRightBx;
+          result[3] = bottomLeftBy;
+          clipPointBFound = true;
+        }
+      }
+
+      //if both clipping points are corners
+      if (clipPointAFound && clipPointBFound) {
+        return false;
+      }
+
+      //determine Cardinal Direction of rectangles
+      if (p1x > p2x) {
+        if (p1y > p2y) {
+          cardinalDirectionA = IGeometry.getCardinalDirection(slopeA, slopePrime, 4);
+          cardinalDirectionB = IGeometry.getCardinalDirection(slopeB, slopePrime, 2);
+        } else {
+          cardinalDirectionA = IGeometry.getCardinalDirection(-slopeA, slopePrime, 3);
+          cardinalDirectionB = IGeometry.getCardinalDirection(-slopeB, slopePrime, 1);
+        }
+      } else {
+        if (p1y > p2y) {
+          cardinalDirectionA = IGeometry.getCardinalDirection(-slopeA, slopePrime, 1);
+          cardinalDirectionB = IGeometry.getCardinalDirection(-slopeB, slopePrime, 3);
+        } else {
+          cardinalDirectionA = IGeometry.getCardinalDirection(slopeA, slopePrime, 2);
+          cardinalDirectionB = IGeometry.getCardinalDirection(slopeB, slopePrime, 4);
+        }
+      }
+      //calculate clipping Point if it is not found before
+      if (!clipPointAFound) {
+        switch (cardinalDirectionA) {
+          case 1:
+            tempPointAy = topLeftAy;
+            tempPointAx = p1x + -halfHeightA / slopePrime;
+            result[0] = tempPointAx;
+            result[1] = tempPointAy;
+            break;
+          case 2:
+            tempPointAx = bottomRightAx;
+            tempPointAy = p1y + halfWidthA * slopePrime;
+            result[0] = tempPointAx;
+            result[1] = tempPointAy;
+            break;
+          case 3:
+            tempPointAy = bottomLeftAy;
+            tempPointAx = p1x + halfHeightA / slopePrime;
+            result[0] = tempPointAx;
+            result[1] = tempPointAy;
+            break;
+          case 4:
+            tempPointAx = bottomLeftAx;
+            tempPointAy = p1y + -halfWidthA * slopePrime;
+            result[0] = tempPointAx;
+            result[1] = tempPointAy;
+            break;
+        }
+      }
+      if (!clipPointBFound) {
+        switch (cardinalDirectionB) {
+          case 1:
+            tempPointBy = topLeftBy;
+            tempPointBx = p2x + -halfHeightB / slopePrime;
+            result[2] = tempPointBx;
+            result[3] = tempPointBy;
+            break;
+          case 2:
+            tempPointBx = bottomRightBx;
+            tempPointBy = p2y + halfWidthB * slopePrime;
+            result[2] = tempPointBx;
+            result[3] = tempPointBy;
+            break;
+          case 3:
+            tempPointBy = bottomLeftBy;
+            tempPointBx = p2x + halfHeightB / slopePrime;
+            result[2] = tempPointBx;
+            result[3] = tempPointBy;
+            break;
+          case 4:
+            tempPointBx = bottomLeftBx;
+            tempPointBy = p2y + -halfWidthB * slopePrime;
+            result[2] = tempPointBx;
+            result[3] = tempPointBy;
+            break;
+        }
       }
     }
-    else
-    {
-      if (p1y > p2y)
-      {
-        cardinalDirectionA = IGeometry.getCardinalDirection(-slopeA, slopePrime, 1);
-        cardinalDirectionB = IGeometry.getCardinalDirection(-slopeB, slopePrime, 3);
-      }
-      else
-      {
-        cardinalDirectionA = IGeometry.getCardinalDirection(slopeA, slopePrime, 2);
-        cardinalDirectionB = IGeometry.getCardinalDirection(slopeB, slopePrime, 4);
-      }
-    }
-    //calculate clipping Point if it is not found before
-    if (!clipPointAFound)
-    {
-      switch (cardinalDirectionA)
-      {
-        case 1:
-          tempPointAy = topLeftAy;
-          tempPointAx = p1x + (-halfHeightA) / slopePrime;
-          result[0] = tempPointAx;
-          result[1] = tempPointAy;
-          break;
-        case 2:
-          tempPointAx = bottomRightAx;
-          tempPointAy = p1y + halfWidthA * slopePrime;
-          result[0] = tempPointAx;
-          result[1] = tempPointAy;
-          break;
-        case 3:
-          tempPointAy = bottomLeftAy;
-          tempPointAx = p1x + halfHeightA / slopePrime;
-          result[0] = tempPointAx;
-          result[1] = tempPointAy;
-          break;
-        case 4:
-          tempPointAx = bottomLeftAx;
-          tempPointAy = p1y + (-halfWidthA) * slopePrime;
-          result[0] = tempPointAx;
-          result[1] = tempPointAy;
-          break;
-      }
-    }
-    if (!clipPointBFound)
-    {
-      switch (cardinalDirectionB)
-      {
-        case 1:
-          tempPointBy = topLeftBy;
-          tempPointBx = p2x + (-halfHeightB) / slopePrime;
-          result[2] = tempPointBx;
-          result[3] = tempPointBy;
-          break;
-        case 2:
-          tempPointBx = bottomRightBx;
-          tempPointBy = p2y + halfWidthB * slopePrime;
-          result[2] = tempPointBx;
-          result[3] = tempPointBy;
-          break;
-        case 3:
-          tempPointBy = bottomLeftBy;
-          tempPointBx = p2x + halfHeightB / slopePrime;
-          result[2] = tempPointBx;
-          result[3] = tempPointBy;
-          break;
-        case 4:
-          tempPointBx = bottomLeftBx;
-          tempPointBy = p2y + (-halfWidthB) * slopePrime;
-          result[2] = tempPointBx;
-          result[3] = tempPointBy;
-          break;
-      }
-    }
-  }
   return false;
-}
+};
 
-IGeometry.getCardinalDirection = function (slope, slopePrime, line)
-{
-  if (slope > slopePrime)
-  {
+IGeometry.getCardinalDirection = function (slope, slopePrime, line) {
+  if (slope > slopePrime) {
     return line;
-  }
-  else
-  {
+  } else {
     return 1 + line % 4;
   }
-}
+};
 
-IGeometry.getIntersection = function (s1, s2, f1, f2)
-{
+IGeometry.getIntersection = function (s1, s2, f1, f2) {
   if (f2 == null) {
     return IGeometry.getIntersection2(s1, s2, f1);
   }
@@ -3284,16 +3056,15 @@ IGeometry.getIntersection = function (s1, s2, f1, f2)
 
   a1 = y2 - y1;
   b1 = x1 - x2;
-  c1 = x2 * y1 - x1 * y2;  // { a1*x + b1*y + c1 = 0 is line 1 }
+  c1 = x2 * y1 - x1 * y2; // { a1*x + b1*y + c1 = 0 is line 1 }
 
   a2 = y4 - y3;
   b2 = x3 - x4;
-  c2 = x4 * y3 - x3 * y4;  // { a2*x + b2*y + c2 = 0 is line 2 }
+  c2 = x4 * y3 - x3 * y4; // { a2*x + b2*y + c2 = 0 is line 2 }
 
   denom = a1 * b2 - a2 * b1;
 
-  if (denom == 0)
-  {
+  if (denom == 0) {
     return null;
   }
 
@@ -3301,7 +3072,7 @@ IGeometry.getIntersection = function (s1, s2, f1, f2)
   y = (a2 * c1 - a1 * c2) / denom;
 
   return new Point(x, y);
-}
+};
 
 // -----------------------------------------------------------------------------
 // Section: Class Constants
@@ -3324,27 +3095,22 @@ function IMath() {
  * This method returns the sign of the input value.
  */
 IMath.sign = function (value) {
-  if (value > 0)
-  {
+  if (value > 0) {
     return 1;
-  }
-  else if (value < 0)
-  {
+  } else if (value < 0) {
     return -1;
-  }
-  else
-  {
+  } else {
     return 0;
   }
-}
+};
 
 IMath.floor = function (value) {
   return value < 0 ? Math.ceil(value) : Math.floor(value);
-}
+};
 
 IMath.ceil = function (value) {
   return value < 0 ? Math.floor(value) : Math.ceil(value);
-}
+};
 
 module.exports = IMath;
 
@@ -3358,6 +3124,7 @@ Integer.MIN_VALUE = -2147483648;
 module.exports = Integer;
 
 },{}],22:[function(require,module,exports){
+  
 var LGraphObject = require('./LGraphObject');
 var IGeometry = require('./IGeometry');
 var IMath = require('./IMath');
@@ -3378,81 +3145,62 @@ for (var prop in LGraphObject) {
   LEdge[prop] = LGraphObject[prop];
 }
 
-LEdge.prototype.getSource = function ()
-{
+LEdge.prototype.getSource = function () {
   return this.source;
 };
 
-LEdge.prototype.getTarget = function ()
-{
+LEdge.prototype.getTarget = function () {
   return this.target;
 };
 
-LEdge.prototype.isInterGraph = function ()
-{
+LEdge.prototype.isInterGraph = function () {
   return this.isInterGraph;
 };
 
-LEdge.prototype.getLength = function ()
-{
+LEdge.prototype.getLength = function () {
   return this.length;
 };
 
-LEdge.prototype.isOverlapingSourceAndTarget = function ()
-{
+LEdge.prototype.isOverlapingSourceAndTarget = function () {
   return this.isOverlapingSourceAndTarget;
 };
 
-LEdge.prototype.getBendpoints = function ()
-{
+LEdge.prototype.getBendpoints = function () {
   return this.bendpoints;
 };
 
-LEdge.prototype.getLca = function ()
-{
+LEdge.prototype.getLca = function () {
   return this.lca;
 };
 
-LEdge.prototype.getSourceInLca = function ()
-{
+LEdge.prototype.getSourceInLca = function () {
   return this.sourceInLca;
 };
 
-LEdge.prototype.getTargetInLca = function ()
-{
+LEdge.prototype.getTargetInLca = function () {
   return this.targetInLca;
 };
 
-LEdge.prototype.getOtherEnd = function (node)
-{
-  if (this.source === node)
-  {
+LEdge.prototype.getOtherEnd = function (node) {
+  if (this.source === node) {
     return this.target;
-  }
-  else if (this.target === node)
-  {
+  } else if (this.target === node) {
     return this.source;
-  }
-  else
-  {
+  } else {
     throw "Node is not incident with this edge";
   }
-}
+};
 
-LEdge.prototype.getOtherEndInGraph = function (node, graph)
-{
+LEdge.prototype.getOtherEndInGraph = function (node, graph) {
   var otherEnd = this.getOtherEnd(node);
   var root = graph.getGraphManager().getRoot();
 
-  while (true)
-  {
-    if (otherEnd.getOwner() == graph)
-    {
+  while (true) {
+    if (otherEnd.getOwner() == graph) {
       return otherEnd;
     }
 
-    if (otherEnd.getOwner() == root)
-    {
+    if (otherEnd.getOwner() == root) {
       break;
     }
 
@@ -3462,57 +3210,46 @@ LEdge.prototype.getOtherEndInGraph = function (node, graph)
   return null;
 };
 
-LEdge.prototype.updateLength = function ()
-{
+LEdge.prototype.updateLength = function () {
   var clipPointCoordinates = new Array(4);
 
-  this.isOverlapingSourceAndTarget =
-          IGeometry.getIntersection(this.target.getRect(),
-                  this.source.getRect(),
-                  clipPointCoordinates);
+  this.isOverlapingSourceAndTarget = IGeometry.getIntersection(this.target.getRect(), this.source.getRect(), clipPointCoordinates);
 
-  if (!this.isOverlapingSourceAndTarget)
-  {
+  if (!this.isOverlapingSourceAndTarget) {
     this.lengthX = clipPointCoordinates[0] - clipPointCoordinates[2];
     this.lengthY = clipPointCoordinates[1] - clipPointCoordinates[3];
 
-    if (Math.abs(this.lengthX) < 1.0)
-    {
+    if (Math.abs(this.lengthX) < 1.0) {
       this.lengthX = IMath.sign(this.lengthX);
     }
 
-    if (Math.abs(this.lengthY) < 1.0)
-    {
+    if (Math.abs(this.lengthY) < 1.0) {
       this.lengthY = IMath.sign(this.lengthY);
     }
 
-    this.length = Math.sqrt(
-            this.lengthX * this.lengthX + this.lengthY * this.lengthY);
+    this.length = Math.sqrt(this.lengthX * this.lengthX + this.lengthY * this.lengthY);
   }
 };
 
-LEdge.prototype.updateLengthSimple = function ()
-{
+LEdge.prototype.updateLengthSimple = function () {
   this.lengthX = this.target.getCenterX() - this.source.getCenterX();
   this.lengthY = this.target.getCenterY() - this.source.getCenterY();
 
-  if (Math.abs(this.lengthX) < 1.0)
-  {
+  if (Math.abs(this.lengthX) < 1.0) {
     this.lengthX = IMath.sign(this.lengthX);
   }
 
-  if (Math.abs(this.lengthY) < 1.0)
-  {
+  if (Math.abs(this.lengthY) < 1.0) {
     this.lengthY = IMath.sign(this.lengthY);
   }
 
-  this.length = Math.sqrt(
-          this.lengthX * this.lengthX + this.lengthY * this.lengthY);
-}
+  this.length = Math.sqrt(this.lengthX * this.lengthX + this.lengthY * this.lengthY);
+};
 
 module.exports = LEdge;
 
 },{"./IGeometry":19,"./IMath":20,"./LGraphObject":25}],23:[function(require,module,exports){
+  
 var LGraphObject = require('./LGraphObject');
 var Integer = require('./Integer');
 var LayoutConstants = require('./LayoutConstants');
@@ -3535,8 +3272,7 @@ function LGraph(parent, obj2, vGraph) {
 
   if (obj2 != null && obj2 instanceof LGraphManager) {
     this.graphManager = obj2;
-  }
-  else if (obj2 != null && obj2 instanceof Layout) {
+  } else if (obj2 != null && obj2 instanceof Layout) {
     this.graphManager = obj2.graphManager;
   }
 }
@@ -3554,38 +3290,31 @@ LGraph.prototype.getEdges = function () {
   return this.edges;
 };
 
-LGraph.prototype.getGraphManager = function ()
-{
+LGraph.prototype.getGraphManager = function () {
   return this.graphManager;
 };
 
-LGraph.prototype.getParent = function ()
-{
+LGraph.prototype.getParent = function () {
   return this.parent;
 };
 
-LGraph.prototype.getLeft = function ()
-{
+LGraph.prototype.getLeft = function () {
   return this.left;
 };
 
-LGraph.prototype.getRight = function ()
-{
+LGraph.prototype.getRight = function () {
   return this.right;
 };
 
-LGraph.prototype.getTop = function ()
-{
+LGraph.prototype.getTop = function () {
   return this.top;
 };
 
-LGraph.prototype.getBottom = function ()
-{
+LGraph.prototype.getBottom = function () {
   return this.bottom;
 };
 
-LGraph.prototype.isConnected = function ()
-{
+LGraph.prototype.isConnected = function () {
   return this.isConnected;
 };
 
@@ -3602,10 +3331,9 @@ LGraph.prototype.add = function (obj1, sourceNode, targetNode) {
     this.getNodes().push(newNode);
 
     return newNode;
-  }
-  else {
+  } else {
     var newEdge = obj1;
-    if (!(this.getNodes().indexOf(sourceNode) > -1 && (this.getNodes().indexOf(targetNode)) > -1)) {
+    if (!(this.getNodes().indexOf(sourceNode) > -1 && this.getNodes().indexOf(targetNode) > -1)) {
       throw "Source or target not in graph!";
     }
 
@@ -3613,8 +3341,7 @@ LGraph.prototype.add = function (obj1, sourceNode, targetNode) {
       throw "Both owners must be this graph!";
     }
 
-    if (sourceNode.owner != targetNode.owner)
-    {
+    if (sourceNode.owner != targetNode.owner) {
       return null;
     }
 
@@ -3631,8 +3358,7 @@ LGraph.prototype.add = function (obj1, sourceNode, targetNode) {
     // add to incidency lists
     sourceNode.edges.push(newEdge);
 
-    if (targetNode != sourceNode)
-    {
+    if (targetNode != sourceNode) {
       targetNode.edges.push(newEdge);
     }
 
@@ -3656,16 +3382,12 @@ LGraph.prototype.remove = function (obj) {
     var edgesToBeRemoved = node.edges.slice();
     var edge;
     var s = edgesToBeRemoved.length;
-    for (var i = 0; i < s; i++)
-    {
+    for (var i = 0; i < s; i++) {
       edge = edgesToBeRemoved[i];
 
-      if (edge.isInterGraph)
-      {
+      if (edge.isInterGraph) {
         this.graphManager.remove(edge);
-      }
-      else
-      {
+      } else {
         edge.source.owner.remove(edge);
       }
     }
@@ -3677,8 +3399,7 @@ LGraph.prototype.remove = function (obj) {
     }
 
     this.nodes.splice(index, 1);
-  }
-  else if (obj instanceof LEdge) {
+  } else if (obj instanceof LEdge) {
     var edge = obj;
     if (edge == null) {
       throw "Edge is null!";
@@ -3686,8 +3407,7 @@ LGraph.prototype.remove = function (obj) {
     if (!(edge.source != null && edge.target != null)) {
       throw "Source and/or target is null!";
     }
-    if (!(edge.source.owner != null && edge.target.owner != null &&
-            edge.source.owner == this && edge.target.owner == this)) {
+    if (!(edge.source.owner != null && edge.target.owner != null && edge.source.owner == this && edge.target.owner == this)) {
       throw "Source and/or target owner is invalid!";
     }
 
@@ -3699,8 +3419,7 @@ LGraph.prototype.remove = function (obj) {
 
     edge.source.edges.splice(sourceIndex, 1);
 
-    if (edge.target != edge.source)
-    {
+    if (edge.target != edge.source) {
       edge.target.edges.splice(targetIndex, 1);
     }
 
@@ -3713,8 +3432,7 @@ LGraph.prototype.remove = function (obj) {
   }
 };
 
-LGraph.prototype.updateLeftTop = function ()
-{
+LGraph.prototype.updateLeftTop = function () {
   var top = Integer.MAX_VALUE;
   var left = Integer.MAX_VALUE;
   var nodeTop;
@@ -3724,33 +3442,28 @@ LGraph.prototype.updateLeftTop = function ()
   var nodes = this.getNodes();
   var s = nodes.length;
 
-  for (var i = 0; i < s; i++)
-  {
+  for (var i = 0; i < s; i++) {
     var lNode = nodes[i];
     nodeTop = lNode.getTop();
     nodeLeft = lNode.getLeft();
 
-    if (top > nodeTop)
-    {
+    if (top > nodeTop) {
       top = nodeTop;
     }
 
-    if (left > nodeLeft)
-    {
+    if (left > nodeLeft) {
       left = nodeLeft;
     }
   }
 
   // Do we have any nodes in this graph?
-  if (top == Integer.MAX_VALUE)
-  {
+  if (top == Integer.MAX_VALUE) {
     return null;
   }
-  
-  if(nodes[0].getParent().paddingLeft != undefined){
+
+  if (nodes[0].getParent().paddingLeft != undefined) {
     margin = nodes[0].getParent().paddingLeft;
-  }
-  else{
+  } else {
     margin = this.margin;
   }
 
@@ -3761,8 +3474,7 @@ LGraph.prototype.updateLeftTop = function ()
   return new Point(this.left, this.top);
 };
 
-LGraph.prototype.updateBounds = function (recursive)
-{
+LGraph.prototype.updateBounds = function (recursive) {
   // calculate bounds
   var left = Integer.MAX_VALUE;
   var right = -Integer.MAX_VALUE;
@@ -3776,12 +3488,10 @@ LGraph.prototype.updateBounds = function (recursive)
 
   var nodes = this.nodes;
   var s = nodes.length;
-  for (var i = 0; i < s; i++)
-  {
+  for (var i = 0; i < s; i++) {
     var lNode = nodes[i];
 
-    if (recursive && lNode.child != null)
-    {
+    if (recursive && lNode.child != null) {
       lNode.updateBounds();
     }
     nodeLeft = lNode.getLeft();
@@ -3789,40 +3499,34 @@ LGraph.prototype.updateBounds = function (recursive)
     nodeTop = lNode.getTop();
     nodeBottom = lNode.getBottom();
 
-    if (left > nodeLeft)
-    {
+    if (left > nodeLeft) {
       left = nodeLeft;
     }
 
-    if (right < nodeRight)
-    {
+    if (right < nodeRight) {
       right = nodeRight;
     }
 
-    if (top > nodeTop)
-    {
+    if (top > nodeTop) {
       top = nodeTop;
     }
 
-    if (bottom < nodeBottom)
-    {
+    if (bottom < nodeBottom) {
       bottom = nodeBottom;
     }
   }
 
   var boundingRect = new RectangleD(left, top, right - left, bottom - top);
-  if (left == Integer.MAX_VALUE)
-  {
+  if (left == Integer.MAX_VALUE) {
     this.left = this.parent.getLeft();
     this.right = this.parent.getRight();
     this.top = this.parent.getTop();
     this.bottom = this.parent.getBottom();
   }
-  
-  if(nodes[0].getParent().paddingLeft != undefined){
+
+  if (nodes[0].getParent().paddingLeft != undefined) {
     margin = nodes[0].getParent().paddingLeft;
-  }
-  else{
+  } else {
     margin = this.margin;
   }
 
@@ -3832,8 +3536,7 @@ LGraph.prototype.updateBounds = function (recursive)
   this.bottom = boundingRect.y + boundingRect.height + margin;
 };
 
-LGraph.calculateBounds = function (nodes)
-{
+LGraph.calculateBounds = function (nodes) {
   var left = Integer.MAX_VALUE;
   var right = -Integer.MAX_VALUE;
   var top = Integer.MAX_VALUE;
@@ -3845,31 +3548,26 @@ LGraph.calculateBounds = function (nodes)
 
   var s = nodes.length;
 
-  for (var i = 0; i < s; i++)
-  {
+  for (var i = 0; i < s; i++) {
     var lNode = nodes[i];
     nodeLeft = lNode.getLeft();
     nodeRight = lNode.getRight();
     nodeTop = lNode.getTop();
     nodeBottom = lNode.getBottom();
 
-    if (left > nodeLeft)
-    {
+    if (left > nodeLeft) {
       left = nodeLeft;
     }
 
-    if (right < nodeRight)
-    {
+    if (right < nodeRight) {
       right = nodeRight;
     }
 
-    if (top > nodeTop)
-    {
+    if (top > nodeTop) {
       top = nodeTop;
     }
 
-    if (bottom < nodeBottom)
-    {
+    if (bottom < nodeBottom) {
       bottom = nodeBottom;
     }
   }
@@ -3879,55 +3577,43 @@ LGraph.calculateBounds = function (nodes)
   return boundingRect;
 };
 
-LGraph.prototype.getInclusionTreeDepth = function ()
-{
-  if (this == this.graphManager.getRoot())
-  {
+LGraph.prototype.getInclusionTreeDepth = function () {
+  if (this == this.graphManager.getRoot()) {
     return 1;
-  }
-  else
-  {
+  } else {
     return this.parent.getInclusionTreeDepth();
   }
 };
 
-LGraph.prototype.getEstimatedSize = function ()
-{
+LGraph.prototype.getEstimatedSize = function () {
   if (this.estimatedSize == Integer.MIN_VALUE) {
     throw "assert failed";
   }
   return this.estimatedSize;
 };
 
-LGraph.prototype.calcEstimatedSize = function ()
-{
+LGraph.prototype.calcEstimatedSize = function () {
   var size = 0;
   var nodes = this.nodes;
   var s = nodes.length;
 
-  for (var i = 0; i < s; i++)
-  {
+  for (var i = 0; i < s; i++) {
     var lNode = nodes[i];
     size += lNode.calcEstimatedSize();
   }
 
-  if (size == 0)
-  {
+  if (size == 0) {
     this.estimatedSize = LayoutConstants.EMPTY_COMPOUND_NODE_SIZE;
-  }
-  else
-  {
+  } else {
     this.estimatedSize = size / Math.sqrt(this.nodes.length);
   }
 
   return this.estimatedSize;
 };
 
-LGraph.prototype.updateConnected = function ()
-{
+LGraph.prototype.updateConnected = function () {
   var self = this;
-  if (this.nodes.length == 0)
-  {
+  if (this.nodes.length == 0) {
     this.isConnected = true;
     return;
   }
@@ -3942,19 +3628,16 @@ LGraph.prototype.updateConnected = function ()
     toBeVisited.push(node);
   });
 
-  while (toBeVisited.length > 0)
-  {
+  while (toBeVisited.length > 0) {
     currentNode = toBeVisited.shift();
     visited.add(currentNode);
 
     // Traverse all neighbors of this node
     neighborEdges = currentNode.getEdges();
     var s = neighborEdges.length;
-    for (var i = 0; i < s; i++)
-    {
+    for (var i = 0; i < s; i++) {
       var neighborEdge = neighborEdges[i];
-      currentNeighbor =
-              neighborEdge.getOtherEndInGraph(currentNode, this);
+      currentNeighbor = neighborEdge.getOtherEndInGraph(currentNode, this);
 
       // Add unvisited neighbors to the list to visit
       if (currentNeighbor != null &&
@@ -3971,21 +3654,18 @@ LGraph.prototype.updateConnected = function ()
 
   this.isConnected = false;
 
-  if (visited.size() >= this.nodes.length)
-  {
+  if (visited.size() >= this.nodes.length) {
     var noOfVisitedInThisGraph = 0;
-    
+
     var s = visited.size();
-     Object.keys(visited.set).forEach(function(visitedId) {
+    Object.keys(visited.set).forEach(function (visitedId) {
       var visitedNode = visited.set[visitedId];
-      if (visitedNode.owner == self)
-      {
+      if (visitedNode.owner == self) {
         noOfVisitedInThisGraph++;
       }
     });
 
-    if (noOfVisitedInThisGraph == this.nodes.length)
-    {
+    if (noOfVisitedInThisGraph == this.nodes.length) {
       this.isConnected = true;
     }
   }
@@ -4005,8 +3685,7 @@ function LGraphManager(layout) {
   this.edges = [];
 }
 
-LGraphManager.prototype.addRoot = function ()
-{
+LGraphManager.prototype.addRoot = function () {
   var ngraph = this.layout.newGraph();
   var nnode = this.layout.newNode(null);
   var root = this.add(ngraph, nnode);
@@ -4014,8 +3693,7 @@ LGraphManager.prototype.addRoot = function ()
   return this.rootGraph;
 };
 
-LGraphManager.prototype.add = function (newGraph, parentNode, newEdge, sourceNode, targetNode)
-{
+LGraphManager.prototype.add = function (newGraph, parentNode, newEdge, sourceNode, targetNode) {
   //there are just 2 parameters are passed then it adds an LGraph else it adds an LEdge
   if (newEdge == null && sourceNode == null && targetNode == null) {
     if (newGraph == null) {
@@ -4034,15 +3712,14 @@ LGraphManager.prototype.add = function (newGraph, parentNode, newEdge, sourceNod
       throw "Already has a parent!";
     }
     if (parentNode.child != null) {
-      throw  "Already has a child!";
+      throw "Already has a child!";
     }
 
     newGraph.parent = parentNode;
     parentNode.child = newGraph;
 
     return newGraph;
-  }
-  else {
+  } else {
     //change the order of the parameters
     targetNode = newEdge;
     sourceNode = parentNode;
@@ -4057,13 +3734,10 @@ LGraphManager.prototype.add = function (newGraph, parentNode, newEdge, sourceNod
       throw "Target not in this graph mgr!";
     }
 
-    if (sourceGraph == targetGraph)
-    {
+    if (sourceGraph == targetGraph) {
       newEdge.isInterGraph = false;
       return sourceGraph.add(newEdge, sourceNode, targetNode);
-    }
-    else
-    {
+    } else {
       newEdge.isInterGraph = true;
 
       // set source and target
@@ -4100,7 +3774,7 @@ LGraphManager.prototype.remove = function (lObj) {
     if (graph.getGraphManager() != this) {
       throw "Graph not in this graph mgr";
     }
-    if (!(graph == this.rootGraph || (graph.parent != null && graph.parent.graphManager == this))) {
+    if (!(graph == this.rootGraph || graph.parent != null && graph.parent.graphManager == this)) {
       throw "Invalid parent node!";
     }
 
@@ -4111,8 +3785,7 @@ LGraphManager.prototype.remove = function (lObj) {
 
     var edge;
     var s = edgesToBeRemoved.length;
-    for (var i = 0; i < s; i++)
-    {
+    for (var i = 0; i < s; i++) {
       edge = edgesToBeRemoved[i];
       graph.remove(edge);
     }
@@ -4124,15 +3797,13 @@ LGraphManager.prototype.remove = function (lObj) {
 
     var node;
     s = nodesToBeRemoved.length;
-    for (var i = 0; i < s; i++)
-    {
+    for (var i = 0; i < s; i++) {
       node = nodesToBeRemoved[i];
       graph.remove(node);
     }
 
     // check if graph is the root
-    if (graph == this.rootGraph)
-    {
+    if (graph == this.rootGraph) {
       this.setRootGraph(null);
     }
 
@@ -4142,8 +3813,7 @@ LGraphManager.prototype.remove = function (lObj) {
 
     // also reset the parent of the graph
     graph.parent = null;
-  }
-  else if (lObj instanceof LEdge) {
+  } else if (lObj instanceof LEdge) {
     edge = lObj;
     if (edge == null) {
       throw "Edge is null!";
@@ -4180,25 +3850,20 @@ LGraphManager.prototype.remove = function (lObj) {
   }
 };
 
-LGraphManager.prototype.updateBounds = function ()
-{
+LGraphManager.prototype.updateBounds = function () {
   this.rootGraph.updateBounds(true);
 };
 
-LGraphManager.prototype.getGraphs = function ()
-{
+LGraphManager.prototype.getGraphs = function () {
   return this.graphs;
 };
 
-LGraphManager.prototype.getAllNodes = function ()
-{
-  if (this.allNodes == null)
-  {
+LGraphManager.prototype.getAllNodes = function () {
+  if (this.allNodes == null) {
     var nodeList = [];
     var graphs = this.getGraphs();
     var s = graphs.length;
-    for (var i = 0; i < s; i++)
-    {
+    for (var i = 0; i < s; i++) {
       nodeList = nodeList.concat(graphs[i].getNodes());
     }
     this.allNodes = nodeList;
@@ -4206,30 +3871,24 @@ LGraphManager.prototype.getAllNodes = function ()
   return this.allNodes;
 };
 
-LGraphManager.prototype.resetAllNodes = function ()
-{
+LGraphManager.prototype.resetAllNodes = function () {
   this.allNodes = null;
 };
 
-LGraphManager.prototype.resetAllEdges = function ()
-{
+LGraphManager.prototype.resetAllEdges = function () {
   this.allEdges = null;
 };
 
-LGraphManager.prototype.resetAllNodesToApplyGravitation = function ()
-{
+LGraphManager.prototype.resetAllNodesToApplyGravitation = function () {
   this.allNodesToApplyGravitation = null;
 };
 
-LGraphManager.prototype.getAllEdges = function ()
-{
-  if (this.allEdges == null)
-  {
+LGraphManager.prototype.getAllEdges = function () {
+  if (this.allEdges == null) {
     var edgeList = [];
     var graphs = this.getGraphs();
     var s = graphs.length;
-    for (var i = 0; i < graphs.length; i++)
-    {
+    for (var i = 0; i < graphs.length; i++) {
       edgeList = edgeList.concat(graphs[i].getEdges());
     }
 
@@ -4240,13 +3899,11 @@ LGraphManager.prototype.getAllEdges = function ()
   return this.allEdges;
 };
 
-LGraphManager.prototype.getAllNodesToApplyGravitation = function ()
-{
+LGraphManager.prototype.getAllNodesToApplyGravitation = function () {
   return this.allNodesToApplyGravitation;
 };
 
-LGraphManager.prototype.setAllNodesToApplyGravitation = function (nodeList)
-{
+LGraphManager.prototype.setAllNodesToApplyGravitation = function (nodeList) {
   if (this.allNodesToApplyGravitation != null) {
     throw "assert failed";
   }
@@ -4254,84 +3911,70 @@ LGraphManager.prototype.setAllNodesToApplyGravitation = function (nodeList)
   this.allNodesToApplyGravitation = nodeList;
 };
 
-LGraphManager.prototype.getRoot = function ()
-{
+LGraphManager.prototype.getRoot = function () {
   return this.rootGraph;
 };
 
-LGraphManager.prototype.setRootGraph = function (graph)
-{
+LGraphManager.prototype.setRootGraph = function (graph) {
   if (graph.getGraphManager() != this) {
     throw "Root not in this graph mgr!";
   }
 
   this.rootGraph = graph;
   // root graph must have a root node associated with it for convenience
-  if (graph.parent == null)
-  {
+  if (graph.parent == null) {
     graph.parent = this.layout.newNode("Root node");
   }
 };
 
-LGraphManager.prototype.getLayout = function ()
-{
+LGraphManager.prototype.getLayout = function () {
   return this.layout;
 };
 
-LGraphManager.prototype.isOneAncestorOfOther = function (firstNode, secondNode)
-{
+LGraphManager.prototype.isOneAncestorOfOther = function (firstNode, secondNode) {
   if (!(firstNode != null && secondNode != null)) {
     throw "assert failed";
   }
 
-  if (firstNode == secondNode)
-  {
+  if (firstNode == secondNode) {
     return true;
   }
   // Is second node an ancestor of the first one?
   var ownerGraph = firstNode.getOwner();
   var parentNode;
 
-  do
-  {
+  do {
     parentNode = ownerGraph.getParent();
 
-    if (parentNode == null)
-    {
+    if (parentNode == null) {
       break;
     }
 
-    if (parentNode == secondNode)
-    {
+    if (parentNode == secondNode) {
       return true;
     }
 
     ownerGraph = parentNode.getOwner();
-    if (ownerGraph == null)
-    {
+    if (ownerGraph == null) {
       break;
     }
   } while (true);
   // Is first node an ancestor of the second one?
   ownerGraph = secondNode.getOwner();
 
-  do
-  {
+  do {
     parentNode = ownerGraph.getParent();
 
-    if (parentNode == null)
-    {
+    if (parentNode == null) {
       break;
     }
 
-    if (parentNode == firstNode)
-    {
+    if (parentNode == firstNode) {
       return true;
     }
 
     ownerGraph = parentNode.getOwner();
-    if (ownerGraph == null)
-    {
+    if (ownerGraph == null) {
       break;
     }
   } while (true);
@@ -4339,8 +3982,7 @@ LGraphManager.prototype.isOneAncestorOfOther = function (firstNode, secondNode)
   return false;
 };
 
-LGraphManager.prototype.calcLowestCommonAncestors = function ()
-{
+LGraphManager.prototype.calcLowestCommonAncestors = function () {
   var edge;
   var sourceNode;
   var targetNode;
@@ -4349,8 +3991,7 @@ LGraphManager.prototype.calcLowestCommonAncestors = function ()
 
   var edges = this.getAllEdges();
   var s = edges.length;
-  for (var i = 0; i < s; i++)
-  {
+  for (var i = 0; i < s; i++) {
     edge = edges[i];
 
     sourceNode = edge.source;
@@ -4359,29 +4000,24 @@ LGraphManager.prototype.calcLowestCommonAncestors = function ()
     edge.sourceInLca = sourceNode;
     edge.targetInLca = targetNode;
 
-    if (sourceNode == targetNode)
-    {
+    if (sourceNode == targetNode) {
       edge.lca = sourceNode.getOwner();
       continue;
     }
 
     sourceAncestorGraph = sourceNode.getOwner();
 
-    while (edge.lca == null)
-    {
-      edge.targetInLca = targetNode;  
+    while (edge.lca == null) {
+      edge.targetInLca = targetNode;
       targetAncestorGraph = targetNode.getOwner();
 
-      while (edge.lca == null)
-      {
-        if (targetAncestorGraph == sourceAncestorGraph)
-        {
+      while (edge.lca == null) {
+        if (targetAncestorGraph == sourceAncestorGraph) {
           edge.lca = targetAncestorGraph;
           break;
         }
 
-        if (targetAncestorGraph == this.rootGraph)
-        {
+        if (targetAncestorGraph == this.rootGraph) {
           break;
         }
 
@@ -4392,13 +4028,11 @@ LGraphManager.prototype.calcLowestCommonAncestors = function ()
         targetAncestorGraph = edge.targetInLca.getOwner();
       }
 
-      if (sourceAncestorGraph == this.rootGraph)
-      {
+      if (sourceAncestorGraph == this.rootGraph) {
         break;
       }
 
-      if (edge.lca == null)
-      {
+      if (edge.lca == null) {
         edge.sourceInLca = sourceAncestorGraph.getParent();
         sourceAncestorGraph = edge.sourceInLca.getOwner();
       }
@@ -4410,31 +4044,24 @@ LGraphManager.prototype.calcLowestCommonAncestors = function ()
   }
 };
 
-LGraphManager.prototype.calcLowestCommonAncestor = function (firstNode, secondNode)
-{
-  if (firstNode == secondNode)
-  {
+LGraphManager.prototype.calcLowestCommonAncestor = function (firstNode, secondNode) {
+  if (firstNode == secondNode) {
     return firstNode.getOwner();
   }
   var firstOwnerGraph = firstNode.getOwner();
 
-  do
-  {
-    if (firstOwnerGraph == null)
-    {
+  do {
+    if (firstOwnerGraph == null) {
       break;
     }
     var secondOwnerGraph = secondNode.getOwner();
 
-    do
-    {
-      if (secondOwnerGraph == null)
-      {
+    do {
+      if (secondOwnerGraph == null) {
         break;
       }
 
-      if (secondOwnerGraph == firstOwnerGraph)
-      {
+      if (secondOwnerGraph == firstOwnerGraph) {
         return secondOwnerGraph;
       }
       secondOwnerGraph = secondOwnerGraph.getParent().getOwner();
@@ -4455,29 +4082,24 @@ LGraphManager.prototype.calcInclusionTreeDepths = function (graph, depth) {
 
   var nodes = graph.getNodes();
   var s = nodes.length;
-  for (var i = 0; i < s; i++)
-  {
+  for (var i = 0; i < s; i++) {
     node = nodes[i];
     node.inclusionTreeDepth = depth;
 
-    if (node.child != null)
-    {
+    if (node.child != null) {
       this.calcInclusionTreeDepths(node.child, depth + 1);
     }
   }
 };
 
-LGraphManager.prototype.includesInvalidEdge = function ()
-{
+LGraphManager.prototype.includesInvalidEdge = function () {
   var edge;
 
   var s = this.edges.length;
-  for (var i = 0; i < s; i++)
-  {
+  for (var i = 0; i < s; i++) {
     edge = this.edges[i];
 
-    if (this.isOneAncestorOfOther(edge.source, edge.target))
-    {
+    if (this.isOneAncestorOfOther(edge.source, edge.target)) {
       return true;
     }
   }
@@ -4511,8 +4133,7 @@ function LNode(gm, loc, size, vNode) {
   LGraphObject.call(this, vNode);
 
   //Alternative constructor 2 : LNode(Layout layout, Object vNode)
-  if (gm.graphManager != null)
-    gm = gm.graphManager;
+  if (gm.graphManager != null) gm = gm.graphManager;
 
   this.estimatedSize = Integer.MIN_VALUE;
   this.inclusionTreeDepth = Integer.MAX_VALUE;
@@ -4520,10 +4141,7 @@ function LNode(gm, loc, size, vNode) {
   this.edges = [];
   this.graphManager = gm;
 
-  if (size != null && loc != null)
-    this.rect = new RectangleD(loc.x, loc.y, size.width, size.height);
-  else
-    this.rect = new RectangleD();
+  if (size != null && loc != null) this.rect = new RectangleD(loc.x, loc.y, size.width, size.height);else this.rect = new RectangleD();
 }
 
 LNode.prototype = Object.create(LGraphObject.prototype);
@@ -4531,13 +4149,11 @@ for (var prop in LGraphObject) {
   LNode[prop] = LGraphObject[prop];
 }
 
-LNode.prototype.getEdges = function ()
-{
+LNode.prototype.getEdges = function () {
   return this.edges;
 };
 
-LNode.prototype.getChild = function ()
-{
+LNode.prototype.getChild = function () {
   return this.child;
 };
 
@@ -4548,100 +4164,80 @@ LNode.prototype.getOwner = function ()
 //      throw "assert failed";
 //    }
 //  }
-
   return this.owner;
 };
 
-LNode.prototype.getWidth = function ()
-{
+LNode.prototype.getWidth = function () {
   return this.rect.width;
 };
 
-LNode.prototype.setWidth = function (width)
-{
+LNode.prototype.setWidth = function (width) {
   this.rect.width = width;
 };
 
-LNode.prototype.getHeight = function ()
-{
+LNode.prototype.getHeight = function () {
   return this.rect.height;
 };
 
-LNode.prototype.setHeight = function (height)
-{
+LNode.prototype.setHeight = function (height) {
   this.rect.height = height;
 };
 
-LNode.prototype.getCenterX = function ()
-{
+LNode.prototype.getCenterX = function () {
   return this.rect.x + this.rect.width / 2;
 };
 
-LNode.prototype.getCenterY = function ()
-{
+LNode.prototype.getCenterY = function () {
   return this.rect.y + this.rect.height / 2;
 };
 
-LNode.prototype.getCenter = function ()
-{
-  return new PointD(this.rect.x + this.rect.width / 2,
-          this.rect.y + this.rect.height / 2);
+LNode.prototype.getCenter = function () {
+  return new PointD(this.rect.x + this.rect.width / 2, this.rect.y + this.rect.height / 2);
 };
 
-LNode.prototype.getLocation = function ()
-{
+LNode.prototype.getLocation = function () {
   return new PointD(this.rect.x, this.rect.y);
 };
 
-LNode.prototype.getRect = function ()
-{
+LNode.prototype.getRect = function () {
   return this.rect;
 };
 
-LNode.prototype.getDiagonal = function ()
-{
-  return Math.sqrt(this.rect.width * this.rect.width +
-          this.rect.height * this.rect.height);
+LNode.prototype.getDiagonal = function () {
+  return Math.sqrt(this.rect.width * this.rect.width + this.rect.height * this.rect.height);
 };
 
-LNode.prototype.setRect = function (upperLeft, dimension)
-{
+LNode.prototype.setRect = function (upperLeft, dimension) {
   this.rect.x = upperLeft.x;
   this.rect.y = upperLeft.y;
   this.rect.width = dimension.width;
   this.rect.height = dimension.height;
 };
 
-LNode.prototype.setCenter = function (cx, cy)
-{
+LNode.prototype.setCenter = function (cx, cy) {
   this.rect.x = cx - this.rect.width / 2;
   this.rect.y = cy - this.rect.height / 2;
 };
 
-LNode.prototype.setLocation = function (x, y)
-{
+LNode.prototype.setLocation = function (x, y) {
   this.rect.x = x;
   this.rect.y = y;
 };
 
-LNode.prototype.moveBy = function (dx, dy)
-{
+LNode.prototype.moveBy = function (dx, dy) {
   this.rect.x += dx;
   this.rect.y += dy;
 };
 
-LNode.prototype.getEdgeListToNode = function (to)
-{
+LNode.prototype.getEdgeListToNode = function (to) {
   var edgeList = [];
   var edge;
   var self = this;
 
-  self.edges.forEach(function(edge) {
-    
-    if (edge.target == to)
-    {
-      if (edge.source != self)
-        throw "Incorrect edge source!";
+  self.edges.forEach(function (edge) {
+
+    if (edge.target == to) {
+      if (edge.source != self) throw "Incorrect edge source!";
 
       edgeList.push(edge);
     }
@@ -4650,19 +4246,16 @@ LNode.prototype.getEdgeListToNode = function (to)
   return edgeList;
 };
 
-LNode.prototype.getEdgesBetween = function (other)
-{
+LNode.prototype.getEdgesBetween = function (other) {
   var edgeList = [];
   var edge;
-  
+
   var self = this;
-  self.edges.forEach(function(edge) {
+  self.edges.forEach(function (edge) {
 
-    if (!(edge.source == self || edge.target == self))
-      throw "Incorrect edge source and/or target";
+    if (!(edge.source == self || edge.target == self)) throw "Incorrect edge source and/or target";
 
-    if ((edge.target == other) || (edge.source == other))
-    {
+    if (edge.target == other || edge.source == other) {
       edgeList.push(edge);
     }
   });
@@ -4670,24 +4263,20 @@ LNode.prototype.getEdgesBetween = function (other)
   return edgeList;
 };
 
-LNode.prototype.getNeighborsList = function ()
-{
+LNode.prototype.getNeighborsList = function () {
   var neighbors = new HashSet();
   var edge;
-  
-  var self = this;
-  self.edges.forEach(function(edge) {
 
-    if (edge.source == self)
-    {
+  var self = this;
+  self.edges.forEach(function (edge) {
+
+    if (edge.source == self) {
       neighbors.add(edge.target);
-    }
-    else
-    {
+    } else {
       if (edge.target != self) {
         throw "Incorrect incidency!";
       }
-    
+
       neighbors.add(edge.source);
     }
   });
@@ -4703,11 +4292,9 @@ LNode.prototype.withChildren = function ()
 
   withNeighborsList.add(this);
 
-  if (this.child != null)
-  {
+  if (this.child != null) {
     var nodes = this.child.getNodes();
-    for (var i = 0; i < nodes.length; i++)
-    {
+    for (var i = 0; i < nodes.length; i++) {
       childNode = nodes[i];
       children = childNode.withChildren();
       children.forEach(function(node) {
@@ -4719,26 +4306,22 @@ LNode.prototype.withChildren = function ()
   return withNeighborsList;
 };
 
-LNode.prototype.getNoOfChildren = function ()
-{
+LNode.prototype.getNoOfChildren = function () {
   var noOfChildren = 0;
   var childNode;
 
-  if(this.child == null){
+  if (this.child == null) {
     noOfChildren = 1;
-  }
-  else
-  {
+  } else {
     var nodes = this.child.getNodes();
-    for (var i = 0; i < nodes.length; i++)
-    {
+    for (var i = 0; i < nodes.length; i++) {
       childNode = nodes[i];
 
       noOfChildren += childNode.getNoOfChildren();
     }
   }
-  
-  if(noOfChildren == 0){
+
+  if (noOfChildren == 0) {
     noOfChildren = 1;
   }
   return noOfChildren;
@@ -4752,12 +4335,9 @@ LNode.prototype.getEstimatedSize = function () {
 };
 
 LNode.prototype.calcEstimatedSize = function () {
-  if (this.child == null)
-  {
+  if (this.child == null) {
     return this.estimatedSize = (this.rect.width + this.rect.height) / 2;
-  }
-  else
-  {
+  } else {
     this.estimatedSize = this.child.calcEstimatedSize();
     this.rect.width = this.estimatedSize;
     this.rect.height = this.estimatedSize;
@@ -4772,24 +4352,21 @@ LNode.prototype.scatter = function () {
 
   var minX = -LayoutConstants.INITIAL_WORLD_BOUNDARY;
   var maxX = LayoutConstants.INITIAL_WORLD_BOUNDARY;
-  randomCenterX = LayoutConstants.WORLD_CENTER_X +
-          (RandomSeed.nextDouble() * (maxX - minX)) + minX;
+  randomCenterX = LayoutConstants.WORLD_CENTER_X + RandomSeed.nextDouble() * (maxX - minX) + minX;
 
   var minY = -LayoutConstants.INITIAL_WORLD_BOUNDARY;
   var maxY = LayoutConstants.INITIAL_WORLD_BOUNDARY;
-  randomCenterY = LayoutConstants.WORLD_CENTER_Y +
-          (RandomSeed.nextDouble() * (maxY - minY)) + minY;
+  randomCenterY = LayoutConstants.WORLD_CENTER_Y + RandomSeed.nextDouble() * (maxY - minY) + minY;
 
   this.rect.x = randomCenterX;
-  this.rect.y = randomCenterY
+  this.rect.y = randomCenterY;
 };
 
 LNode.prototype.updateBounds = function () {
   if (this.getChild() == null) {
     throw "assert failed";
   }
-  if (this.getChild().getNodes().length != 0)
-  {
+  if (this.getChild().getNodes().length != 0) {
     // wrap the children nodes by re-arranging the boundaries
     var childGraph = this.getChild();
     childGraph.updateBounds(true);
@@ -4824,35 +4401,27 @@ LNode.prototype.updateBounds = function () {
   }
 };
 
-LNode.prototype.getInclusionTreeDepth = function ()
-{
+LNode.prototype.getInclusionTreeDepth = function () {
   if (this.inclusionTreeDepth == Integer.MAX_VALUE) {
     throw "assert failed";
   }
   return this.inclusionTreeDepth;
 };
 
-LNode.prototype.transform = function (trans)
-{
+LNode.prototype.transform = function (trans) {
   var left = this.rect.x;
 
-  if (left > LayoutConstants.WORLD_BOUNDARY)
-  {
+  if (left > LayoutConstants.WORLD_BOUNDARY) {
     left = LayoutConstants.WORLD_BOUNDARY;
-  }
-  else if (left < -LayoutConstants.WORLD_BOUNDARY)
-  {
+  } else if (left < -LayoutConstants.WORLD_BOUNDARY) {
     left = -LayoutConstants.WORLD_BOUNDARY;
   }
 
   var top = this.rect.y;
 
-  if (top > LayoutConstants.WORLD_BOUNDARY)
-  {
+  if (top > LayoutConstants.WORLD_BOUNDARY) {
     top = LayoutConstants.WORLD_BOUNDARY;
-  }
-  else if (top < -LayoutConstants.WORLD_BOUNDARY)
-  {
+  } else if (top < -LayoutConstants.WORLD_BOUNDARY) {
     top = -LayoutConstants.WORLD_BOUNDARY;
   }
 
@@ -4862,30 +4431,24 @@ LNode.prototype.transform = function (trans)
   this.setLocation(vLeftTop.x, vLeftTop.y);
 };
 
-LNode.prototype.getLeft = function ()
-{
+LNode.prototype.getLeft = function () {
   return this.rect.x;
 };
 
-LNode.prototype.getRight = function ()
-{
+LNode.prototype.getRight = function () {
   return this.rect.x + this.rect.width;
 };
 
-LNode.prototype.getTop = function ()
-{
+LNode.prototype.getTop = function () {
   return this.rect.y;
 };
 
-LNode.prototype.getBottom = function ()
-{
+LNode.prototype.getBottom = function () {
   return this.rect.y + this.rect.height;
 };
 
-LNode.prototype.getParent = function ()
-{
-  if (this.owner == null)
-  {
+LNode.prototype.getParent = function () {
+  if (this.owner == null) {
     return null;
   }
 
@@ -4907,18 +4470,16 @@ var Emitter = require('./Emitter');
 var HashSet = require('./HashSet');
 
 function Layout(isRemoteUse) {
-  Emitter.call( this );
+  Emitter.call(this);
 
   //Layout Quality: 0:proof, 1:default, 2:draft
   this.layoutQuality = LayoutConstants.DEFAULT_QUALITY;
   //Whether layout should create bendpoints as needed or not
-  this.createBendsAsNeeded =
-          LayoutConstants.DEFAULT_CREATE_BENDS_AS_NEEDED;
+  this.createBendsAsNeeded = LayoutConstants.DEFAULT_CREATE_BENDS_AS_NEEDED;
   //Whether layout should be incremental or not
   this.incremental = LayoutConstants.DEFAULT_INCREMENTAL;
   //Whether we animate from before to after layout node positions
-  this.animationOnLayout =
-          LayoutConstants.DEFAULT_ANIMATION_ON_LAYOUT;
+  this.animationOnLayout = LayoutConstants.DEFAULT_ANIMATION_ON_LAYOUT;
   //Whether we animate the layout process or not
   this.animationDuringLayout = LayoutConstants.DEFAULT_ANIMATION_DURING_LAYOUT;
   //Number iterations that should be done between two successive animations
@@ -4929,8 +4490,7 @@ function Layout(isRemoteUse) {
    * calculated without the expensive clipping point calculations, resulting
    * in major speed-up.
    */
-  this.uniformLeafNodeSizes =
-          LayoutConstants.DEFAULT_UNIFORM_LEAF_NODE_SIZES;
+  this.uniformLeafNodeSizes = LayoutConstants.DEFAULT_UNIFORM_LEAF_NODE_SIZES;
   /**
    * This is used for creation of bendpoints by using dummy nodes and edges.
    * Maps an LEdge to its dummy bendpoint path.
@@ -4948,7 +4508,7 @@ function Layout(isRemoteUse) {
 
 Layout.RANDOM_SEED = 1;
 
-Layout.prototype = Object.create( Emitter.prototype );
+Layout.prototype = Object.create(Emitter.prototype);
 
 Layout.prototype.getGraphManager = function () {
   return this.graphManager;
@@ -4972,31 +4532,25 @@ Layout.prototype.newGraphManager = function () {
   return gm;
 };
 
-Layout.prototype.newGraph = function (vGraph)
-{
+Layout.prototype.newGraph = function (vGraph) {
   return new LGraph(null, this.graphManager, vGraph);
 };
 
-Layout.prototype.newNode = function (vNode)
-{
+Layout.prototype.newNode = function (vNode) {
   return new LNode(this.graphManager, vNode);
 };
 
-Layout.prototype.newEdge = function (vEdge)
-{
+Layout.prototype.newEdge = function (vEdge) {
   return new LEdge(null, null, vEdge);
 };
 
-Layout.prototype.checkLayoutSuccess = function() {
-  return (this.graphManager.getRoot() == null)
-          || this.graphManager.getRoot().getNodes().length == 0
-          || this.graphManager.includesInvalidEdge();
+Layout.prototype.checkLayoutSuccess = function () {
+  return this.graphManager.getRoot() == null || this.graphManager.getRoot().getNodes().length == 0 || this.graphManager.includesInvalidEdge();
 };
 
-Layout.prototype.runLayout = function ()
-{
+Layout.prototype.runLayout = function () {
   this.isLayoutFinished = false;
-  
+
   if (this.tilingPreLayout) {
     this.tilingPreLayout();
   }
@@ -5004,25 +4558,20 @@ Layout.prototype.runLayout = function ()
   this.initParameters();
   var isLayoutSuccessfull;
 
-  if (this.checkLayoutSuccess())
-  {
+  if (this.checkLayoutSuccess()) {
     isLayoutSuccessfull = false;
-  }
-  else
-  {
+  } else {
     isLayoutSuccessfull = this.layout();
   }
-  
+
   if (LayoutConstants.ANIMATE === 'during') {
     // If this is a 'during' layout animation. Layout is not finished yet. 
     // We need to perform these in index.js when layout is really finished.
     return false;
   }
-  
-  if (isLayoutSuccessfull)
-  {
-    if (!this.isSubLayout)
-    {
+
+  if (isLayoutSuccessfull) {
+    if (!this.isSubLayout) {
       this.doPostLayout();
     }
   }
@@ -5039,11 +4588,10 @@ Layout.prototype.runLayout = function ()
 /**
  * This method performs the operations required after layout.
  */
-Layout.prototype.doPostLayout = function ()
-{
+Layout.prototype.doPostLayout = function () {
   //assert !isSubLayout : "Should not be called on sub-layout!";
   // Propagate geometric changes to v-level objects
-  if(!this.incremental){
+  if (!this.incremental) {
     this.transform();
   }
   this.update();
@@ -5055,8 +4603,7 @@ Layout.prototype.doPostLayout = function ()
  */
 Layout.prototype.update2 = function () {
   // update bend points
-  if (this.createBendsAsNeeded)
-  {
+  if (this.createBendsAsNeeded) {
     this.createBendpointsFromDummyNodes();
 
     // reset all edges, since the topology has changed
@@ -5065,24 +4612,21 @@ Layout.prototype.update2 = function () {
 
   // perform edge, node and root updates if layout is not called
   // remotely
-  if (!this.isRemoteUse)
-  {
+  if (!this.isRemoteUse) {
     // update all edges
     var edge;
     var allEdges = this.graphManager.getAllEdges();
-    for (var i = 0; i < allEdges.length; i++)
-    {
+    for (var i = 0; i < allEdges.length; i++) {
       edge = allEdges[i];
-//      this.update(edge);
+      //      this.update(edge);
     }
 
     // recursively update nodes
     var node;
     var nodes = this.graphManager.getRoot().getNodes();
-    for (var i = 0; i < nodes.length; i++)
-    {
+    for (var i = 0; i < nodes.length; i++) {
       node = nodes[i];
-//      this.update(node);
+      //      this.update(node);
     }
 
     // update root graph
@@ -5093,15 +4637,12 @@ Layout.prototype.update2 = function () {
 Layout.prototype.update = function (obj) {
   if (obj == null) {
     this.update2();
-  }
-  else if (obj instanceof LNode) {
+  } else if (obj instanceof LNode) {
     var node = obj;
-    if (node.getChild() != null)
-    {
+    if (node.getChild() != null) {
       // since node is compound, recursively update child nodes
       var nodes = node.getChild().getNodes();
-      for (var i = 0; i < nodes.length; i++)
-      {
+      for (var i = 0; i < nodes.length; i++) {
         update(nodes[i]);
       }
     }
@@ -5109,38 +4650,33 @@ Layout.prototype.update = function (obj) {
     // if the l-level node is associated with a v-level graph object,
     // then it is assumed that the v-level node implements the
     // interface Updatable.
-    if (node.vGraphObject != null)
-    {
+    if (node.vGraphObject != null) {
       // cast to Updatable without any type check
       var vNode = node.vGraphObject;
 
       // call the update method of the interface
       vNode.update(node);
     }
-  }
-  else if (obj instanceof LEdge) {
+  } else if (obj instanceof LEdge) {
     var edge = obj;
     // if the l-level edge is associated with a v-level graph object,
     // then it is assumed that the v-level edge implements the
     // interface Updatable.
 
-    if (edge.vGraphObject != null)
-    {
+    if (edge.vGraphObject != null) {
       // cast to Updatable without any type check
       var vEdge = edge.vGraphObject;
 
       // call the update method of the interface
       vEdge.update(edge);
     }
-  }
-  else if (obj instanceof LGraph) {
+  } else if (obj instanceof LGraph) {
     var graph = obj;
     // if the l-level graph is associated with a v-level graph object,
     // then it is assumed that the v-level object implements the
     // interface Updatable.
 
-    if (graph.vGraphObject != null)
-    {
+    if (graph.vGraphObject != null) {
       // cast to Updatable without any type check
       var vGraph = graph.vGraphObject;
 
@@ -5155,28 +4691,25 @@ Layout.prototype.update = function (obj) {
  * determined at compile time.
  */
 Layout.prototype.initParameters = function () {
-  if (!this.isSubLayout)
-  {
+  if (!this.isSubLayout) {
     this.layoutQuality = LayoutConstants.DEFAULT_QUALITY;
-    this.animationDuringLayout = LayoutConstants.DEFAULT_ANIMATION_ON_LAYOUT;
+    this.animationDuringLayout = LayoutConstants.DEFAULT_ANIMATION_DURING_LAYOUT;
     this.animationPeriod = LayoutConstants.DEFAULT_ANIMATION_PERIOD;
-    this.animationOnLayout = LayoutConstants.DEFAULT_ANIMATION_DURING_LAYOUT;
+    this.animationOnLayout = LayoutConstants.DEFAULT_ANIMATION_ON_LAYOUT;
     this.incremental = LayoutConstants.DEFAULT_INCREMENTAL;
     this.createBendsAsNeeded = LayoutConstants.DEFAULT_CREATE_BENDS_AS_NEEDED;
     this.uniformLeafNodeSizes = LayoutConstants.DEFAULT_UNIFORM_LEAF_NODE_SIZES;
   }
 
-  if (this.animationDuringLayout)
-  {
-    animationOnLayout = false;
+  if (this.animationDuringLayout) {
+    this.animationOnLayout = false;
   }
 };
 
 Layout.prototype.transform = function (newLeftTop) {
   if (newLeftTop == undefined) {
     this.transform(new PointD(0, 0));
-  }
-  else {
+  } else {
     // create a transformation object (from Eclipse to layout). When an
     // inverse transform is applied, we get upper-left coordinate of the
     // drawing or the root graph at given input coordinate (some margins
@@ -5185,8 +4718,7 @@ Layout.prototype.transform = function (newLeftTop) {
     var trans = new Transform();
     var leftTop = this.graphManager.getRoot().updateLeftTop();
 
-    if (leftTop != null)
-    {
+    if (leftTop != null) {
       trans.setWorldOrgX(newLeftTop.x);
       trans.setWorldOrgY(newLeftTop.y);
 
@@ -5196,8 +4728,7 @@ Layout.prototype.transform = function (newLeftTop) {
       var nodes = this.getAllNodes();
       var node;
 
-      for (var i = 0; i < nodes.length; i++)
-      {
+      for (var i = 0; i < nodes.length; i++) {
         node = nodes[i];
         node.transform(trans);
       }
@@ -5211,27 +4742,20 @@ Layout.prototype.positionNodesRandomly = function (graph) {
     //assert !this.incremental;
     this.positionNodesRandomly(this.getGraphManager().getRoot());
     this.getGraphManager().getRoot().updateBounds(true);
-  }
-  else {
+  } else {
     var lNode;
     var childGraph;
 
     var nodes = graph.getNodes();
-    for (var i = 0; i < nodes.length; i++)
-    {
+    for (var i = 0; i < nodes.length; i++) {
       lNode = nodes[i];
       childGraph = lNode.getChild();
 
-      if (childGraph == null)
-      {
+      if (childGraph == null) {
         lNode.scatter();
-      }
-      else if (childGraph.getNodes().length == 0)
-      {
+      } else if (childGraph.getNodes().length == 0) {
         lNode.scatter();
-      }
-      else
-      {
+      } else {
         this.positionNodesRandomly(childGraph);
         lNode.updateBounds();
       }
@@ -5245,8 +4769,7 @@ Layout.prototype.positionNodesRandomly = function (graph) {
  * - The graph is not flat or
  * - One of the component(s) of the graph is not a tree.
  */
-Layout.prototype.getFlatForest = function ()
-{
+Layout.prototype.getFlatForest = function () {
   var flatForest = [];
   var isForest = true;
 
@@ -5257,17 +4780,14 @@ Layout.prototype.getFlatForest = function ()
   // First be sure that the graph is flat
   var isFlat = true;
 
-  for (var i = 0; i < allNodes.length; i++)
-  {
-    if (allNodes[i].getChild() != null)
-    {
+  for (var i = 0; i < allNodes.length; i++) {
+    if (allNodes[i].getChild() != null) {
       isFlat = false;
     }
   }
 
   // Return empty forest if the graph is not flat.
-  if (!isFlat)
-  {
+  if (!isFlat) {
     return flatForest;
   }
 
@@ -5284,14 +4804,12 @@ Layout.prototype.getFlatForest = function ()
   // decides whether it is a tree or not. If it is a tree, adds it to the
   // forest and continued with the next component.
 
-  while (unProcessedNodes.length > 0 && isForest)
-  {
+  while (unProcessedNodes.length > 0 && isForest) {
     toBeVisited.push(unProcessedNodes[0]);
 
     // Start the BFS. Each iteration of this loop visits a node in a
     // BFS manner.
-    while (toBeVisited.length > 0 && isForest)
-    {
+    while (toBeVisited.length > 0 && isForest) {
       //pool operation
       var currentNode = toBeVisited[0];
       toBeVisited.splice(0, 1);
@@ -5300,17 +4818,13 @@ Layout.prototype.getFlatForest = function ()
       // Traverse all neighbors of this node
       var neighborEdges = currentNode.getEdges();
 
-      for (var i = 0; i < neighborEdges.length; i++)
-      {
-        var currentNeighbor =
-                neighborEdges[i].getOtherEnd(currentNode);
+      for (var i = 0; i < neighborEdges.length; i++) {
+        var currentNeighbor = neighborEdges[i].getOtherEnd(currentNode);
 
         // If BFS is not growing from this neighbor.
-        if (parents.get(currentNode) != currentNeighbor)
-        {
+        if (parents.get(currentNode) != currentNeighbor) {
           // We haven't previously visited this neighbor.
-          if (!visited.contains(currentNeighbor))
-          {
+          if (!visited.contains(currentNeighbor)) {
             toBeVisited.push(currentNeighbor);
             parents.put(currentNeighbor, currentNode);
           }
@@ -5318,41 +4832,38 @@ Layout.prototype.getFlatForest = function ()
           // this neighbor is not parent of currentNode, given
           // graph contains a component that is not tree, hence
           // it is not a forest.
-          else
-          {
-            isForest = false;
-            break;
-          }
+          else {
+              isForest = false;
+              break;
+            }
         }
       }
     }
 
     // The graph contains a component that is not a tree. Empty
     // previously found trees. The method will end.
-    if (!isForest)
-    {
+    if (!isForest) {
       flatForest = [];
     }
     // Save currently visited nodes as a tree in our forest. Reset
     // visited and parents lists. Continue with the next component of
     // the graph, if any.
-    else
-    {
-      var temp = [];
-      visited.addAllTo(temp);
-      flatForest.push(temp);
-      //flatForest = flatForest.concat(temp);
-      //unProcessedNodes.removeAll(visited);
-      for (var i = 0; i < temp.length; i++) {
-        var value = temp[i];
-        var index = unProcessedNodes.indexOf(value);
-        if (index > -1) {
-          unProcessedNodes.splice(index, 1);
+    else {
+        var temp = [];
+        visited.addAllTo(temp);
+        flatForest.push(temp);
+        //flatForest = flatForest.concat(temp);
+        //unProcessedNodes.removeAll(visited);
+        for (var i = 0; i < temp.length; i++) {
+          var value = temp[i];
+          var index = unProcessedNodes.indexOf(value);
+          if (index > -1) {
+            unProcessedNodes.splice(index, 1);
+          }
         }
+        visited = new HashSet();
+        parents = new HashMap();
       }
-      visited = new HashSet();
-      parents = new HashMap();
-    }
   }
 
   return flatForest;
@@ -5363,15 +4874,13 @@ Layout.prototype.getFlatForest = function ()
  * for the given edge (one per bendpoint). The existing l-level structure
  * is updated accordingly.
  */
-Layout.prototype.createDummyNodesForBendpoints = function (edge)
-{
+Layout.prototype.createDummyNodesForBendpoints = function (edge) {
   var dummyNodes = [];
   var prev = edge.source;
 
   var graph = this.graphManager.calcLowestCommonAncestor(edge.source, edge.target);
 
-  for (var i = 0; i < edge.bendpoints.length; i++)
-  {
+  for (var i = 0; i < edge.bendpoints.length; i++) {
     // create new dummy node
     var dummyNode = this.newNode(null);
     dummyNode.setRect(new Point(0, 0), new Dimension(1, 1));
@@ -5392,15 +4901,13 @@ Layout.prototype.createDummyNodesForBendpoints = function (edge)
   this.edgeToDummyNodes.put(edge, dummyNodes);
 
   // remove real edge from graph manager if it is inter-graph
-  if (edge.isInterGraph())
-  {
+  if (edge.isInterGraph()) {
     this.graphManager.remove(edge);
   }
   // else, remove the edge from the current graph
-  else
-  {
-    graph.remove(edge);
-  }
+  else {
+      graph.remove(edge);
+    }
 
   return dummyNodes;
 };
@@ -5409,25 +4916,20 @@ Layout.prototype.createDummyNodesForBendpoints = function (edge)
  * This method creates bendpoints for edges from the dummy nodes
  * at l-level.
  */
-Layout.prototype.createBendpointsFromDummyNodes = function ()
-{
+Layout.prototype.createBendpointsFromDummyNodes = function () {
   var edges = [];
   edges = edges.concat(this.graphManager.getAllEdges());
   edges = this.edgeToDummyNodes.keySet().concat(edges);
 
-  for (var k = 0; k < edges.length; k++)
-  {
+  for (var k = 0; k < edges.length; k++) {
     var lEdge = edges[k];
 
-    if (lEdge.bendpoints.length > 0)
-    {
+    if (lEdge.bendpoints.length > 0) {
       var path = this.edgeToDummyNodes.get(lEdge);
 
-      for (var i = 0; i < path.length; i++)
-      {
+      for (var i = 0; i < path.length; i++) {
         var dummyNode = path[i];
-        var p = new PointD(dummyNode.getCenterX(),
-                dummyNode.getCenterY());
+        var p = new PointD(dummyNode.getCenterX(), dummyNode.getCenterY());
 
         // update bendpoint's location according to dummy node
         var ebp = lEdge.bendpoints.get(i);
@@ -5449,34 +4951,27 @@ Layout.transform = function (sliderValue, defaultValue, minDiv, maxMul) {
   if (minDiv != undefined && maxMul != undefined) {
     var value = defaultValue;
 
-    if (sliderValue <= 50)
-    {
+    if (sliderValue <= 50) {
       var minValue = defaultValue / minDiv;
-      value -= ((defaultValue - minValue) / 50) * (50 - sliderValue);
-    }
-    else
-    {
+      value -= (defaultValue - minValue) / 50 * (50 - sliderValue);
+    } else {
       var maxValue = defaultValue * maxMul;
-      value += ((maxValue - defaultValue) / 50) * (sliderValue - 50);
+      value += (maxValue - defaultValue) / 50 * (sliderValue - 50);
     }
 
     return value;
-  }
-  else {
+  } else {
     var a, b;
 
-    if (sliderValue <= 50)
-    {
+    if (sliderValue <= 50) {
       a = 9.0 * defaultValue / 500.0;
       b = defaultValue / 10.0;
-    }
-    else
-    {
+    } else {
       a = 9.0 * defaultValue / 50.0;
       b = -8 * defaultValue;
     }
 
-    return (a * sliderValue + b);
+    return a * sliderValue + b;
   }
 };
 
@@ -5484,8 +4979,7 @@ Layout.transform = function (sliderValue, defaultValue, minDiv, maxMul) {
  * This method finds and returns the center of the given nodes, assuming
  * that the given nodes form a tree in themselves.
  */
-Layout.findCenterOfTree = function (nodes)
-{
+Layout.findCenterOfTree = function (nodes) {
   var list = [];
   list = list.concat(nodes);
 
@@ -5494,20 +4988,17 @@ Layout.findCenterOfTree = function (nodes)
   var foundCenter = false;
   var centerNode = null;
 
-  if (list.length == 1 || list.length == 2)
-  {
+  if (list.length == 1 || list.length == 2) {
     foundCenter = true;
     centerNode = list[0];
   }
 
-  for (var i = 0; i < list.length; i++)
-  {
+  for (var i = 0; i < list.length; i++) {
     var node = list[i];
     var degree = node.getNeighborsList().size();
     remainingDegrees.put(node, node.getNeighborsList().size());
 
-    if (degree == 1)
-    {
+    if (degree == 1) {
       removedNodes.push(node);
     }
   }
@@ -5515,14 +5006,12 @@ Layout.findCenterOfTree = function (nodes)
   var tempList = [];
   tempList = tempList.concat(removedNodes);
 
-  while (!foundCenter)
-  {
+  while (!foundCenter) {
     var tempList2 = [];
     tempList2 = tempList2.concat(tempList);
     tempList = [];
 
-    for (var i = 0; i < list.length; i++)
-    {
+    for (var i = 0; i < list.length; i++) {
       var node = list[i];
 
       var index = list.indexOf(node);
@@ -5532,15 +5021,13 @@ Layout.findCenterOfTree = function (nodes)
 
       var neighbours = node.getNeighborsList();
 
-      Object.keys(neighbours.set).forEach(function(j) {
+      Object.keys(neighbours.set).forEach(function (j) {
         var neighbour = neighbours.set[j];
-        if (removedNodes.indexOf(neighbour) < 0)
-        {
+        if (removedNodes.indexOf(neighbour) < 0) {
           var otherDegree = remainingDegrees.get(neighbour);
           var newDegree = otherDegree - 1;
 
-          if (newDegree == 1)
-          {
+          if (newDegree == 1) {
             tempList.push(neighbour);
           }
 
@@ -5551,8 +5038,7 @@ Layout.findCenterOfTree = function (nodes)
 
     removedNodes = removedNodes.concat(tempList);
 
-    if (list.length == 1 || list.length == 2)
-    {
+    if (list.length == 1 || list.length == 2) {
       foundCenter = true;
       centerNode = list[0];
     }
@@ -5565,8 +5051,7 @@ Layout.findCenterOfTree = function (nodes)
  * During the coarsening process, this layout may be referenced by two graph managers
  * this setter function grants access to change the currently being used graph manager
  */
-Layout.prototype.setGraphManager = function (gm)
-{
+Layout.prototype.setGraphManager = function (gm) {
   this.graphManager = gm;
 };
 
@@ -5657,12 +5142,10 @@ function Point(x, y, p) {
   if (x == null && y == null && p == null) {
     this.x = 0;
     this.y = 0;
-  }
-  else if (typeof x == 'number' && typeof y == 'number' && p == null) {
+  } else if (typeof x == 'number' && typeof y == 'number' && p == null) {
     this.x = x;
     this.y = y;
-  }
-  else if (x.constructor.name == 'Point' && y == null && p == null) {
+  } else if (x.constructor.name == 'Point' && y == null && p == null) {
     p = x;
     this.x = p.x;
     this.y = p.y;
@@ -5671,54 +5154,52 @@ function Point(x, y, p) {
 
 Point.prototype.getX = function () {
   return this.x;
-}
+};
 
 Point.prototype.getY = function () {
   return this.y;
-}
+};
 
 Point.prototype.getLocation = function () {
   return new Point(this.x, this.y);
-}
+};
 
 Point.prototype.setLocation = function (x, y, p) {
   if (x.constructor.name == 'Point' && y == null && p == null) {
     p = x;
     this.setLocation(p.x, p.y);
-  }
-  else if (typeof x == 'number' && typeof y == 'number' && p == null) {
+  } else if (typeof x == 'number' && typeof y == 'number' && p == null) {
     //if both parameters are integer just move (x,y) location
     if (parseInt(x) == x && parseInt(y) == y) {
       this.move(x, y);
-    }
-    else {
+    } else {
       this.x = Math.floor(x + 0.5);
       this.y = Math.floor(y + 0.5);
     }
   }
-}
+};
 
 Point.prototype.move = function (x, y) {
   this.x = x;
   this.y = y;
-}
+};
 
 Point.prototype.translate = function (dx, dy) {
   this.x += dx;
   this.y += dy;
-}
+};
 
 Point.prototype.equals = function (obj) {
   if (obj.constructor.name == "Point") {
     var pt = obj;
-    return (this.x == pt.x) && (this.y == pt.y);
+    return this.x == pt.x && this.y == pt.y;
   }
   return this == obj;
-}
+};
 
 Point.prototype.toString = function () {
   return new Point().constructor.name + "[x=" + this.x + ",y=" + this.y + "]";
-}
+};
 
 module.exports = Point;
 
@@ -5733,38 +5214,31 @@ function PointD(x, y) {
   }
 }
 
-PointD.prototype.getX = function ()
-{
+PointD.prototype.getX = function () {
   return this.x;
 };
 
-PointD.prototype.getY = function ()
-{
+PointD.prototype.getY = function () {
   return this.y;
 };
 
-PointD.prototype.setX = function (x)
-{
+PointD.prototype.setX = function (x) {
   this.x = x;
 };
 
-PointD.prototype.setY = function (y)
-{
+PointD.prototype.setY = function (y) {
   this.y = y;
 };
 
-PointD.prototype.getDifference = function (pt)
-{
+PointD.prototype.getDifference = function (pt) {
   return new DimensionD(this.x - pt.x, this.y - pt.y);
 };
 
-PointD.prototype.getCopy = function ()
-{
+PointD.prototype.getCopy = function () {
   return new PointD(this.x, this.y);
 };
 
-PointD.prototype.translate = function (dim)
-{
+PointD.prototype.translate = function (dim) {
   this.x += dim.width;
   this.y += dim.height;
   return this;
@@ -5800,118 +5274,95 @@ function RectangleD(x, y, width, height) {
   }
 }
 
-RectangleD.prototype.getX = function ()
-{
+RectangleD.prototype.getX = function () {
   return this.x;
 };
 
-RectangleD.prototype.setX = function (x)
-{
+RectangleD.prototype.setX = function (x) {
   this.x = x;
 };
 
-RectangleD.prototype.getY = function ()
-{
+RectangleD.prototype.getY = function () {
   return this.y;
 };
 
-RectangleD.prototype.setY = function (y)
-{
+RectangleD.prototype.setY = function (y) {
   this.y = y;
 };
 
-RectangleD.prototype.getWidth = function ()
-{
+RectangleD.prototype.getWidth = function () {
   return this.width;
 };
 
-RectangleD.prototype.setWidth = function (width)
-{
+RectangleD.prototype.setWidth = function (width) {
   this.width = width;
 };
 
-RectangleD.prototype.getHeight = function ()
-{
+RectangleD.prototype.getHeight = function () {
   return this.height;
 };
 
-RectangleD.prototype.setHeight = function (height)
-{
+RectangleD.prototype.setHeight = function (height) {
   this.height = height;
 };
 
-RectangleD.prototype.getRight = function ()
-{
+RectangleD.prototype.getRight = function () {
   return this.x + this.width;
 };
 
-RectangleD.prototype.getBottom = function ()
-{
+RectangleD.prototype.getBottom = function () {
   return this.y + this.height;
 };
 
-RectangleD.prototype.intersects = function (a)
-{
-  if (this.getRight() < a.x)
-  {
+RectangleD.prototype.intersects = function (a) {
+  if (this.getRight() < a.x) {
     return false;
   }
 
-  if (this.getBottom() < a.y)
-  {
+  if (this.getBottom() < a.y) {
     return false;
   }
 
-  if (a.getRight() < this.x)
-  {
+  if (a.getRight() < this.x) {
     return false;
   }
 
-  if (a.getBottom() < this.y)
-  {
+  if (a.getBottom() < this.y) {
     return false;
   }
 
   return true;
 };
 
-RectangleD.prototype.getCenterX = function ()
-{
+RectangleD.prototype.getCenterX = function () {
   return this.x + this.width / 2;
 };
 
-RectangleD.prototype.getMinX = function ()
-{
+RectangleD.prototype.getMinX = function () {
   return this.getX();
 };
 
-RectangleD.prototype.getMaxX = function ()
-{
+RectangleD.prototype.getMaxX = function () {
   return this.getX() + this.width;
 };
 
-RectangleD.prototype.getCenterY = function ()
-{
+RectangleD.prototype.getCenterY = function () {
   return this.y + this.height / 2;
 };
 
-RectangleD.prototype.getMinY = function ()
-{
+RectangleD.prototype.getMinY = function () {
   return this.getY();
 };
 
-RectangleD.prototype.getMaxY = function ()
-{
+RectangleD.prototype.getMaxY = function () {
   return this.getY() + this.height;
 };
 
-RectangleD.prototype.getWidthHalf = function ()
-{
+RectangleD.prototype.getWidthHalf = function () {
   return this.width / 2;
 };
 
-RectangleD.prototype.getHeightHalf = function ()
-{
+RectangleD.prototype.getHeightHalf = function () {
   return this.height / 2;
 };
 
@@ -5931,148 +5382,115 @@ function Transform(x, y) {
   this.ldeviceExtY = 1.0;
 }
 
-Transform.prototype.getWorldOrgX = function ()
-{
+Transform.prototype.getWorldOrgX = function () {
   return this.lworldOrgX;
-}
+};
 
-Transform.prototype.setWorldOrgX = function (wox)
-{
+Transform.prototype.setWorldOrgX = function (wox) {
   this.lworldOrgX = wox;
-}
+};
 
-Transform.prototype.getWorldOrgY = function ()
-{
+Transform.prototype.getWorldOrgY = function () {
   return this.lworldOrgY;
-}
+};
 
-Transform.prototype.setWorldOrgY = function (woy)
-{
+Transform.prototype.setWorldOrgY = function (woy) {
   this.lworldOrgY = woy;
-}
+};
 
-Transform.prototype.getWorldExtX = function ()
-{
+Transform.prototype.getWorldExtX = function () {
   return this.lworldExtX;
-}
+};
 
-Transform.prototype.setWorldExtX = function (wex)
-{
+Transform.prototype.setWorldExtX = function (wex) {
   this.lworldExtX = wex;
-}
+};
 
-Transform.prototype.getWorldExtY = function ()
-{
+Transform.prototype.getWorldExtY = function () {
   return this.lworldExtY;
-}
+};
 
-Transform.prototype.setWorldExtY = function (wey)
-{
+Transform.prototype.setWorldExtY = function (wey) {
   this.lworldExtY = wey;
-}
+};
 
 /* Device related */
 
-Transform.prototype.getDeviceOrgX = function ()
-{
+Transform.prototype.getDeviceOrgX = function () {
   return this.ldeviceOrgX;
-}
+};
 
-Transform.prototype.setDeviceOrgX = function (dox)
-{
+Transform.prototype.setDeviceOrgX = function (dox) {
   this.ldeviceOrgX = dox;
-}
+};
 
-Transform.prototype.getDeviceOrgY = function ()
-{
+Transform.prototype.getDeviceOrgY = function () {
   return this.ldeviceOrgY;
-}
+};
 
-Transform.prototype.setDeviceOrgY = function (doy)
-{
+Transform.prototype.setDeviceOrgY = function (doy) {
   this.ldeviceOrgY = doy;
-}
+};
 
-Transform.prototype.getDeviceExtX = function ()
-{
+Transform.prototype.getDeviceExtX = function () {
   return this.ldeviceExtX;
-}
+};
 
-Transform.prototype.setDeviceExtX = function (dex)
-{
+Transform.prototype.setDeviceExtX = function (dex) {
   this.ldeviceExtX = dex;
-}
+};
 
-Transform.prototype.getDeviceExtY = function ()
-{
+Transform.prototype.getDeviceExtY = function () {
   return this.ldeviceExtY;
-}
+};
 
-Transform.prototype.setDeviceExtY = function (dey)
-{
+Transform.prototype.setDeviceExtY = function (dey) {
   this.ldeviceExtY = dey;
-}
+};
 
-Transform.prototype.transformX = function (x)
-{
+Transform.prototype.transformX = function (x) {
   var xDevice = 0.0;
   var worldExtX = this.lworldExtX;
-  if (worldExtX != 0.0)
-  {
-    xDevice = this.ldeviceOrgX +
-            ((x - this.lworldOrgX) * this.ldeviceExtX / worldExtX);
+  if (worldExtX != 0.0) {
+    xDevice = this.ldeviceOrgX + (x - this.lworldOrgX) * this.ldeviceExtX / worldExtX;
   }
 
   return xDevice;
-}
+};
 
-Transform.prototype.transformY = function (y)
-{
+Transform.prototype.transformY = function (y) {
   var yDevice = 0.0;
   var worldExtY = this.lworldExtY;
-  if (worldExtY != 0.0)
-  {
-    yDevice = this.ldeviceOrgY +
-            ((y - this.lworldOrgY) * this.ldeviceExtY / worldExtY);
+  if (worldExtY != 0.0) {
+    yDevice = this.ldeviceOrgY + (y - this.lworldOrgY) * this.ldeviceExtY / worldExtY;
   }
-
 
   return yDevice;
-}
+};
 
-Transform.prototype.inverseTransformX = function (x)
-{
+Transform.prototype.inverseTransformX = function (x) {
   var xWorld = 0.0;
   var deviceExtX = this.ldeviceExtX;
-  if (deviceExtX != 0.0)
-  {
-    xWorld = this.lworldOrgX +
-            ((x - this.ldeviceOrgX) * this.lworldExtX / deviceExtX);
+  if (deviceExtX != 0.0) {
+    xWorld = this.lworldOrgX + (x - this.ldeviceOrgX) * this.lworldExtX / deviceExtX;
   }
-
 
   return xWorld;
-}
+};
 
-Transform.prototype.inverseTransformY = function (y)
-{
+Transform.prototype.inverseTransformY = function (y) {
   var yWorld = 0.0;
   var deviceExtY = this.ldeviceExtY;
-  if (deviceExtY != 0.0)
-  {
-    yWorld = this.lworldOrgY +
-            ((y - this.ldeviceOrgY) * this.lworldExtY / deviceExtY);
+  if (deviceExtY != 0.0) {
+    yWorld = this.lworldOrgY + (y - this.ldeviceOrgY) * this.lworldExtY / deviceExtY;
   }
   return yWorld;
-}
+};
 
-Transform.prototype.inverseTransformPoint = function (inPoint)
-{
-  var outPoint =
-          new PointD(this.inverseTransformX(inPoint.x),
-                  this.inverseTransformY(inPoint.y));
+Transform.prototype.inverseTransformPoint = function (inPoint) {
+  var outPoint = new PointD(this.inverseTransformX(inPoint.x), this.inverseTransformY(inPoint.y));
   return outPoint;
-}
+};
 
 module.exports = Transform;
 
@@ -6092,18 +5510,17 @@ UniqueIDGeneretor.createID = function (obj) {
   obj.uniqueID = UniqueIDGeneretor.getString();
   UniqueIDGeneretor.lastID++;
   return obj.uniqueID;
-}
+};
 
 UniqueIDGeneretor.getString = function (id) {
-  if (id == null)
-    id = UniqueIDGeneretor.lastID;
+  if (id == null) id = UniqueIDGeneretor.lastID;
   return "Object#" + id + "";
-}
+};
 
 UniqueIDGeneretor.isPrimitive = function (arg) {
-  var type = typeof arg;
-  return arg == null || (type != "object" && type != "function");
-}
+  var type = typeof arg === "undefined" ? "undefined" : _typeof(arg);
+  return arg == null || type != "object" && type != "function";
+};
 
 module.exports = UniqueIDGeneretor;
 
@@ -6142,8 +5559,7 @@ var CoSENode = require('./CoSENode');
 
 var defaults = {
   // Called on `layoutready`
-  ready: function () {
-  },
+  ready: function ready() {},
   // Called on `layoutstop`
   stop: function () {
   },
@@ -6235,10 +5651,8 @@ var getUserOptions = function (options) {
           !(options.randomize);
   CoSEConstants.ANIMATE = FDLayoutConstants.ANIMATE = LayoutConstants.ANIMATE = options.animate;
   CoSEConstants.TILE = options.tile;
-  CoSEConstants.TILING_PADDING_VERTICAL = 
-          typeof options.tilingPaddingVertical === 'function' ? options.tilingPaddingVertical.call() : options.tilingPaddingVertical;
-  CoSEConstants.TILING_PADDING_HORIZONTAL = 
-          typeof options.tilingPaddingHorizontal === 'function' ? options.tilingPaddingHorizontal.call() : options.tilingPaddingHorizontal;
+  CoSEConstants.TILING_PADDING_VERTICAL = typeof options.tilingPaddingVertical === 'function' ? options.tilingPaddingVertical.call() : options.tilingPaddingVertical;
+  CoSEConstants.TILING_PADDING_HORIZONTAL = typeof options.tilingPaddingHorizontal === 'function' ? options.tilingPaddingHorizontal.call() : options.tilingPaddingHorizontal;
 };
 
 _CoSELayout.prototype.run = function () {
@@ -6248,7 +5662,9 @@ _CoSELayout.prototype.run = function () {
   var idToLNode = this.idToLNode = {};
   var layout = this.layout = new CoSELayout();
   var self = this;
-  
+
+  self.stopped = false;
+
   this.cy = this.options.cy;
 
   this.cy.trigger({ type: 'layoutstart', layout: this });
@@ -6262,7 +5678,6 @@ _CoSELayout.prototype.run = function () {
   this.root = gm.addRoot();
   this.processChildrenList(this.root, this.getTopMostNodes(nodes), layout);
 
-
   for (var i = 0; i < edges.length; i++) {
     var edge = edges[i];
     var sourceNode = this.idToLNode[edge.data("source")];
@@ -6272,9 +5687,9 @@ _CoSELayout.prototype.run = function () {
       e1.id = edge.id();
     }
   }
-  
-   var getPositions = function(ele, i){
-    if(typeof ele === "number") {
+
+  var getPositions = function getPositions(ele, i) {
+    if (typeof ele === "number") {
       ele = i;
     }
     var theId = ele.data('id');
@@ -6285,13 +5700,13 @@ _CoSELayout.prototype.run = function () {
       y: lNode.getRect().getCenterY()
     };
   };
-  
+
   /*
    * Reposition nodes in iterations animatedly
    */
-  var iterateAnimated = function () {
+  var iterateAnimated = function iterateAnimated() {
     // Thigs to perform after nodes are repositioned on screen
-    var afterReposition = function() {
+    var afterReposition = function afterReposition() {
       if (options.fit) {
         options.cy.fit(options.eles.nodes(), options.padding);
       }
@@ -6299,35 +5714,35 @@ _CoSELayout.prototype.run = function () {
       if (!ready) {
         ready = true;
         self.cy.one('layoutready', options.ready);
-        self.cy.trigger({type: 'layoutready', layout: self});
+        self.cy.trigger({ type: 'layoutready', layout: self });
       }
     };
-    
+
     var ticksPerFrame = self.options.refresh;
     var isDone;
 
-    for( var i = 0; i < ticksPerFrame && !isDone; i++ ){
-      isDone = self.layout.tick();
+    for (var i = 0; i < ticksPerFrame && !isDone; i++) {
+      isDone = self.stopped || self.layout.tick();
     }
-    
+
     // If layout is done
     if (isDone) {
       // If the layout is not a sublayout and it is successful perform post layout.
       if (layout.checkLayoutSuccess() && !layout.isSubLayout) {
         layout.doPostLayout();
       }
-      
+
       // If layout has a tilingPostLayout function property call it.
       if (layout.tilingPostLayout) {
         layout.tilingPostLayout();
       }
-      
+
       layout.isLayoutFinished = true;
-      
+
       self.options.eles.nodes().positions(getPositions);
-      
+
       afterReposition();
-      
+
       // trigger layoutstop when the layout stops (e.g. finishes)
       self.cy.one('layoutstop', self.options.stop);
       self.cy.trigger({ type: 'layoutstop', layout: self });
@@ -6335,13 +5750,13 @@ _CoSELayout.prototype.run = function () {
       if (frameId) {
         cancelAnimationFrame(frameId);
       }
-      
+
       ready = false;
       return;
     }
-    
+
     var animationData = self.layout.getPositionsData(); // Get positions of layout nodes note that all nodes may not be layout nodes because of tiling
-    
+
     // Position nodes, for the nodes whose id does not included in data (because they are removed from their parents and included in dummy compounds)
     // use position of their ancestors or dummy ancestors
     options.eles.nodes().positions(function (ele, i) {
@@ -6378,7 +5793,7 @@ _CoSELayout.prototype.run = function () {
 
     frameId = requestAnimationFrame(iterateAnimated);
   };
-  
+
   /*
   * Listen 'layoutstarted' event and start animated iteration if animate option is 'during'
   */
@@ -6387,9 +5802,9 @@ _CoSELayout.prototype.run = function () {
       frameId = requestAnimationFrame(iterateAnimated);
     }
   });
-  
+
   layout.runLayout(); // Run cose layout
-  
+
   /*
    * If animate option is not 'during' ('end' or false) perform these here (If it is 'during' similar things are already performed)
    */
@@ -6402,23 +5817,23 @@ _CoSELayout.prototype.run = function () {
 };
 
 //Get the top most ones of a list of nodes
-_CoSELayout.prototype.getTopMostNodes = function(nodes) {
+_CoSELayout.prototype.getTopMostNodes = function (nodes) {
   var nodesMap = {};
   for (var i = 0; i < nodes.length; i++) {
-      nodesMap[nodes[i].id()] = true;
+    nodesMap[nodes[i].id()] = true;
   }
   var roots = nodes.filter(function (ele, i) {
-      if(typeof ele === "number") {
-        ele = i;
+    if (typeof ele === "number") {
+      ele = i;
+    }
+    var parent = ele.parent()[0];
+    while (parent != null) {
+      if (nodesMap[parent.id()]) {
+        return false;
       }
-      var parent = ele.parent()[0];
-      while(parent != null){
-        if(nodesMap[parent.id()]){
-          return false;
-        }
-        parent = parent.parent()[0];
-      }
-      return true;
+      parent = parent.parent()[0];
+    }
+    return true;
   });
 
   return roots;
@@ -6488,8 +5903,6 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
  */
 _CoSELayout.prototype.stop = function () {
   this.stopped = true;
-  
-  this.trigger('layoutstop');
 
   return this; // chaining
 };
@@ -6502,17 +5915,18 @@ module.exports = function get(cytoscape) {
 'use strict';
 
 // registers the extension on a cytoscape lib ref
+
 var getLayout = require('./Layout');
 
-var register = function( cytoscape ){
-  var Layout = getLayout( cytoscape );
+var register = function register(cytoscape) {
+  var Layout = getLayout(cytoscape);
 
   cytoscape('layout', 'cose-bilkent', Layout);
 };
 
 // auto reg for globals
-if( typeof cytoscape !== 'undefined' ){
-  register( cytoscape );
+if (typeof cytoscape !== 'undefined') {
+  register(cytoscape);
 }
 
 module.exports = register;

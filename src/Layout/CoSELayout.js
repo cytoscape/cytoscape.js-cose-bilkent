@@ -256,12 +256,12 @@ CoSELayout.prototype.calcNoOfChildrenForAllNodes = function ()
   var node;
   var allNodes = this.graphManager.getAllNodes();
   
-  for(i = 0; i < allNodes.length; i++)
+  for(var i = 0; i < allNodes.length; i++)
   {
       node = allNodes[i];
       node.noOfChildren = node.getNoOfChildren();
   }
-}
+};
 
 CoSELayout.prototype.createBendpoints = function () {
   var edges = [];
