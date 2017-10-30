@@ -155,11 +155,9 @@ FDLayout.prototype.calcRepulsionForces = function () {
       this.calculateRepulsionForceOfANode(nodeA, processedNodeSet);
       processedNodeSet.add(nodeA);
     }
-
   }
   else
   {
-  
     for (i = 0; i < lNodes.length; i++)
     {
       nodeA = lNodes[i];
