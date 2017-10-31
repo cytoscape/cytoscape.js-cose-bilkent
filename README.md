@@ -10,7 +10,7 @@ U. Dogrusoz, E. Giral, A. Cetintas, A. Civril, and E. Demir, "[A Layout Algorith
 
 ## Demos
 
-Click [here](https://rawgit.com/cytoscape/cytoscape.js-cose-bilkent/unstable/demo.html) (simple) or [here](https://rawgit.com/cytoscape/cytoscape.js-cose-bilkent/unstable/demo-compound.html) (compound) for demos
+Click [here](https://rawgit.com/cytoscape/cytoscape.js-cose-bilkent/master/demo.html) (simple) or [here](https://rawgit.com/cytoscape/cytoscape.js-cose-bilkent/master/demo-compound.html) (compound) for demos
 
 ## Dependencies
 
