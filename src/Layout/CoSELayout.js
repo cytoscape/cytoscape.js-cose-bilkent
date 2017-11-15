@@ -86,7 +86,8 @@ CoSELayout.prototype.layout = function () {
 };
 
 CoSELayout.prototype.classicLayout = function () {
-  this.calculateNodesToApplyGravitationTo();
+  this.nodesWithGravity = this.calculateNodesToApplyGravitationTo();
+  this.graphManager.setAllNodesToApplyGravitation(this.nodesWithGravity);
   this.calcNoOfChildrenForAllNodes();
   this.graphManager.calcLowestCommonAncestors();
   this.graphManager.calcInclusionTreeDepths();
@@ -107,6 +108,12 @@ CoSELayout.prototype.classicLayout = function () {
     {
       // Reduce the trees when incremental mode is not enabled and graph is not a forest 
       this.reduceTrees();
+      // Update nodes that gravity will be applied
+      this.graphManager.resetAllNodesToApplyGravitation();
+      var allNodes = new Set(this.getAllNodes());
+      var intersection = this.nodesWithGravity.filter(x => allNodes.has(x));
+      this.graphManager.setAllNodesToApplyGravitation(intersection);
+      
       this.positionNodesRandomly();
     }
   }
@@ -151,7 +158,13 @@ CoSELayout.prototype.tick = function() {
       if(this.prunedNodesAll.length > 0) {
         this.graphManager.updateBounds();
         this.updateGrid();
-        this.growTree(this.prunedNodesAll, this.isFirstGrowth);
+        this.growTree(this.prunedNodesAll);
+        // Update nodes that gravity will be applied
+        this.graphManager.resetAllNodesToApplyGravitation();
+        var allNodes = new Set(this.getAllNodes());
+        var intersection = this.nodesWithGravity.filter(x => allNodes.has(x));
+        this.graphManager.setAllNodesToApplyGravitation(intersection);
+        
         this.graphManager.updateBounds();
         this.updateGrid(); 
         this.coolingFactor = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL; 
@@ -244,7 +257,7 @@ CoSELayout.prototype.calculateNodesToApplyGravitationTo = function () {
     }
   }
 
-  this.graphManager.setAllNodesToApplyGravitation(nodeList);
+  return nodeList;
 };
 
 CoSELayout.prototype.calcNoOfChildrenForAllNodes = function ()

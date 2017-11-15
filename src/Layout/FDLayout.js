@@ -180,14 +180,11 @@ FDLayout.prototype.calcRepulsionForces = function () {
 
 FDLayout.prototype.calcGravitationalForces = function () {
   var node;
-  var allNodes = new Set(this.getAllNodes());
   var lNodes = this.getAllNodesToApplyGravitation();
-  
-  var intersection = lNodes.filter(x => allNodes.has(x));
 
-  for (var i = 0; i < intersection.length; i++)
+  for (var i = 0; i < lNodes.length; i++)
   {
-    node = intersection[i];
+    node = lNodes[i];
     this.calcGravitationalForce(node);
   }
 };
@@ -563,7 +560,7 @@ FDLayout.prototype.reduceTrees = function ()
 };
 
 // Grow tree one step 
-FDLayout.prototype.growTree = function(prunedNodesAll, isFirstGrowth)
+FDLayout.prototype.growTree = function(prunedNodesAll)
 {
   var lengthOfPrunedNodesInStep = prunedNodesAll.length; 
   var prunedNodesInStep = prunedNodesAll[lengthOfPrunedNodesInStep - 1];  
