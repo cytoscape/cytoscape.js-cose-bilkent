@@ -95,7 +95,7 @@ var defaultOptions = {
   // Gravity range (constant)
   gravityRange: 3.8,
   // Initial cooling factor for incremental layout
-  initialEnergyOnIncremental:0.8
+  initialEnergyOnIncremental:0.5
 };
 ```
 
