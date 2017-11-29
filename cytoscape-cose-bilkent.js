@@ -1,7 +1,7 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.cytoscapeCoseBilkent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.cytoscapeCoseBilkent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 var ns = {
-	List: require('./src/List'),
-	Node: require('./src/Node'),
+	List: _dereq_('./src/List'),
+	Node: _dereq_('./src/Node'),
 };
 
 if (typeof module !== 'undefined') {
@@ -13,8 +13,8 @@ if (typeof module !== 'undefined') {
 } else if (typeof window !== 'undefined') {
 	window.LinkedListJS = ns;
 }
-},{"./src/List":2,"./src/Node":3}],2:[function(require,module,exports){
-var Node = require('./Node');
+},{"./src/List":2,"./src/Node":3}],2:[function(_dereq_,module,exports){
+var Node = _dereq_('./Node');
 
 var List = function () {
 	this._count = 0;
@@ -184,7 +184,7 @@ List.prototype.each = function (callback) {
 }
 
 module.exports = List;
-},{"./Node":3}],3:[function(require,module,exports){
+},{"./Node":3}],3:[function(_dereq_,module,exports){
 var Node = function (value, previous, next) {
 	this._value = value === undefined ? null : value;
 	
@@ -225,10 +225,10 @@ Node.prototype.isTail = function () {
 };
 
 module.exports = Node;
-},{}],4:[function(require,module,exports){
+},{}],4:[function(_dereq_,module,exports){
 'use strict';
 
-var FDLayoutConstants = require('./FDLayoutConstants');
+var FDLayoutConstants = _dereq_('./FDLayoutConstants');
 
 function CoSEConstants() {}
 
@@ -246,10 +246,10 @@ CoSEConstants.TILING_PADDING_HORIZONTAL = 10;
 
 module.exports = CoSEConstants;
 
-},{"./FDLayoutConstants":13}],5:[function(require,module,exports){
+},{"./FDLayoutConstants":13}],5:[function(_dereq_,module,exports){
 'use strict';
 
-var FDLayoutEdge = require('./FDLayoutEdge');
+var FDLayoutEdge = _dereq_('./FDLayoutEdge');
 
 function CoSEEdge(source, target, vEdge) {
   FDLayoutEdge.call(this, source, target, vEdge);
@@ -262,10 +262,10 @@ for (var prop in FDLayoutEdge) {
 
 module.exports = CoSEEdge;
 
-},{"./FDLayoutEdge":14}],6:[function(require,module,exports){
+},{"./FDLayoutEdge":14}],6:[function(_dereq_,module,exports){
 'use strict';
 
-var LGraph = require('./LGraph');
+var LGraph = _dereq_('./LGraph');
 
 function CoSEGraph(parent, graphMgr, vGraph) {
   LGraph.call(this, parent, graphMgr, vGraph);
@@ -278,10 +278,10 @@ for (var prop in LGraph) {
 
 module.exports = CoSEGraph;
 
-},{"./LGraph":22}],7:[function(require,module,exports){
+},{"./LGraph":22}],7:[function(_dereq_,module,exports){
 'use strict';
 
-var LGraphManager = require('./LGraphManager');
+var LGraphManager = _dereq_('./LGraphManager');
 
 function CoSEGraphManager(layout) {
   LGraphManager.call(this, layout);
@@ -294,24 +294,24 @@ for (var prop in LGraphManager) {
 
 module.exports = CoSEGraphManager;
 
-},{"./LGraphManager":23}],8:[function(require,module,exports){
+},{"./LGraphManager":23}],8:[function(_dereq_,module,exports){
 'use strict';
 
-var FDLayout = require('./FDLayout');
-var CoSEGraphManager = require('./CoSEGraphManager');
-var CoSEGraph = require('./CoSEGraph');
-var CoSENode = require('./CoSENode');
-var CoSEEdge = require('./CoSEEdge');
-var CoSEConstants = require('./CoSEConstants');
-var FDLayoutConstants = require('./FDLayoutConstants');
-var LayoutConstants = require('./LayoutConstants');
-var Point = require('./Point');
-var PointD = require('./PointD');
-var Layout = require('./Layout');
-var Integer = require('./Integer');
-var IGeometry = require('./IGeometry');
-var LGraph = require('./LGraph');
-var Transform = require('./Transform');
+var FDLayout = _dereq_('./FDLayout');
+var CoSEGraphManager = _dereq_('./CoSEGraphManager');
+var CoSEGraph = _dereq_('./CoSEGraph');
+var CoSENode = _dereq_('./CoSENode');
+var CoSEEdge = _dereq_('./CoSEEdge');
+var CoSEConstants = _dereq_('./CoSEConstants');
+var FDLayoutConstants = _dereq_('./FDLayoutConstants');
+var LayoutConstants = _dereq_('./LayoutConstants');
+var Point = _dereq_('./Point');
+var PointD = _dereq_('./PointD');
+var Layout = _dereq_('./Layout');
+var Integer = _dereq_('./Integer');
+var IGeometry = _dereq_('./IGeometry');
+var LGraph = _dereq_('./LGraph');
+var Transform = _dereq_('./Transform');
 
 function CoSELayout() {
   FDLayout.call(this);
@@ -1232,11 +1232,11 @@ CoSELayout.prototype.tilingPostLayout = function () {
 
 module.exports = CoSELayout;
 
-},{"./CoSEConstants":4,"./CoSEEdge":5,"./CoSEGraph":6,"./CoSEGraphManager":7,"./CoSENode":9,"./FDLayout":12,"./FDLayoutConstants":13,"./IGeometry":18,"./Integer":20,"./LGraph":22,"./Layout":26,"./LayoutConstants":27,"./Point":28,"./PointD":29,"./Transform":32}],9:[function(require,module,exports){
+},{"./CoSEConstants":4,"./CoSEEdge":5,"./CoSEGraph":6,"./CoSEGraphManager":7,"./CoSENode":9,"./FDLayout":12,"./FDLayoutConstants":13,"./IGeometry":18,"./Integer":20,"./LGraph":22,"./Layout":26,"./LayoutConstants":27,"./Point":28,"./PointD":29,"./Transform":32}],9:[function(_dereq_,module,exports){
 'use strict';
 
-var FDLayoutNode = require('./FDLayoutNode');
-var IMath = require('./IMath');
+var FDLayoutNode = _dereq_('./FDLayoutNode');
+var IMath = _dereq_('./IMath');
 
 function CoSENode(gm, loc, size, vNode) {
   FDLayoutNode.call(this, gm, loc, size, vNode);
@@ -1330,7 +1330,7 @@ CoSENode.prototype.isProcessed = function () {
 
 module.exports = CoSENode;
 
-},{"./FDLayoutNode":15,"./IMath":19}],10:[function(require,module,exports){
+},{"./FDLayoutNode":15,"./IMath":19}],10:[function(_dereq_,module,exports){
 "use strict";
 
 function DimensionD(width, height) {
@@ -1360,7 +1360,7 @@ DimensionD.prototype.setHeight = function (height) {
 
 module.exports = DimensionD;
 
-},{}],11:[function(require,module,exports){
+},{}],11:[function(_dereq_,module,exports){
 "use strict";
 
 function Emitter() {
@@ -1398,17 +1398,17 @@ p.emit = function (event, data) {
 
 module.exports = Emitter;
 
-},{}],12:[function(require,module,exports){
+},{}],12:[function(_dereq_,module,exports){
 'use strict';
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var Layout = require('./Layout');
-var FDLayoutConstants = require('./FDLayoutConstants');
-var LayoutConstants = require('./LayoutConstants');
-var IGeometry = require('./IGeometry');
-var IMath = require('./IMath');
-var Integer = require('./Integer');
+var Layout = _dereq_('./Layout');
+var FDLayoutConstants = _dereq_('./FDLayoutConstants');
+var LayoutConstants = _dereq_('./LayoutConstants');
+var IGeometry = _dereq_('./IGeometry');
+var IMath = _dereq_('./IMath');
+var Integer = _dereq_('./Integer');
 
 function FDLayout() {
   Layout.call(this);
@@ -2038,10 +2038,10 @@ FDLayout.prototype.findPlaceforPrunedNode = function (nodeData) {
 
 module.exports = FDLayout;
 
-},{"./FDLayoutConstants":13,"./IGeometry":18,"./IMath":19,"./Integer":20,"./Layout":26,"./LayoutConstants":27}],13:[function(require,module,exports){
+},{"./FDLayoutConstants":13,"./IGeometry":18,"./IMath":19,"./Integer":20,"./Layout":26,"./LayoutConstants":27}],13:[function(_dereq_,module,exports){
 'use strict';
 
-var LayoutConstants = require('./LayoutConstants');
+var LayoutConstants = _dereq_('./LayoutConstants');
 
 function FDLayoutConstants() {}
 
@@ -2072,11 +2072,11 @@ FDLayoutConstants.GRID_CALCULATION_CHECK_PERIOD = 10;
 
 module.exports = FDLayoutConstants;
 
-},{"./LayoutConstants":27}],14:[function(require,module,exports){
+},{"./LayoutConstants":27}],14:[function(_dereq_,module,exports){
 'use strict';
 
-var LEdge = require('./LEdge');
-var FDLayoutConstants = require('./FDLayoutConstants');
+var LEdge = _dereq_('./LEdge');
+var FDLayoutConstants = _dereq_('./FDLayoutConstants');
 
 function FDLayoutEdge(source, target, vEdge) {
   LEdge.call(this, source, target, vEdge);
@@ -2091,10 +2091,10 @@ for (var prop in LEdge) {
 
 module.exports = FDLayoutEdge;
 
-},{"./FDLayoutConstants":13,"./LEdge":21}],15:[function(require,module,exports){
+},{"./FDLayoutConstants":13,"./LEdge":21}],15:[function(_dereq_,module,exports){
 'use strict';
 
-var LNode = require('./LNode');
+var LNode = _dereq_('./LNode');
 
 function FDLayoutNode(gm, loc, size, vNode) {
   // alternative constructor is handled inside LNode
@@ -2135,10 +2135,10 @@ FDLayoutNode.prototype.setGridCoordinates = function (_startX, _finishX, _startY
 
 module.exports = FDLayoutNode;
 
-},{"./LNode":25}],16:[function(require,module,exports){
+},{"./LNode":25}],16:[function(_dereq_,module,exports){
 'use strict';
 
-var UniqueIDGeneretor = require('./UniqueIDGeneretor');
+var UniqueIDGeneretor = _dereq_('./UniqueIDGeneretor');
 
 function HashMap() {
   this.map = {};
@@ -2169,10 +2169,10 @@ HashMap.prototype.keySet = function () {
 
 module.exports = HashMap;
 
-},{"./UniqueIDGeneretor":33}],17:[function(require,module,exports){
+},{"./UniqueIDGeneretor":33}],17:[function(_dereq_,module,exports){
 'use strict';
 
-var UniqueIDGeneretor = require('./UniqueIDGeneretor');
+var UniqueIDGeneretor = _dereq_('./UniqueIDGeneretor');
 
 function HashSet() {
   this.set = {};
@@ -2227,7 +2227,7 @@ HashSet.prototype.addAll = function (list) {
 
 module.exports = HashSet;
 
-},{"./UniqueIDGeneretor":33}],18:[function(require,module,exports){
+},{"./UniqueIDGeneretor":33}],18:[function(_dereq_,module,exports){
 "use strict";
 
 function IGeometry() {}
@@ -2560,7 +2560,7 @@ IGeometry.THREE_PI = 3.0 * Math.PI;
 
 module.exports = IGeometry;
 
-},{}],19:[function(require,module,exports){
+},{}],19:[function(_dereq_,module,exports){
 "use strict";
 
 function IMath() {}
@@ -2588,7 +2588,7 @@ IMath.ceil = function (value) {
 
 module.exports = IMath;
 
-},{}],20:[function(require,module,exports){
+},{}],20:[function(_dereq_,module,exports){
 "use strict";
 
 function Integer() {}
@@ -2598,12 +2598,12 @@ Integer.MIN_VALUE = -2147483648;
 
 module.exports = Integer;
 
-},{}],21:[function(require,module,exports){
+},{}],21:[function(_dereq_,module,exports){
 'use strict';
 
-var LGraphObject = require('./LGraphObject');
-var IGeometry = require('./IGeometry');
-var IMath = require('./IMath');
+var LGraphObject = _dereq_('./LGraphObject');
+var IGeometry = _dereq_('./IGeometry');
+var IMath = _dereq_('./IMath');
 
 function LEdge(source, target, vEdge) {
   LGraphObject.call(this, vEdge);
@@ -2724,19 +2724,19 @@ LEdge.prototype.updateLengthSimple = function () {
 
 module.exports = LEdge;
 
-},{"./IGeometry":18,"./IMath":19,"./LGraphObject":24}],22:[function(require,module,exports){
+},{"./IGeometry":18,"./IMath":19,"./LGraphObject":24}],22:[function(_dereq_,module,exports){
 'use strict';
 
-var LGraphObject = require('./LGraphObject');
-var Integer = require('./Integer');
-var LayoutConstants = require('./LayoutConstants');
-var LGraphManager = require('./LGraphManager');
-var LNode = require('./LNode');
-var LEdge = require('./LEdge');
-var HashSet = require('./HashSet');
-var RectangleD = require('./RectangleD');
-var Point = require('./Point');
-var List = require('linkedlist-js').List;
+var LGraphObject = _dereq_('./LGraphObject');
+var Integer = _dereq_('./Integer');
+var LayoutConstants = _dereq_('./LayoutConstants');
+var LGraphManager = _dereq_('./LGraphManager');
+var LNode = _dereq_('./LNode');
+var LEdge = _dereq_('./LEdge');
+var HashSet = _dereq_('./HashSet');
+var RectangleD = _dereq_('./RectangleD');
+var Point = _dereq_('./Point');
+var List = _dereq_('linkedlist-js').List;
 
 function LGraph(parent, obj2, vGraph) {
   LGraphObject.call(this, vGraph);
@@ -3148,14 +3148,14 @@ LGraph.prototype.updateConnected = function () {
 
 module.exports = LGraph;
 
-},{"./HashSet":17,"./Integer":20,"./LEdge":21,"./LGraphManager":23,"./LGraphObject":24,"./LNode":25,"./LayoutConstants":27,"./Point":28,"./RectangleD":31,"linkedlist-js":1}],23:[function(require,module,exports){
+},{"./HashSet":17,"./Integer":20,"./LEdge":21,"./LGraphManager":23,"./LGraphObject":24,"./LNode":25,"./LayoutConstants":27,"./Point":28,"./RectangleD":31,"linkedlist-js":1}],23:[function(_dereq_,module,exports){
 'use strict';
 
 var LGraph;
-var LEdge = require('./LEdge');
+var LEdge = _dereq_('./LEdge');
 
 function LGraphManager(layout) {
-  LGraph = require('./LGraph'); // It may be better to initilize this out of this function but it gives an error (Right-hand side of 'instanceof' is not callable) now.
+  LGraph = _dereq_('./LGraph'); // It may be better to initilize this out of this function but it gives an error (Right-hand side of 'instanceof' is not callable) now.
   this.layout = layout;
 
   this.graphs = [];
@@ -3585,7 +3585,7 @@ LGraphManager.prototype.includesInvalidEdge = function () {
 
 module.exports = LGraphManager;
 
-},{"./LEdge":21,"./LGraph":22}],24:[function(require,module,exports){
+},{"./LEdge":21,"./LGraph":22}],24:[function(_dereq_,module,exports){
 "use strict";
 
 function LGraphObject(vGraphObject) {
@@ -3594,16 +3594,16 @@ function LGraphObject(vGraphObject) {
 
 module.exports = LGraphObject;
 
-},{}],25:[function(require,module,exports){
+},{}],25:[function(_dereq_,module,exports){
 'use strict';
 
-var LGraphObject = require('./LGraphObject');
-var Integer = require('./Integer');
-var RectangleD = require('./RectangleD');
-var LayoutConstants = require('./LayoutConstants');
-var RandomSeed = require('./RandomSeed');
-var PointD = require('./PointD');
-var HashSet = require('./HashSet');
+var LGraphObject = _dereq_('./LGraphObject');
+var Integer = _dereq_('./Integer');
+var RectangleD = _dereq_('./RectangleD');
+var LayoutConstants = _dereq_('./LayoutConstants');
+var RandomSeed = _dereq_('./RandomSeed');
+var PointD = _dereq_('./PointD');
+var HashSet = _dereq_('./HashSet');
 
 function LNode(gm, loc, size, vNode) {
   //Alternative constructor 1 : LNode(LGraphManager gm, Point loc, Dimension size, Object vNode)
@@ -3936,19 +3936,19 @@ LNode.prototype.getParent = function () {
 
 module.exports = LNode;
 
-},{"./HashSet":17,"./Integer":20,"./LGraphObject":24,"./LayoutConstants":27,"./PointD":29,"./RandomSeed":30,"./RectangleD":31}],26:[function(require,module,exports){
+},{"./HashSet":17,"./Integer":20,"./LGraphObject":24,"./LayoutConstants":27,"./PointD":29,"./RandomSeed":30,"./RectangleD":31}],26:[function(_dereq_,module,exports){
 'use strict';
 
-var LayoutConstants = require('./LayoutConstants');
-var HashMap = require('./HashMap');
-var LGraphManager = require('./LGraphManager');
-var LNode = require('./LNode');
-var LEdge = require('./LEdge');
-var LGraph = require('./LGraph');
-var PointD = require('./PointD');
-var Transform = require('./Transform');
-var Emitter = require('./Emitter');
-var HashSet = require('./HashSet');
+var LayoutConstants = _dereq_('./LayoutConstants');
+var HashMap = _dereq_('./HashMap');
+var LGraphManager = _dereq_('./LGraphManager');
+var LNode = _dereq_('./LNode');
+var LEdge = _dereq_('./LEdge');
+var LGraph = _dereq_('./LGraph');
+var PointD = _dereq_('./PointD');
+var Transform = _dereq_('./Transform');
+var Emitter = _dereq_('./Emitter');
+var HashSet = _dereq_('./HashSet');
 
 function Layout(isRemoteUse) {
   Emitter.call(this);
@@ -4538,7 +4538,7 @@ Layout.prototype.setGraphManager = function (gm) {
 
 module.exports = Layout;
 
-},{"./Emitter":11,"./HashMap":16,"./HashSet":17,"./LEdge":21,"./LGraph":22,"./LGraphManager":23,"./LNode":25,"./LayoutConstants":27,"./PointD":29,"./Transform":32}],27:[function(require,module,exports){
+},{"./Emitter":11,"./HashMap":16,"./HashSet":17,"./LEdge":21,"./LGraph":22,"./LGraphManager":23,"./LNode":25,"./LayoutConstants":27,"./PointD":29,"./Transform":32}],27:[function(_dereq_,module,exports){
 "use strict";
 
 function LayoutConstants() {}
@@ -4614,7 +4614,7 @@ LayoutConstants.WORLD_CENTER_Y = 900;
 
 module.exports = LayoutConstants;
 
-},{}],28:[function(require,module,exports){
+},{}],28:[function(_dereq_,module,exports){
 'use strict';
 
 /*
@@ -4687,7 +4687,7 @@ Point.prototype.toString = function () {
 
 module.exports = Point;
 
-},{}],29:[function(require,module,exports){
+},{}],29:[function(_dereq_,module,exports){
 "use strict";
 
 function PointD(x, y) {
@@ -4732,7 +4732,7 @@ PointD.prototype.translate = function (dim) {
 
 module.exports = PointD;
 
-},{}],30:[function(require,module,exports){
+},{}],30:[function(_dereq_,module,exports){
 "use strict";
 
 function RandomSeed() {}
@@ -4746,7 +4746,7 @@ RandomSeed.nextDouble = function () {
 
 module.exports = RandomSeed;
 
-},{}],31:[function(require,module,exports){
+},{}],31:[function(_dereq_,module,exports){
 "use strict";
 
 function RectangleD(x, y, width, height) {
@@ -4857,10 +4857,10 @@ RectangleD.prototype.getHeightHalf = function () {
 
 module.exports = RectangleD;
 
-},{}],32:[function(require,module,exports){
+},{}],32:[function(_dereq_,module,exports){
 'use strict';
 
-var PointD = require('./PointD');
+var PointD = _dereq_('./PointD');
 
 function Transform(x, y) {
   this.lworldOrgX = 0.0;
@@ -4985,7 +4985,7 @@ Transform.prototype.inverseTransformPoint = function (inPoint) {
 
 module.exports = Transform;
 
-},{"./PointD":29}],33:[function(require,module,exports){
+},{"./PointD":29}],33:[function(_dereq_,module,exports){
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -5018,38 +5018,38 @@ UniqueIDGeneretor.isPrimitive = function (arg) {
 
 module.exports = UniqueIDGeneretor;
 
-},{}],34:[function(require,module,exports){
+},{}],34:[function(_dereq_,module,exports){
 'use strict';
 
-var DimensionD = require('./DimensionD');
-var HashMap = require('./HashMap');
-var HashSet = require('./HashSet');
-var IGeometry = require('./IGeometry');
-var IMath = require('./IMath');
-var Integer = require('./Integer');
-var Point = require('./Point');
-var PointD = require('./PointD');
-var RandomSeed = require('./RandomSeed');
-var RectangleD = require('./RectangleD');
-var Transform = require('./Transform');
-var UniqueIDGeneretor = require('./UniqueIDGeneretor');
-var LGraphObject = require('./LGraphObject');
-var LGraph = require('./LGraph');
-var LEdge = require('./LEdge');
-var LGraphManager = require('./LGraphManager');
-var LNode = require('./LNode');
-var Layout = require('./Layout');
-var LayoutConstants = require('./LayoutConstants');
-var FDLayout = require('./FDLayout');
-var FDLayoutConstants = require('./FDLayoutConstants');
-var FDLayoutEdge = require('./FDLayoutEdge');
-var FDLayoutNode = require('./FDLayoutNode');
-var CoSEConstants = require('./CoSEConstants');
-var CoSEEdge = require('./CoSEEdge');
-var CoSEGraph = require('./CoSEGraph');
-var CoSEGraphManager = require('./CoSEGraphManager');
-var CoSELayout = require('./CoSELayout');
-var CoSENode = require('./CoSENode');
+var DimensionD = _dereq_('./DimensionD');
+var HashMap = _dereq_('./HashMap');
+var HashSet = _dereq_('./HashSet');
+var IGeometry = _dereq_('./IGeometry');
+var IMath = _dereq_('./IMath');
+var Integer = _dereq_('./Integer');
+var Point = _dereq_('./Point');
+var PointD = _dereq_('./PointD');
+var RandomSeed = _dereq_('./RandomSeed');
+var RectangleD = _dereq_('./RectangleD');
+var Transform = _dereq_('./Transform');
+var UniqueIDGeneretor = _dereq_('./UniqueIDGeneretor');
+var LGraphObject = _dereq_('./LGraphObject');
+var LGraph = _dereq_('./LGraph');
+var LEdge = _dereq_('./LEdge');
+var LGraphManager = _dereq_('./LGraphManager');
+var LNode = _dereq_('./LNode');
+var Layout = _dereq_('./Layout');
+var LayoutConstants = _dereq_('./LayoutConstants');
+var FDLayout = _dereq_('./FDLayout');
+var FDLayoutConstants = _dereq_('./FDLayoutConstants');
+var FDLayoutEdge = _dereq_('./FDLayoutEdge');
+var FDLayoutNode = _dereq_('./FDLayoutNode');
+var CoSEConstants = _dereq_('./CoSEConstants');
+var CoSEEdge = _dereq_('./CoSEEdge');
+var CoSEGraph = _dereq_('./CoSEGraph');
+var CoSEGraphManager = _dereq_('./CoSEGraphManager');
+var CoSELayout = _dereq_('./CoSELayout');
+var CoSENode = _dereq_('./CoSENode');
 
 var defaults = {
   // Called on `layoutready`
@@ -5388,12 +5388,12 @@ module.exports = function get(cytoscape) {
   return _CoSELayout;
 };
 
-},{"./CoSEConstants":4,"./CoSEEdge":5,"./CoSEGraph":6,"./CoSEGraphManager":7,"./CoSELayout":8,"./CoSENode":9,"./DimensionD":10,"./FDLayout":12,"./FDLayoutConstants":13,"./FDLayoutEdge":14,"./FDLayoutNode":15,"./HashMap":16,"./HashSet":17,"./IGeometry":18,"./IMath":19,"./Integer":20,"./LEdge":21,"./LGraph":22,"./LGraphManager":23,"./LGraphObject":24,"./LNode":25,"./Layout":26,"./LayoutConstants":27,"./Point":28,"./PointD":29,"./RandomSeed":30,"./RectangleD":31,"./Transform":32,"./UniqueIDGeneretor":33}],35:[function(require,module,exports){
+},{"./CoSEConstants":4,"./CoSEEdge":5,"./CoSEGraph":6,"./CoSEGraphManager":7,"./CoSELayout":8,"./CoSENode":9,"./DimensionD":10,"./FDLayout":12,"./FDLayoutConstants":13,"./FDLayoutEdge":14,"./FDLayoutNode":15,"./HashMap":16,"./HashSet":17,"./IGeometry":18,"./IMath":19,"./Integer":20,"./LEdge":21,"./LGraph":22,"./LGraphManager":23,"./LGraphObject":24,"./LNode":25,"./Layout":26,"./LayoutConstants":27,"./Point":28,"./PointD":29,"./RandomSeed":30,"./RectangleD":31,"./Transform":32,"./UniqueIDGeneretor":33}],35:[function(_dereq_,module,exports){
 'use strict';
 
 // registers the extension on a cytoscape lib ref
 
-var getLayout = require('./Layout');
+var getLayout = _dereq_('./Layout');
 
 var register = function register(cytoscape) {
   var Layout = getLayout(cytoscape);
