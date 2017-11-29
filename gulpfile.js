@@ -3,6 +3,7 @@ var util = require('gulp-util');
 var notifier = require('node-notifier');
 var path = require('path');
 var replace = require('gulp-replace');
+var derequire = require('gulp-derequire');
 var child_process = require('child_process');
 var fs = require('fs');
 var shell = require('gulp-shell');
@@ -65,6 +66,7 @@ var bundle = function( b ){
     .on( 'error', handleErr )
     .pipe( source('cytoscape-cose-bilkent.js') )
     .pipe( buffer() )
+    .pipe( derequire() )
   ) ;
 };
 
