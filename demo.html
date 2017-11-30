@@ -53,9 +53,7 @@
 
           layout: {
             name: 'cose-bilkent',
-            animate: 'end',
-            animationEasing: 'ease-out',
-            animationDuration: 2000,
+            animate: false,
             randomize: true
           },
 
@@ -87,16 +85,21 @@
             name: 'cose-bilkent',
             animate: 'end',
             animationEasing: 'ease-out',
-            animationDuration: 2000,
+            animationDuration: 1000,
             randomize: true
           });
-            layout.run();
+
+          layout.run();
         });
         document.getElementById("randomize").addEventListener("click", function(){
           var layout = cy.layout({
-            name: 'random'
+            name: 'random',
+            animate: true,
+            animationDuration: 1000,
+            animationEasing: 'ease-out'
           });
-            layout.run();
+
+          layout.run();
         });
       });
     </script>
