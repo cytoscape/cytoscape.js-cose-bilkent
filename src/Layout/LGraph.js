@@ -7,6 +7,7 @@ var LEdge = require('./LEdge');
 var HashSet = require('./HashSet');
 var RectangleD = require('./RectangleD');
 var Point = require('./Point');
+var LinkedList = require('./LinkedList');
 
 function LGraph(parent, obj2, vGraph) {
   LGraphObject.call(this, vGraph);
@@ -416,7 +417,7 @@ LGraph.prototype.updateConnected = function ()
     return;
   }
 
-  var toBeVisited = [];
+  var toBeVisited = new LinkedList();
   var visited = new HashSet();
   var currentNode = this.nodes[0];
   var neighborEdges;
