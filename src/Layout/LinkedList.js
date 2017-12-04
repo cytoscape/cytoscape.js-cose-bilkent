@@ -59,19 +59,19 @@ class LinkedList {
   }
 
   insertBefore( val, otherNode ){
-    return add( otherNode.prev, nodeFrom(val), otherNode );
+    return add( otherNode.prev, nodeFrom(val), otherNode, this );
   }
 
   insertAfter( val, otherNode ){
-    return add( otherNode, nodeFrom(val), otherNode.next );
+    return add( otherNode, nodeFrom(val), otherNode.next, this );
   }
 
   insertNodeBefore( newNode, otherNode ){
-    return add( otherNode.prev, newNode, otherNode );
+    return add( otherNode.prev, newNode, otherNode, this );
   }
 
   insertNodeAfter( newNode, otherNode ){
-    return add( otherNode, newNode, otherNode.next );
+    return add( otherNode, newNode, otherNode.next, this );
   }
 
   push( val ){
