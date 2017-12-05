@@ -7,7 +7,7 @@ var LEdge = require('./LEdge');
 var HashSet = require('./HashSet');
 var RectangleD = require('./RectangleD');
 var Point = require('./Point');
-var List = require('linkedlist-js').List;
+var LinkedList = require('./LinkedList');
 
 function LGraph(parent, obj2, vGraph) {
   LGraphObject.call(this, vGraph);
@@ -231,7 +231,7 @@ LGraph.prototype.updateLeftTop = function ()
   {
     return null;
   }
-  
+
   if(nodes[0].getParent().paddingLeft != undefined){
     margin = nodes[0].getParent().paddingLeft;
   }
@@ -303,7 +303,7 @@ LGraph.prototype.updateBounds = function (recursive)
     this.top = this.parent.getTop();
     this.bottom = this.parent.getBottom();
   }
-  
+
   if(nodes[0].getParent().paddingLeft != undefined){
     margin = nodes[0].getParent().paddingLeft;
   }
@@ -417,7 +417,7 @@ LGraph.prototype.updateConnected = function ()
     return;
   }
 
-  var toBeVisited = new List();
+  var toBeVisited = new LinkedList();
   var visited = new HashSet();
   var currentNode = this.nodes[0];
   var neighborEdges;
@@ -427,9 +427,9 @@ LGraph.prototype.updateConnected = function ()
     toBeVisited.push(node);
   });
 
-  while (!toBeVisited.isEmpty())
+  while (toBeVisited.length !== 0)
   {
-    currentNode = toBeVisited.shift().value();
+    currentNode = toBeVisited.shift();
     visited.add(currentNode);
 
     // Traverse all neighbors of this node
@@ -446,7 +446,7 @@ LGraph.prototype.updateConnected = function ()
               !visited.contains(currentNeighbor))
       {
         var childrenOfNeighbor = currentNeighbor.withChildren();
-        
+
         childrenOfNeighbor.forEach(function(node) {
           toBeVisited.push(node);
         });
@@ -459,7 +459,7 @@ LGraph.prototype.updateConnected = function ()
   if (visited.size() >= this.nodes.length)
   {
     var noOfVisitedInThisGraph = 0;
-    
+
     var s = visited.size();
      Object.keys(visited.set).forEach(function(visitedId) {
       var visitedNode = visited.set[visitedId];
