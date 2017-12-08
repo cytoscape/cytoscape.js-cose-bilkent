@@ -1,21 +1,19 @@
 cytoscape-cose-bilkent
 ================================================================================
+
 [![DOI](https://zenodo.org/badge/42200589.svg)](https://zenodo.org/badge/latestdoi/42200589)
 
 ## Description
 
-The CoSE layout for Cytoscape.js by the [i-Vis Lab](http://cs.bilkent.edu.tr/~ivis/) in Bilkent University. Please cite the following when using this layout:
+The CoSE layout for Cytoscape.js by the [i-Vis Lab](http://cs.bilkent.edu.tr/~ivis/) in Bilkent University ([demo](https://cytoscape.github.io/cytoscape.js-cose-bilkent/demo.html), [compound demo](https://cytoscape.github.io/cytoscape.js-cose-bilkent/demo.html))
+
+Please cite the following when using this layout:
 
 U. Dogrusoz, E. Giral, A. Cetintas, A. Civril, and E. Demir, "[A Layout Algorithm For Undirected Compound Graphs](http://www.sciencedirect.com/science/article/pii/S0020025508004799)", Information Sciences, 179, pp. 980-994, 2009.
 
-## Demos
-
-Click [here](https://rawgit.com/cytoscape/cytoscape.js-cose-bilkent/master/demo.html) (simple) or [here](https://rawgit.com/cytoscape/cytoscape.js-cose-bilkent/master/demo-compound.html) (compound) for demos
-
 ## Dependencies
 
- * Cytoscape.js ^2.4.0 || ^3.0.0
- * Versions after 2.0.4 are not compatible with versions before Cytoscape.js 3.1.0
+ * Cytoscape.js ^3.2.0
 
 
 ## Usage instructions
@@ -25,26 +23,36 @@ Download the library:
  * via bower: `bower install cytoscape-cose-bilkent`, or
  * via direct download in the repository (probably from a tag).
 
-`require()` the library as appropriate for your project:
+Import the library as appropriate for your project:
 
-CommonJS:
+ES import:
+
 ```js
-var cytoscape = require('cytoscape');
-var regCose = require('cytoscape-cose-bilkent');
+import cytoscape from 'cytoscape';
+import coseBilkent from 'cytoscape-cose-bilkent';
 
-regCose( cytoscape ); // register extension
+cytoscape.use( coseBilkent );
+```
+
+CommonJS require:
+
+```js
+let cytoscape = require('cytoscape');
+let coseBilkent = require('cytoscape-cose-bilkent');
+
+cytoscape.use( coseBilkent ); // register extension
 ```
 
 AMD:
+
 ```js
-require(['cytoscape', 'cytoscape-cose-bilkent'], function( cytoscape, regCose ){
-  regCose( cytoscape ); // register extension
+require(['cytoscape', 'cytoscape-cose-bilkent'], function( cytoscape, coseBilkent ){
+  coseBilkent( cytoscape ); // register extension
 });
 ```
 
 Plain HTML/JS has the extension registered for you automatically, because no `require()` is needed.
 
-Please note that Cytoscape.js rendering option *styleEnabled* must be true, if layout is running in headless mode.
 
 ## API
 
@@ -61,7 +69,7 @@ var defaultOptions = {
   // Whether to include labels in node dimensions. Useful for avoiding label overlap
   nodeDimensionsIncludeLabels: false,
   // number of ticks per frame; higher is faster but more jerky
-  refresh: 30, 
+  refresh: 30,
   // Whether to fit the network view after when done
   fit: true,
   // Padding on fit
@@ -100,11 +108,25 @@ var defaultOptions = {
 ```
 
 
+## Build targets
+
+* `npm run test` : Run Mocha tests in `./test`
+* `npm run build` : Build `./src/**` into `cytoscape-cose-bilkent.js`
+* `npm run watch` : Automatically build on changes with live reloading (N.b. you must already have an HTTP server running)
+* `npm run dev` : Automatically build on changes with live reloading with webpack dev server
+* `npm run lint` : Run eslint on the source
+
+N.b. all builds use babel, so modern ES features can be used in the `src`.
+
+
 ## Publishing instructions
 
 This project is set up to automatically be published to npm and bower.  To publish:
 
-1. Set the version number environment variable: `export VERSION=1.2.3`
-1. Publish: `gulp publish`
+1. Build the extension : `npm run build`
+1. Commit the build : `git commit -am "Build for release"`
+1. Bump the version number and tag: `npm version major|minor|patch`
+1. Push to origin: `git push && git push --tags`
+1. Publish to npm: `npm publish .`
 1. If publishing to bower for the first time, you'll need to run `bower register cytoscape-cose-bilkent https://github.com/cytoscape/cytoscape.js-cose-bilkent.git`
-1. Make a release on GitHub to automatically register a new Zenodo DOI
+1. [Make a new release](https://github.com/cytoscape/cytoscape.js-cose-bilkent/releases/new) for Zenodo.

@@ -7,15 +7,6 @@
 
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function(){
-        var script = document.createElement('script');
-        script.src = 'http://' + window.location.hostname + ':35729/livereload.js';
-
-        document.head.insertBefore( script, document.head.firstChild );
-      });
-    </script>
-
     <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
 
     <!-- for testing with local version of cytoscape.js -->
@@ -53,9 +44,7 @@
 
           layout: {
             name: 'cose-bilkent',
-            animate: 'end',
-            animationEasing: 'ease-out',
-            animationDuration: 2000,
+            animate: false,
             randomize: true
           },
 
@@ -87,16 +76,21 @@
             name: 'cose-bilkent',
             animate: 'end',
             animationEasing: 'ease-out',
-            animationDuration: 2000,
+            animationDuration: 1000,
             randomize: true
           });
-            layout.run();
+
+          layout.run();
         });
         document.getElementById("randomize").addEventListener("click", function(){
           var layout = cy.layout({
-            name: 'random'
+            name: 'random',
+            animate: true,
+            animationDuration: 1000,
+            animationEasing: 'ease-out'
           });
-            layout.run();
+
+          layout.run();
         });
       });
     </script>
