@@ -3703,6 +3703,7 @@ FDLayout.prototype.reduceTrees = function () {
 FDLayout.prototype.growTree = function (prunedNodesAll) {
   var lengthOfPrunedNodesInStep = prunedNodesAll.length;
   var prunedNodesInStep = prunedNodesAll[lengthOfPrunedNodesInStep - 1];
+
   var nodeData;
   for (var i = 0; i < prunedNodesInStep.length; i++) {
     nodeData = prunedNodesInStep[i];
@@ -4109,6 +4110,7 @@ _CoSELayout.prototype.run = function () {
 
   var gm = layout.newGraphManager();
   this.gm = gm;
+
   var nodes = this.options.eles.nodes();
   var edges = this.options.eles.edges();
 
@@ -5401,6 +5403,7 @@ var _remove = function _remove(node, list) {
   var prev = node.prev,
       next = node.next;
 
+
   if (prev !== null) {
     prev.next = next;
   } else {
@@ -5509,6 +5512,7 @@ module.exports = LinkedList;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
 
 // registers the extension on a cytoscape lib ref
 
