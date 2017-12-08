@@ -5,7 +5,7 @@ cytoscape-cose-bilkent
 
 ## Description
 
-The CoSE layout for Cytoscape.js by the [i-Vis Lab](http://cs.bilkent.edu.tr/~ivis/) in Bilkent University ([demo](https://cytoscape.github.io/cytoscape.js-cose-bilkent/demo.html), [compound demo](https://cytoscape.github.io/cytoscape.js-cose-bilkent/demo.html))
+The CoSE layout for Cytoscape.js by the [i-Vis Lab](http://cs.bilkent.edu.tr/~ivis/) in Bilkent University ([demo](https://cytoscape.github.io/cytoscape.js-cose-bilkent/demo.html), [compound demo](https://cytoscape.github.io/cytoscape.js-cose-bilkent/demo-compound.html))
 
 Please cite the following when using this layout:
 
