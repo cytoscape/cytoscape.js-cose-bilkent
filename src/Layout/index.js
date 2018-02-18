@@ -123,6 +123,7 @@ var getUserOptions = function (options) {
   CoSEConstants.NODE_DIMENSIONS_INCLUDE_LABELS = FDLayoutConstants.NODE_DIMENSIONS_INCLUDE_LABELS = LayoutConstants.NODE_DIMENSIONS_INCLUDE_LABELS = options.nodeDimensionsIncludeLabels;
   CoSEConstants.DEFAULT_INCREMENTAL = FDLayoutConstants.DEFAULT_INCREMENTAL = LayoutConstants.DEFAULT_INCREMENTAL =
           !(options.randomize);
+  CoSEConstants.BOUNDING_BOX = FDLayoutConstants.BOUNDING_BOX = LayoutConstants.BOUNDING_BOX = options.boundingBox;
   CoSEConstants.ANIMATE = FDLayoutConstants.ANIMATE = LayoutConstants.ANIMATE = options.animate;
   CoSEConstants.TILE = options.tile;
   CoSEConstants.TILING_PADDING_VERTICAL = 
@@ -213,7 +214,9 @@ _CoSELayout.prototype.run = function () {
       if (layout.tilingPostLayout) {
         layout.tilingPostLayout();
       }
-      
+
+      layout.updateBoundingBox();
+
       layout.isLayoutFinished = true;
       
       self.options.eles.nodes().positions(getPositions);

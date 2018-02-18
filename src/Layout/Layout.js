@@ -134,10 +134,101 @@ Layout.prototype.runLayout = function ()
     this.tilingPostLayout();
   }
 
+  this.updateBoundingBox();
+
   this.isLayoutFinished = true;
 
   return isLayoutSuccessfull;
 };
+
+/**
+ * Updates node positions to fit within bounding box.
+ * - Original bounds ratio is respected.
+ *   Alternative: just fit in new bounds. This will deform the original graph shape.
+ * - Node sizes are not altered.
+ *   Alternative: resize nodes proportionally to their new bounding box size.
+ * - Repositioning %age is relative to border closest to node.
+ *   Alternative: reposition relative to node center.
+ */
+Layout.prototype.updateBoundingBox = function() {
+
+  if (!LayoutConstants.BOUNDING_BOX) return;
+
+  var box = LayoutConstants.BOUNDING_BOX;
+
+  var nodes = this.getAllNodes();
+  var s = nodes.length;
+
+  var _bounds = LGraph.calculateBounds(nodes);
+  var bounds = {
+    x: _bounds.getX(),
+    y: _bounds.getY(),
+    w: _bounds.getWidth(),
+    h: _bounds.getHeight()
+  }
+
+  var boundRatio = bounds.w / bounds.h;
+  var boxRatio = box.w / box.h;
+
+  var newBox = {x:0, y: 0, w: 0,h: 0};
+  var boxW, boxH;
+  // box is flat relative to bounds
+  if (boxRatio >= boundRatio) {
+    newBox.h = box.h;
+    newBox.w = bounds.w * box.h / bounds.h;
+  // box is thin relative to bounds
+  } else {
+    newBox.w = box.w;
+    newBox.h = bounds.h * box.w / bounds.w;
+  }
+
+  // center new box
+  newBox.x = box.x1 + (box.w-newBox.w)/2;
+  newBox.y = box.y1 + (box.h-newBox.h)/2;
+
+  for (var i = 0; i < s; i++) {
+    var lNode = nodes[i];
+    var node = {
+      w: lNode.getWidth(),
+      h: lNode.getHeight(),
+      l: lNode.getLeft(),
+      t: lNode.getTop(),
+      r: lNode.getRight(),
+      b: lNode.getBottom()
+    }
+
+    var nX,nY, pctX, pctY;
+
+    // left of node closer to left border than right of node close to right border
+    if ((node.l-bounds.x) <= (bounds.x + bounds.w - node.r)) {
+      pctX = (node.l - bounds.x) / bounds.w;
+      nX = (newBox.x + pctX * newBox.w);
+    } else {
+      pctX = (bounds.x + bounds.w - node.r) / bounds.w;
+      nX = newBox.x + (newBox.w - (pctX * newBox.w)) - node.w;
+    }
+
+    // top of node closer to top border than bottom of node close to bottom border
+    if ((node.t-bounds.y) <= (bounds.y + bounds.h - node.b)) {
+      pctY = (node.t - bounds.y) / bounds.h;
+      nY = (newBox.y + pctY * newBox.h);
+    } else {
+      pctY = (bounds.y + bounds.h - node.b) / bounds.h;
+      nY = newBox.y + (newBox.h - (pctY * newBox.h)) - node.h;
+    }
+
+    lNode.setRect({
+      x: nX,
+      y: nY
+    },
+    {
+      width: node.w,
+      height: node.h
+    });
+  }
+
+  this.graphManager.updateBounds();
+}
 
 /**
  * This method performs the operations required after layout.
