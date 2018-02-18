@@ -103,7 +103,9 @@ var defaultOptions = {
   // Gravity range (constant)
   gravityRange: 3.8,
   // Initial cooling factor for incremental layout
-  initialEnergyOnIncremental: 0.5
+  initialEnergyOnIncremental: 0.5,
+  // bounding box, in model dimensions. e.g. {x: 100, y: 200, w: 250, h: 300}
+  boundingBox: undefined
 };
 ```
 
