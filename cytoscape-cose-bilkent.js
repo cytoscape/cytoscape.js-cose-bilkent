@@ -4202,28 +4202,31 @@ _CoSELayout.prototype.run = function () {
       if (typeof ele === "number") {
         ele = i;
       }
-      var theId = ele.id();
-      var pNode = animationData[theId];
-      var temp = ele;
-      // If pNode is undefined search until finding position data of its first ancestor (It may be dummy as well)
-      while (pNode == null) {
-        pNode = animationData[temp.data('parent')] || animationData['DummyCompound_' + temp.data('parent')];
-        animationData[theId] = pNode;
-        temp = temp.parent()[0];
-        if (temp == undefined) {
-          break;
+      // If ele is a compound node, then its position will be defined by its children
+      if (!ele.isParent()) {
+        var theId = ele.id();
+        var pNode = animationData[theId];
+        var temp = ele;
+        // If pNode is undefined search until finding position data of its first ancestor (It may be dummy as well)
+        while (pNode == null) {
+          pNode = animationData[temp.data('parent')] || animationData['DummyCompound_' + temp.data('parent')];
+          animationData[theId] = pNode;
+          temp = temp.parent()[0];
+          if (temp == undefined) {
+            break;
+          }
         }
-      }
-      if (pNode != null) {
-        return {
-          x: pNode.x,
-          y: pNode.y
-        };
-      } else {
-        return {
-          x: ele.x,
-          y: ele.y
-        };
+        if (pNode != null) {
+          return {
+            x: pNode.x,
+            y: pNode.y
+          };
+        } else {
+          return {
+            x: ele.x,
+            y: ele.y
+          };
+        }
       }
     });
 
