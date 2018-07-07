@@ -82,6 +82,25 @@
 
           layout.run();
         });
+        document.getElementById("edgeLengthFunction").addEventListener("click", function(){
+          var layout = cy.layout({
+            name: 'cose-bilkent',
+            animate: 'end',
+            animationEasing: 'ease-out',
+            animationDuration: 1000,
+            randomize: true,
+            idealEdgeLengthFunction: function(edge) {
+              if (edge.source.id === 'glyph33') {
+                return 100;
+              } else if (edge.target.id == 'glyph33') {
+                return 10;
+              } else {
+                return 50;
+              }
+            }
+          });
+          layout.run();
+        });
         document.getElementById("randomize").addEventListener("click", function(){
           var layout = cy.layout({
             name: 'random',
@@ -101,6 +120,7 @@
 
     <button id="randomize" type="button">Randomize</button>
     <button id="layoutButton" type="button">CoSE-Bilkent</button>
+    <button id="edgeLengthFunction" type="button">Variable Length Edges</button>
 
     <div id="cy"></div>
 

@@ -3,7 +3,6 @@ var FDLayoutConstants = require('./FDLayoutConstants');
 
 function FDLayoutEdge(source, target, vEdge) {
   LEdge.call(this, source, target, vEdge);
-  this.idealLength = FDLayoutConstants.DEFAULT_EDGE_LENGTH;
 }
 
 FDLayoutEdge.prototype = Object.create(LEdge.prototype);
