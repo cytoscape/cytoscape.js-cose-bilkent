@@ -10,6 +10,7 @@ function FDLayout() {
 
   this.useSmartIdealEdgeLengthCalculation = FDLayoutConstants.DEFAULT_USE_SMART_IDEAL_EDGE_LENGTH_CALCULATION;
   this.idealEdgeLength = FDLayoutConstants.DEFAULT_EDGE_LENGTH;
+  this.idealEdgeLengthFunction = null;
   this.springConstant = FDLayoutConstants.DEFAULT_SPRING_STRENGTH;
   this.repulsionConstant = FDLayoutConstants.DEFAULT_REPULSION_STRENGTH;
   this.gravityConstant = FDLayoutConstants.DEFAULT_GRAVITY_STRENGTH;
@@ -58,6 +59,10 @@ FDLayout.prototype.initParameters = function () {
   this.isGrowthFinished = false;
 };
 
+FDLayout.prototype.setPerEdgeLengthFunction = function(fn) {
+  this.idealEdgeLengthFunction = fn;
+}
+
 FDLayout.prototype.calcIdealEdgeLengths = function () {
   var edge;
   var lcaDepth;
@@ -65,13 +70,18 @@ FDLayout.prototype.calcIdealEdgeLengths = function () {
   var target;
   var sizeOfSourceInLca;
   var sizeOfTargetInLca;
+  var edgeLength;
 
   var allEdges = this.getGraphManager().getAllEdges();
   for (var i = 0; i < allEdges.length; i++)
   {
     edge = allEdges[i];
 
-    edge.idealLength = this.idealEdgeLength;
+    var edgeLength = this.idealEdgeLength;
+    if (this.idealEdgeLengthFunction) {
+      edgeLength = this.idealEdgeLengthFunction(edge);
+    }
+    edge.idealLength = edgeLength;
 
     if (edge.isInterGraph)
     {
@@ -89,7 +99,7 @@ FDLayout.prototype.calcIdealEdgeLengths = function () {
 
       lcaDepth = edge.getLca().getInclusionTreeDepth();
 
-      edge.idealLength += FDLayoutConstants.DEFAULT_EDGE_LENGTH *
+      edge.idealLength += edgeLength *
               FDLayoutConstants.PER_LEVEL_IDEAL_EDGE_LENGTH_FACTOR *
               (source.getInclusionTreeDepth() +
                       target.getInclusionTreeDepth() - 2 * lcaDepth);

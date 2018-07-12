@@ -51,6 +51,8 @@ var defaults = {
   nodeRepulsion: 4500,
   // Ideal edge (non nested) length
   idealEdgeLength: 50,
+  // Per edge length function (to override ideal edge length on a per-edge basis - use with care)
+  idealEdgeLengthFunction: null,
   // Divisor to compute edge forces
   edgeElasticity: 0.45,
   // Nesting factor (multiplier) to compute ideal edge length for nested edges
@@ -137,6 +139,9 @@ _CoSELayout.prototype.run = function () {
   var options = this.options;
   var idToLNode = this.idToLNode = {};
   var layout = this.layout = new CoSELayout();
+  if (options.idealEdgeLengthFunction != null) {
+    layout.setPerEdgeLengthFunction(options.idealEdgeLengthFunction);
+  }
   var self = this;
   
   self.stopped = false;
@@ -162,6 +167,7 @@ _CoSELayout.prototype.run = function () {
     if(sourceNode.getEdgesBetween(targetNode).length == 0){
       var e1 = gm.add(layout.newEdge(), sourceNode, targetNode);
       e1.id = edge.id();
+      e1.setData(edge.data());
     }
   }
   
@@ -228,6 +234,14 @@ _CoSELayout.prototype.run = function () {
         cancelAnimationFrame(frameId);
       }
       
+      this.cy.eles().addEventListener('data', function() {
+        var gmedges = gm.edges;
+        for (var e = 0; e < gmedges.length; e++) {
+          var cyEdge = this.cy.getElementById(e.id);
+          e.setData(cyEdge.data());
+        }
+      });
+
       ready = false;
       return;
     }
