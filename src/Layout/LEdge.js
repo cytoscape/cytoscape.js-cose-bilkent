@@ -10,6 +10,7 @@ function LEdge(source, target, vEdge) {
   this.bendpoints = [];
   this.source = source;
   this.target = target;
+  this._data = {};
 }
 
 LEdge.prototype = Object.create(LGraphObject.prototype);
@@ -148,6 +149,19 @@ LEdge.prototype.updateLengthSimple = function ()
 
   this.length = Math.sqrt(
           this.lengthX * this.lengthX + this.lengthY * this.lengthY);
+}
+
+LEdge.prototype.setData = function(data)
+{
+  if (data)
+  {
+    this._data = data;
+  }
+}
+
+LEdge.prototype.data = function()
+{
+  return this._data;
 }
 
 module.exports = LEdge;

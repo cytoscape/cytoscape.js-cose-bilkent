@@ -167,6 +167,7 @@ _CoSELayout.prototype.run = function () {
     if(sourceNode.getEdgesBetween(targetNode).length == 0){
       var e1 = gm.add(layout.newEdge(), sourceNode, targetNode);
       e1.id = edge.id();
+      e1.setData(edge.data());
     }
   }
   
@@ -233,6 +234,14 @@ _CoSELayout.prototype.run = function () {
         cancelAnimationFrame(frameId);
       }
       
+      this.cy.eles().addEventListener('data', function() {
+        var gmedges = gm.edges;
+        for (var e = 0; e < gmedges.length; e++) {
+          var cyEdge = this.cy.getElementById(e.id);
+          e.setData(cyEdge.data());
+        }
+      });
+
       ready = false;
       return;
     }
