@@ -163,6 +163,84 @@ module.exports = LayoutConstants;
 "use strict";
 
 
+var UniqueIDGeneretor = __webpack_require__(16);
+
+function HashSet(elements) {
+  this.set = {};
+  if (elements != undefined) {
+    for (var i = 0, len = elements.length; i < len; i++) {
+      this.add(elements[i]);
+    }
+  }
+};
+
+HashSet.prototype.has = function (obj) {
+  return this.contains(obj);
+};
+
+HashSet.prototype.getAll = function () {
+  var allElements = [];
+  for (var elementKey in this.set) {
+    allElements.push(this.set[elementKey]);
+  }
+  return allElements;
+};
+
+HashSet.prototype.add = function (obj) {
+  var theId = UniqueIDGeneretor.createID(obj);
+  if (!this.contains(theId)) this.set[theId] = obj;
+};
+
+HashSet.prototype.remove = function (obj) {
+  delete this.set[UniqueIDGeneretor.createID(obj)];
+};
+
+HashSet.prototype.clear = function () {
+  this.set = {};
+};
+
+HashSet.prototype.contains = function (obj) {
+  return this.set[UniqueIDGeneretor.createID(obj)] == obj;
+};
+
+HashSet.prototype.isEmpty = function () {
+  return this.size() === 0;
+};
+
+HashSet.prototype.size = function () {
+  return Object.keys(this.set).length;
+};
+
+//concats this.set to the given list
+HashSet.prototype.addAllTo = function (list) {
+  var keys = Object.keys(this.set);
+  var length = keys.length;
+  for (var i = 0; i < length; i++) {
+    list.push(this.set[keys[i]]);
+  }
+};
+
+HashSet.prototype.size = function () {
+  return Object.keys(this.set).length;
+};
+
+HashSet.prototype.addAll = function (list) {
+  var s = list.length;
+  for (var i = 0; i < s; i++) {
+    var v = list[i];
+    this.add(v);
+  }
+};
+
+module.exports = HashSet;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var LayoutConstants = __webpack_require__(0);
 
 function FDLayoutConstants() {}
@@ -195,7 +273,7 @@ FDLayoutConstants.GRID_CALCULATION_CHECK_PERIOD = 10;
 module.exports = FDLayoutConstants;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -209,7 +287,7 @@ Integer.MIN_VALUE = -2147483648;
 module.exports = Integer;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -339,19 +417,19 @@ LEdge.prototype.updateLengthSimple = function () {
 module.exports = LEdge;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var LGraphObject = __webpack_require__(10);
-var Integer = __webpack_require__(2);
+var Integer = __webpack_require__(3);
 var LayoutConstants = __webpack_require__(0);
 var LGraphManager = __webpack_require__(9);
 var LNode = __webpack_require__(11);
-var LEdge = __webpack_require__(3);
-var HashSet = __webpack_require__(6);
+var LEdge = __webpack_require__(4);
+var HashSet = __webpack_require__(1);
 var RectangleD = __webpack_require__(14);
 var Point = __webpack_require__(13);
 var LinkedList = __webpack_require__(31);
@@ -719,7 +797,7 @@ LGraph.prototype.updateConnected = function () {
   var neighborEdges;
   var currentNeighbor;
   var childrenOfNode = currentNode.withChildren();
-  childrenOfNode.forEach(function (node) {
+  childrenOfNode.getAll().forEach(function (node) {
     toBeVisited.push(node);
   });
 
@@ -738,7 +816,7 @@ LGraph.prototype.updateConnected = function () {
       if (currentNeighbor != null && !visited.contains(currentNeighbor)) {
         var childrenOfNeighbor = currentNeighbor.withChildren();
 
-        childrenOfNeighbor.forEach(function (node) {
+        childrenOfNeighbor.getAll().forEach(function (node) {
           toBeVisited.push(node);
         });
       }
@@ -767,7 +845,7 @@ LGraph.prototype.updateConnected = function () {
 module.exports = LGraph;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -814,68 +892,6 @@ PointD.prototype.translate = function (dim) {
 };
 
 module.exports = PointD;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var UniqueIDGeneretor = __webpack_require__(16);
-
-function HashSet() {
-  this.set = {};
-}
-;
-
-HashSet.prototype.add = function (obj) {
-  var theId = UniqueIDGeneretor.createID(obj);
-  if (!this.contains(theId)) this.set[theId] = obj;
-};
-
-HashSet.prototype.remove = function (obj) {
-  delete this.set[UniqueIDGeneretor.createID(obj)];
-};
-
-HashSet.prototype.clear = function () {
-  this.set = {};
-};
-
-HashSet.prototype.contains = function (obj) {
-  return this.set[UniqueIDGeneretor.createID(obj)] == obj;
-};
-
-HashSet.prototype.isEmpty = function () {
-  return this.size() === 0;
-};
-
-HashSet.prototype.size = function () {
-  return Object.keys(this.set).length;
-};
-
-//concats this.set to the given list
-HashSet.prototype.addAllTo = function (list) {
-  var keys = Object.keys(this.set);
-  var length = keys.length;
-  for (var i = 0; i < length; i++) {
-    list.push(this.set[keys[i]]);
-  }
-};
-
-HashSet.prototype.size = function () {
-  return Object.keys(this.set).length;
-};
-
-HashSet.prototype.addAll = function (list) {
-  var s = list.length;
-  for (var i = 0; i < s; i++) {
-    var v = list[i];
-    this.add(v);
-  }
-};
-
-module.exports = HashSet;
 
 /***/ }),
 /* 7 */
@@ -1254,10 +1270,10 @@ module.exports = IMath;
 
 
 var LGraph;
-var LEdge = __webpack_require__(3);
+var LEdge = __webpack_require__(4);
 
 function LGraphManager(layout) {
-  LGraph = __webpack_require__(4); // It may be better to initilize this out of this function but it gives an error (Right-hand side of 'instanceof' is not callable) now.
+  LGraph = __webpack_require__(5); // It may be better to initilize this out of this function but it gives an error (Right-hand side of 'instanceof' is not callable) now.
   this.layout = layout;
 
   this.graphs = [];
@@ -1708,12 +1724,12 @@ module.exports = LGraphObject;
 
 
 var LGraphObject = __webpack_require__(10);
-var Integer = __webpack_require__(2);
+var Integer = __webpack_require__(3);
 var RectangleD = __webpack_require__(14);
 var LayoutConstants = __webpack_require__(0);
 var RandomSeed = __webpack_require__(26);
-var PointD = __webpack_require__(5);
-var HashSet = __webpack_require__(6);
+var PointD = __webpack_require__(6);
+var HashSet = __webpack_require__(1);
 
 function LNode(gm, loc, size, vNode) {
   //Alternative constructor 1 : LNode(LGraphManager gm, Point loc, Dimension size, Object vNode)
@@ -1876,7 +1892,7 @@ LNode.prototype.getNeighborsList = function () {
 };
 
 LNode.prototype.withChildren = function () {
-  var withNeighborsList = new Set();
+  var withNeighborsList = new HashSet();
   var childNode;
   var children;
 
@@ -1887,7 +1903,7 @@ LNode.prototype.withChildren = function () {
     for (var i = 0; i < nodes.length; i++) {
       childNode = nodes[i];
       children = childNode.withChildren();
-      children.forEach(function (node) {
+      children.getAll().forEach(function (node) {
         withNeighborsList.add(node);
       });
     }
@@ -2057,12 +2073,12 @@ var LayoutConstants = __webpack_require__(0);
 var HashMap = __webpack_require__(25);
 var LGraphManager = __webpack_require__(9);
 var LNode = __webpack_require__(11);
-var LEdge = __webpack_require__(3);
-var LGraph = __webpack_require__(4);
-var PointD = __webpack_require__(5);
+var LEdge = __webpack_require__(4);
+var LGraph = __webpack_require__(5);
+var PointD = __webpack_require__(6);
 var Transform = __webpack_require__(15);
 var Emitter = __webpack_require__(30);
-var HashSet = __webpack_require__(6);
+var HashSet = __webpack_require__(1);
 
 function Layout(isRemoteUse) {
   Emitter.call(this);
@@ -2851,7 +2867,7 @@ module.exports = RectangleD;
 "use strict";
 
 
-var PointD = __webpack_require__(5);
+var PointD = __webpack_require__(6);
 
 function Transform(x, y) {
   this.lworldOrgX = 0.0;
@@ -3020,7 +3036,7 @@ module.exports = UniqueIDGeneretor;
 "use strict";
 
 
-var FDLayoutConstants = __webpack_require__(1);
+var FDLayoutConstants = __webpack_require__(2);
 
 function CoSEConstants() {}
 
@@ -3065,7 +3081,7 @@ module.exports = CoSEEdge;
 "use strict";
 
 
-var LGraph = __webpack_require__(4);
+var LGraph = __webpack_require__(5);
 
 function CoSEGraph(parent, graphMgr, vGraph) {
   LGraph.call(this, parent, graphMgr, vGraph);
@@ -3210,11 +3226,12 @@ module.exports = CoSENode;
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var Layout = __webpack_require__(12);
-var FDLayoutConstants = __webpack_require__(1);
+var FDLayoutConstants = __webpack_require__(2);
 var LayoutConstants = __webpack_require__(0);
 var IGeometry = __webpack_require__(7);
 var IMath = __webpack_require__(8);
-var Integer = __webpack_require__(2);
+var Integer = __webpack_require__(3);
+var HashSet = __webpack_require__(1);
 
 function FDLayout() {
   Layout.call(this);
@@ -3337,7 +3354,7 @@ FDLayout.prototype.calcRepulsionForces = function () {
       this.updateGrid();
     }
 
-    processedNodeSet = new Set();
+    processedNodeSet = new HashSet();
 
     // calculate repulsion forces between each nodes and its surrounding
     for (i = 0; i < lNodes.length; i++) {
@@ -3616,7 +3633,7 @@ FDLayout.prototype.updateGrid = function () {
 FDLayout.prototype.calculateRepulsionForceOfANode = function (nodeA, processedNodeSet) {
 
   if (this.totalIterations % FDLayoutConstants.GRID_CALCULATION_CHECK_PERIOD == 1 && !this.isTreeGrowing && !this.isGrowthFinished || this.growTreeIterations % 10 == 1 && this.isTreeGrowing || this.afterGrowthIterations % 10 == 1 && this.isGrowthFinished) {
-    var surrounding = new Set();
+    var surrounding = new HashSet();
     nodeA.surrounding = new Array();
     var nodeB;
     var grid = this.grid;
@@ -3651,7 +3668,7 @@ FDLayout.prototype.calculateRepulsionForceOfANode = function (nodeA, processedNo
       }
     }
 
-    nodeA.surrounding = [].concat(_toConsumableArray(surrounding));
+    nodeA.surrounding = [].concat(_toConsumableArray(surrounding.getAll()));
   }
   for (i = 0; i < nodeA.surrounding.length; i++) {
     this.calcRepulsionForce(nodeA, nodeA.surrounding[i]);
@@ -3851,8 +3868,8 @@ module.exports = FDLayout;
 "use strict";
 
 
-var LEdge = __webpack_require__(3);
-var FDLayoutConstants = __webpack_require__(1);
+var LEdge = __webpack_require__(4);
+var FDLayoutConstants = __webpack_require__(2);
 
 function FDLayoutEdge(source, target, vEdge) {
   LEdge.call(this, source, target, vEdge);
@@ -3980,25 +3997,25 @@ module.exports = RandomSeed;
 
 var DimensionD = __webpack_require__(29);
 var HashMap = __webpack_require__(25);
-var HashSet = __webpack_require__(6);
+var HashSet = __webpack_require__(1);
 var IGeometry = __webpack_require__(7);
 var IMath = __webpack_require__(8);
-var Integer = __webpack_require__(2);
+var Integer = __webpack_require__(3);
 var Point = __webpack_require__(13);
-var PointD = __webpack_require__(5);
+var PointD = __webpack_require__(6);
 var RandomSeed = __webpack_require__(26);
 var RectangleD = __webpack_require__(14);
 var Transform = __webpack_require__(15);
 var UniqueIDGeneretor = __webpack_require__(16);
 var LGraphObject = __webpack_require__(10);
-var LGraph = __webpack_require__(4);
-var LEdge = __webpack_require__(3);
+var LGraph = __webpack_require__(5);
+var LEdge = __webpack_require__(4);
 var LGraphManager = __webpack_require__(9);
 var LNode = __webpack_require__(11);
 var Layout = __webpack_require__(12);
 var LayoutConstants = __webpack_require__(0);
 var FDLayout = __webpack_require__(22);
-var FDLayoutConstants = __webpack_require__(1);
+var FDLayoutConstants = __webpack_require__(2);
 var FDLayoutEdge = __webpack_require__(23);
 var FDLayoutNode = __webpack_require__(24);
 var CoSEConstants = __webpack_require__(17);
@@ -4358,15 +4375,16 @@ var CoSEGraph = __webpack_require__(19);
 var CoSENode = __webpack_require__(21);
 var CoSEEdge = __webpack_require__(18);
 var CoSEConstants = __webpack_require__(17);
-var FDLayoutConstants = __webpack_require__(1);
+var FDLayoutConstants = __webpack_require__(2);
 var LayoutConstants = __webpack_require__(0);
 var Point = __webpack_require__(13);
-var PointD = __webpack_require__(5);
+var PointD = __webpack_require__(6);
 var Layout = __webpack_require__(12);
-var Integer = __webpack_require__(2);
+var Integer = __webpack_require__(3);
 var IGeometry = __webpack_require__(7);
-var LGraph = __webpack_require__(4);
+var LGraph = __webpack_require__(5);
 var Transform = __webpack_require__(15);
+var HashSet = __webpack_require__(1);
 
 function CoSELayout() {
   FDLayout.call(this);
@@ -4450,7 +4468,7 @@ CoSELayout.prototype.classicLayout = function () {
         this.reduceTrees();
         // Update nodes that gravity will be applied
         this.graphManager.resetAllNodesToApplyGravitation();
-        var allNodes = new Set(this.getAllNodes());
+        var allNodes = new HashSet(this.getAllNodes());
         var intersection = this.nodesWithGravity.filter(function (x) {
           return allNodes.has(x);
         });
@@ -4498,7 +4516,7 @@ CoSELayout.prototype.tick = function () {
         this.growTree(this.prunedNodesAll);
         // Update nodes that gravity will be applied
         this.graphManager.resetAllNodesToApplyGravitation();
-        var allNodes = new Set(this.getAllNodes());
+        var allNodes = new HashSet(this.getAllNodes());
         var intersection = this.nodesWithGravity.filter(function (x) {
           return allNodes.has(x);
         });

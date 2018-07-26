@@ -4,6 +4,7 @@ var LayoutConstants = require('./LayoutConstants');
 var IGeometry = require('./IGeometry');
 var IMath = require('./IMath');
 var Integer = require('./Integer');
+var HashSet = require('./HashSet');
 
 function FDLayout() {
   Layout.call(this);
@@ -146,7 +147,7 @@ FDLayout.prototype.calcRepulsionForces = function () {
       this.updateGrid();  
     }
 
-    processedNodeSet = new Set();
+    processedNodeSet = new HashSet();
     
     // calculate repulsion forces between each nodes and its surrounding
     for (i = 0; i < lNodes.length; i++)
@@ -465,7 +466,7 @@ FDLayout.prototype.calculateRepulsionForceOfANode = function (nodeA, processedNo
   
   if ((this.totalIterations % FDLayoutConstants.GRID_CALCULATION_CHECK_PERIOD == 1 && !this.isTreeGrowing && !this.isGrowthFinished) || (this.growTreeIterations % 10 == 1 && this.isTreeGrowing) || (this.afterGrowthIterations % 10 == 1 && this.isGrowthFinished))
   {
-    var surrounding = new Set();
+    var surrounding = new HashSet();
     nodeA.surrounding = new Array();
     var nodeB;
     var grid = this.grid;
@@ -508,7 +509,7 @@ FDLayout.prototype.calculateRepulsionForceOfANode = function (nodeA, processedNo
       }
     }
 
-    nodeA.surrounding = [...surrounding];
+    nodeA.surrounding = [...surrounding.getAll()];
 	
   }
   for (i = 0; i < nodeA.surrounding.length; i++)

@@ -1,14 +1,30 @@
 var UniqueIDGeneretor = require('./UniqueIDGeneretor');
 
-function HashSet() {
+function HashSet(elements) {
   this.set = {};
-}
-;
+  if (elements != undefined)
+  {   
+    for (var i = 0, len = elements.length; i < len; i++) {
+      this.add(elements[i]);
+    }   
+  }
+};
+
+HashSet.prototype.has = function (obj) {
+  return this.contains(obj);
+};
+
+HashSet.prototype.getAll = function () {
+  var allElements = [];
+  for(var elementKey in this.set) {
+    allElements.push(this.set[elementKey]);
+  }
+  return allElements;
+};
 
 HashSet.prototype.add = function (obj) {
   var theId = UniqueIDGeneretor.createID(obj);
-  if (!this.contains(theId))
-    this.set[theId] = obj;
+  if (!this.contains(theId)) this.set[theId] = obj;
 };
 
 HashSet.prototype.remove = function (obj) {
@@ -53,3 +69,4 @@ HashSet.prototype.addAll = function (list) {
 };
 
 module.exports = HashSet;
+
