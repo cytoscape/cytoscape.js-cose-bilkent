@@ -201,7 +201,7 @@ LNode.prototype.getNeighborsList = function ()
 
 LNode.prototype.withChildren = function ()
 {
-  var withNeighborsList = new Set();
+  var withNeighborsList = new HashSet();
   var childNode;
   var children;
 
@@ -214,7 +214,7 @@ LNode.prototype.withChildren = function ()
     {
       childNode = nodes[i];
       children = childNode.withChildren();
-      children.forEach(function(node) {
+      children.getAll().forEach(function(node) {
         withNeighborsList.add(node);
       });
     }

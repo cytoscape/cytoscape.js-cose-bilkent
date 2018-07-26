@@ -13,6 +13,7 @@ var Integer = require('./Integer');
 var IGeometry = require('./IGeometry');
 var LGraph = require('./LGraph');
 var Transform = require('./Transform');
+var HashSet = require('./HashSet');
 
 function CoSELayout() {
   FDLayout.call(this);
@@ -110,7 +111,7 @@ CoSELayout.prototype.classicLayout = function () {
       this.reduceTrees();
       // Update nodes that gravity will be applied
       this.graphManager.resetAllNodesToApplyGravitation();
-      var allNodes = new Set(this.getAllNodes());
+      var allNodes = new HashSet(this.getAllNodes());
       var intersection = this.nodesWithGravity.filter(x => allNodes.has(x));
       this.graphManager.setAllNodesToApplyGravitation(intersection);
       
@@ -161,7 +162,7 @@ CoSELayout.prototype.tick = function() {
         this.growTree(this.prunedNodesAll);
         // Update nodes that gravity will be applied
         this.graphManager.resetAllNodesToApplyGravitation();
-        var allNodes = new Set(this.getAllNodes());
+        var allNodes = new HashSet(this.getAllNodes());
         var intersection = this.nodesWithGravity.filter(x => allNodes.has(x));
         this.graphManager.setAllNodesToApplyGravitation(intersection);
         

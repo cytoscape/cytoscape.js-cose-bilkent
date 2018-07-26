@@ -423,7 +423,7 @@ LGraph.prototype.updateConnected = function ()
   var neighborEdges;
   var currentNeighbor;
   var childrenOfNode = currentNode.withChildren();
-  childrenOfNode.forEach(function(node) {
+  childrenOfNode.getAll().forEach(function(node) {
     toBeVisited.push(node);
   });
 
@@ -447,7 +447,7 @@ LGraph.prototype.updateConnected = function ()
       {
         var childrenOfNeighbor = currentNeighbor.withChildren();
 
-        childrenOfNeighbor.forEach(function(node) {
+        childrenOfNeighbor.getAll().forEach(function(node) {
           toBeVisited.push(node);
         });
       }
