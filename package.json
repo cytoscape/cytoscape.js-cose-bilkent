@@ -4,10 +4,8 @@
   "description": "The CoSE layout for Cytoscape.js by Bilkent with enhanced compound node placement",
   "main": "cytoscape-cose-bilkent.js",
   "scripts": {
-    "postpublish": "run-s gh-pages:demo gh-pages:deploy gh-pages:clean",
-    "gh-pages:demo": "cpy demo.html . --rename=index.html",
-    "gh-pages:deploy": "gh-pages -d . -v node_modules/**",
-    "gh-pages:clean": "rimraf index.html",
+    "postpublish": "run-s gh-pages",
+    "gh-pages": "gh-pages -d pages",
     "copyright": "update license",
     "lint": "eslint src",
     "build": "cross-env NODE_ENV=production webpack",
