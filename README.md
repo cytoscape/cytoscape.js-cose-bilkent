@@ -107,6 +107,8 @@ var defaultOptions = {
 };
 ```
 
+*Note that this extension supports only relatively modern browsers.  Browsers like IE require significant shimming, for example with [core-js](https://www.npmjs.com/package/core-js).*
+
 
 ## Build targets
 
