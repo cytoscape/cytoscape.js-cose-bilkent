@@ -389,6 +389,19 @@ FDLayout.prototype.animate = function () {
   }
 };
 
+//This method calculates the number of children (weight) for all nodes
+FDLayout.prototype.calcNoOfChildrenForAllNodes = function ()
+{
+  var node;
+  var allNodes = this.graphManager.getAllNodes();
+  
+  for(var i = 0; i < allNodes.length; i++)
+  {
+      node = allNodes[i];
+      node.noOfChildren = node.getNoOfChildren();
+  }
+};
+
 // -----------------------------------------------------------------------------
 // Section: FR-Grid Variant Repulsion Force Calculation
 // -----------------------------------------------------------------------------

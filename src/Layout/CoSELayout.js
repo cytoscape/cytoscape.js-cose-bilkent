@@ -270,18 +270,6 @@ CoSELayout.prototype.calculateNodesToApplyGravitationTo = function () {
   return nodeList;
 };
 
-CoSELayout.prototype.calcNoOfChildrenForAllNodes = function ()
-{
-  var node;
-  var allNodes = this.graphManager.getAllNodes();
-  
-  for(var i = 0; i < allNodes.length; i++)
-  {
-      node = allNodes[i];
-      node.noOfChildren = node.getNoOfChildren();
-  }
-};
-
 CoSELayout.prototype.createBendpoints = function () {
   var edges = [];
   edges = edges.concat(this.graphManager.getAllEdges());
