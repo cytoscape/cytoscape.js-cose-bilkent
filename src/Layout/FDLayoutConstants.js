@@ -1,4 +1,4 @@
-var LayoutConstants = require('./LayoutConstants');
+var LayoutConstants = require('layout-base').LayoutConstants;
 
 function FDLayoutConstants() {
 }

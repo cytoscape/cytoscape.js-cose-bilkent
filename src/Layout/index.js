@@ -1,34 +1,12 @@
 'use strict';
 
-var DimensionD = require('./DimensionD');
-var HashMap = require('./HashMap');
-var HashSet = require('./HashSet');
-var IGeometry = require('./IGeometry');
-var IMath = require('./IMath');
-var Integer = require('./Integer');
-var Point = require('./Point');
-var PointD = require('./PointD');
-var RandomSeed = require('./RandomSeed');
-var RectangleD = require('./RectangleD');
-var Transform = require('./Transform');
-var UniqueIDGeneretor = require('./UniqueIDGeneretor');
-var LGraphObject = require('./LGraphObject');
-var LGraph = require('./LGraph');
-var LEdge = require('./LEdge');
-var LGraphManager = require('./LGraphManager');
-var LNode = require('./LNode');
-var Layout = require('./Layout');
-var LayoutConstants = require('./LayoutConstants');
-var FDLayout = require('./FDLayout');
+var LayoutConstants = require('layout-base').LayoutConstants;
 var FDLayoutConstants = require('./FDLayoutConstants');
-var FDLayoutEdge = require('./FDLayoutEdge');
-var FDLayoutNode = require('./FDLayoutNode');
 var CoSEConstants = require('./CoSEConstants');
-var CoSEEdge = require('./CoSEEdge');
-var CoSEGraph = require('./CoSEGraph');
-var CoSEGraphManager = require('./CoSEGraphManager');
 var CoSELayout = require('./CoSELayout');
 var CoSENode = require('./CoSENode');
+var PointD = require('layout-base').PointD;
+var DimensionD = require('layout-base').DimensionD;
 
 var defaults = {
   // Called on `layoutready`

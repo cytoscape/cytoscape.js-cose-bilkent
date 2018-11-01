@@ -5,14 +5,14 @@ var CoSENode = require('./CoSENode');
 var CoSEEdge = require('./CoSEEdge');
 var CoSEConstants = require('./CoSEConstants');
 var FDLayoutConstants = require('./FDLayoutConstants');
-var LayoutConstants = require('./LayoutConstants');
-var Point = require('./Point');
-var PointD = require('./PointD');
-var Layout = require('./Layout');
-var Integer = require('./Integer');
-var IGeometry = require('./IGeometry');
-var LGraph = require('./LGraph');
-var Transform = require('./Transform');
+var LayoutConstants = require('layout-base').LayoutConstants;
+var Point = require('layout-base').Point;
+var PointD = require('layout-base').PointD;
+var Layout = require('layout-base').Layout;
+var Integer = require('layout-base').Integer;
+var IGeometry = require('layout-base').IGeometry;
+var LGraph = require('layout-base').LGraph;
+var Transform = require('layout-base').Transform;
 
 function CoSELayout() {
   FDLayout.call(this);

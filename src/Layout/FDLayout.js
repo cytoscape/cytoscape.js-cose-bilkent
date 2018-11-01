@@ -1,9 +1,8 @@
-var Layout = require('./Layout');
+var Layout = require('layout-base').Layout;
 var FDLayoutConstants = require('./FDLayoutConstants');
-var LayoutConstants = require('./LayoutConstants');
-var IGeometry = require('./IGeometry');
-var IMath = require('./IMath');
-var Integer = require('./Integer');
+var LayoutConstants = require('layout-base').LayoutConstants;
+var IGeometry = require('layout-base').IGeometry;
+var IMath = require('layout-base').IMath;
 
 function FDLayout() {
   Layout.call(this);

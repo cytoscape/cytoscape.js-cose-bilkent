@@ -1,4 +1,4 @@
-var LGraphManager = require('./LGraphManager');
+var LGraphManager = require('layout-base').LGraphManager;
 
 function CoSEGraphManager(layout) {
   LGraphManager.call(this, layout);

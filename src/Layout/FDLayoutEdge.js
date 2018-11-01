@@ -1,4 +1,4 @@
-var LEdge = require('./LEdge');
+var LEdge = require('layout-base').LEdge;
 var FDLayoutConstants = require('./FDLayoutConstants');
 
 function FDLayoutEdge(source, target, vEdge) {

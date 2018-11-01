@@ -1,4 +1,4 @@
-var LNode = require('./LNode');
+var LNode = require('layout-base').LNode;
 
 function FDLayoutNode(gm, loc, size, vNode) {
   // alternative constructor is handled inside LNode
