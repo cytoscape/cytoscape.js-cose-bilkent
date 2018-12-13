@@ -1,4 +1,4 @@
-var FDLayoutEdge = require('./FDLayoutEdge');
+var FDLayoutEdge = require('layout-base').FDLayoutEdge;
 
 function CoSEEdge(source, target, vEdge) {
   FDLayoutEdge.call(this, source, target, vEdge);

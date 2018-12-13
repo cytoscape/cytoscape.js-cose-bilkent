@@ -1,4 +1,4 @@
-var FDLayoutConstants = require('./FDLayoutConstants');
+var FDLayoutConstants = require('layout-base').FDLayoutConstants;
 
 function CoSEConstants() {
 }

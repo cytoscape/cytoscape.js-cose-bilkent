@@ -1,7 +1,7 @@
 'use strict';
 
 var LayoutConstants = require('layout-base').LayoutConstants;
-var FDLayoutConstants = require('./FDLayoutConstants');
+var FDLayoutConstants = require('layout-base').FDLayoutConstants;
 var CoSEConstants = require('./CoSEConstants');
 var CoSELayout = require('./CoSELayout');
 var CoSENode = require('./CoSENode');

@@ -1,4 +1,4 @@
-var FDLayoutNode = require('./FDLayoutNode');
+var FDLayoutNode = require('layout-base').FDLayoutNode;
 var IMath = require('layout-base').IMath;
 
 function CoSENode(gm, loc, size, vNode) {
