@@ -5,7 +5,8 @@ cytoscape-cose-bilkent
 
 ## Description
 
-The CoSE layout for Cytoscape.js by the [i-Vis Lab](http://cs.bilkent.edu.tr/~ivis/) in Bilkent University ([demo](https://cytoscape.github.io/cytoscape.js-cose-bilkent/demo.html), [compound demo](https://cytoscape.github.io/cytoscape.js-cose-bilkent/demo-compound.html))
+The CoSE (Compound Spring Embedder) layout for Cytoscape.js developed by [i-Vis Lab](http://cs.bilkent.edu.tr/~ivis/) in Bilkent University is a spring embedder layout with support for compound graphs (nested structures) and varying (non-uniform) node dimensions.
+([demo](https://cytoscape.github.io/cytoscape.js-cose-bilkent/demo.html), [compound demo](https://cytoscape.github.io/cytoscape.js-cose-bilkent/demo-compound.html))
 
 Please cite the following when using this layout:
 
