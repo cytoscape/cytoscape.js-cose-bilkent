@@ -67,6 +67,11 @@ var defaultOptions = {
   // Called on `layoutstop`
   stop: function () {
   },
+  // 'draft', 'default' or 'proof" 
+  // - 'draft' fast cooling rate 
+  // - 'default' moderate cooling rate 
+  // - "proof" slow cooling rate
+  quality: 'default',
   // Whether to include labels in node dimensions. Useful for avoiding label overlap
   nodeDimensionsIncludeLabels: false,
   // number of ticks per frame; higher is faster but more jerky
@@ -93,6 +98,8 @@ var defaultOptions = {
   tile: true,
   // Type of layout animation. The option set is {'during', 'end', false}
   animate: 'end',
+  // Duration for animate:end
+  animationDuration: 500,
   // Amount of vertical space to put between degree zero nodes during tiling (can also be a function)
   tilingPaddingVertical: 10,
   // Amount of horizontal space to put between degree zero nodes during tiling (can also be a function)

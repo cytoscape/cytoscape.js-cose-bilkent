@@ -15,6 +15,11 @@ var defaults = {
   // Called on `layoutstop`
   stop: function () {
   },
+  // 'draft', 'default' or 'proof" 
+  // - 'draft' fast cooling rate 
+  // - 'default' moderate cooling rate 
+  // - "proof" slow cooling rate
+  quality: 'default',
   // include labels in node dimensions
   nodeDimensionsIncludeLabels: false,
   // number of ticks per frame; higher is faster but more jerky
@@ -97,6 +102,13 @@ var getUserOptions = function (options) {
     CoSEConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = options.gravityRangeCompound;
   if (options.initialEnergyOnIncremental != null)
     CoSEConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = options.initialEnergyOnIncremental;
+  
+  if (options.quality == 'draft')
+    LayoutConstants.QUALITY = 0;
+  else if(options.quality == 'proof')
+    LayoutConstants.QUALITY = 2;
+  else
+    LayoutConstants.QUALITY = 1;
 
   CoSEConstants.NODE_DIMENSIONS_INCLUDE_LABELS = FDLayoutConstants.NODE_DIMENSIONS_INCLUDE_LABELS = LayoutConstants.NODE_DIMENSIONS_INCLUDE_LABELS = options.nodeDimensionsIncludeLabels;
   CoSEConstants.DEFAULT_INCREMENTAL = FDLayoutConstants.DEFAULT_INCREMENTAL = LayoutConstants.DEFAULT_INCREMENTAL =
