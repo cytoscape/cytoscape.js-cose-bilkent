@@ -46,11 +46,16 @@
         var cy = window.cy = cytoscape({
           container: document.getElementById('cy'),
 
-          layout: {
-            name: 'cose-bilkent',
-            animate: false
+          ready: function(){
+            this.nodes().forEach(function(node){
+              let width = [30, 70, 110];
+              let size = width[Math.floor(Math.random()*3)];
+              node.css("width", size);
+              node.css("height", size);
+            });
+            this.layout({name: 'cose-bilkent', animationDuration: 1000}).run();
           },
-
+            
           style: [
             {
               selector: 'node',
@@ -75,7 +80,7 @@
             }
           ],
 
-          elements: [{ group:'nodes', data:{ id: 'n0'}},
+            elements: [{ group:'nodes', data:{ id: 'n0'}},
                     { group:'nodes', data:{ id: 'n1'}},
                     { group:'nodes', data:{ id: 'n2'}},
                     { group:'nodes', data:{ id: 'n3'}},
@@ -86,7 +91,6 @@
                     { group:'nodes', data:{ id: 'n8', parent: 'n37'}},
                     { group:'nodes', data:{ id: 'n9', parent: 'n37'}},
                     { group:'nodes', data:{ id: 'n10', parent: 'n38'}},
-                    { group:'nodes', data:{ id: 'n11', parent: 'n38'}},
                     { group:'nodes', data:{ id: 'n12'}},
                     { group:'nodes', data:{ id: 'n13'}},
                     { group:'nodes', data:{ id: 'n14'}},
@@ -105,7 +109,6 @@
                     { group:'nodes', data:{ id: 'n27', parent: 'n42'}},
                     { group:'nodes', data:{ id: 'n28', parent: 'n42'}},
                     { group:'nodes', data:{ id: 'n29', parent: 'n40'}},
-                    { group:'nodes', data:{ id: 'n30', parent: 'n40'}},
                     { group:'nodes', data:{ id: 'n31', parent: 'n41'}},
                     { group:'nodes', data:{ id: 'n32', parent: 'n41'}},
                     { group:'nodes', data:{ id: 'n33', parent: 'n41'}},
@@ -119,9 +122,6 @@
                     { group:'nodes', data:{ id: 'n41', parent: 'n42'}},
                     { group:'nodes', data:{ id: 'n42', parent: 'n43'}},
                     { group:'nodes', data:{ id: 'n43'}},
-                    { group:'nodes', data:{ id: 'n44', parent: 'n38'}},
-                    { group:'nodes', data:{ id: 'n45', parent: 'n38'}},
-                    { group:'nodes', data:{ id: 'n46', parent: 'n38'}},
                     { group:'edges', data:{ id: 'e0', source: 'n0', target: 'n1'} },
                     { group:'edges', data:{ id: 'e1', source: 'n1', target: 'n2'} },
                     { group:'edges', data:{ id: 'e2', source: 'n2', target: 'n3'} },
@@ -146,23 +146,19 @@
                     { group:'edges', data:{ id: 'e21', source: 'n19', target: 'n20'} },
                     { group:'edges', data:{ id: 'e22', source: 'n16', target: 'n20'} },
                     { group:'edges', data:{ id: 'e23', source: 'n20', target: 'n21'} },
-                    { group:'edges', data:{ id: 'e24', source: 'n22', target: 'n24'} },
                     { group:'edges', data:{ id: 'e25', source: 'n23', target: 'n24'} },
                     { group:'edges', data:{ id: 'e26', source: 'n24', target: 'n25'} },
                     { group:'edges', data:{ id: 'e27', source: 'n26', target: 'n38'} },
-                    { group:'edges', data:{ id: 'e28', source: 'n26', target: 'n37'} },
                     { group:'edges', data:{ id: 'e29', source: 'n26', target: 'n39'} },
                     { group:'edges', data:{ id: 'e30', source: 'n26', target: 'n27'} },
                     { group:'edges', data:{ id: 'e31', source: 'n26', target: 'n28'} },
-                    { group:'edges', data:{ id: 'e32', source: 'n26', target: 'n40'} },
                     { group:'edges', data:{ id: 'e33', source: 'n21', target: 'n31'} },
-                    { group:'edges', data:{ id: 'e34', source: 'n21', target: 'n32'} },
                     { group:'edges', data:{ id: 'e35', source: 'n31', target: 'n33'} },
                     { group:'edges', data:{ id: 'e36', source: 'n31', target: 'n34'} },
                     { group:'edges', data:{ id: 'e37', source: 'n33', target: 'n34'} },
                     { group:'edges', data:{ id: 'e38', source: 'n32', target: 'n35'} },
                     { group:'edges', data:{ id: 'e39', source: 'n32', target: 'n36'} },
-                    { group:'edges', data:{ id: 'e40', source: 'n16', target: 'n40'} },
+                    { group:'edges', data:{ id: 'e40', source: 'n16', target: 'n40'} }
                    ]
         });
         document.getElementById("layoutButton").addEventListener("click", function(){
