@@ -243,7 +243,7 @@ _CoSELayout.prototype.run = function () {
     // Thigs to perform after nodes are repositioned on screen
     var afterReposition = function afterReposition() {
       if (options.fit) {
-        options.cy.fit(options.eles.nodes(), options.padding);
+        options.cy.fit(options.eles, options.padding);
       }
 
       if (!ready) {
