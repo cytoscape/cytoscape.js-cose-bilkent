@@ -1,6 +1,6 @@
 {
   "name": "cytoscape-cose-bilkent",
-  "version": "2.1.0",
+  "version": "4.0.0",
   "description": "The CoSE layout for Cytoscape.js by Bilkent with enhanced compound node placement",
   "main": "cytoscape-cose-bilkent.js",
   "scripts": {
