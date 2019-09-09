@@ -15,6 +15,7 @@ U. Dogrusoz, E. Giral, A. Cetintas, A. Civril, and E. Demir, "[A Layout Algorith
 ## Dependencies
 
  * Cytoscape.js ^3.2.0
+ * cose-base ^1.0.0
 
 
 ## Usage instructions
@@ -116,6 +117,7 @@ var defaultOptions = {
 ```
 
 *Note that this extension supports only relatively modern browsers.  Browsers like IE require significant shimming, for example with [core-js](https://www.npmjs.com/package/core-js).*
+*Note that while running Cytoscape in headless mode, stylingEnabled should be set as true because this extension considers node dimensions.*
 
 
 ## Build targets
