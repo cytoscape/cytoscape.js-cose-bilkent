@@ -117,7 +117,8 @@ var defaultOptions = {
 ```
 
 *Note that this extension supports only relatively modern browsers.  Browsers like IE require significant shimming, for example with [core-js](https://www.npmjs.com/package/core-js).*
-*Note that while running Cytoscape in headless mode, stylingEnabled should be set as true because this extension considers node dimensions.*
+
+*Note that while running Cytoscape.js in headless mode, stylingEnabled option of Cytoscape.js should be set as true because this extension considers node dimensions and some other styling properties.*
 
 
 ## Build targets
