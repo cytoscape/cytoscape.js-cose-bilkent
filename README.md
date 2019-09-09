@@ -15,6 +15,7 @@ U. Dogrusoz, E. Giral, A. Cetintas, A. Civril, and E. Demir, "[A Layout Algorith
 ## Dependencies
 
  * Cytoscape.js ^3.2.0
+ * cose-base ^1.0.0
 
 
 ## Usage instructions
@@ -67,6 +68,11 @@ var defaultOptions = {
   // Called on `layoutstop`
   stop: function () {
   },
+  // 'draft', 'default' or 'proof" 
+  // - 'draft' fast cooling rate 
+  // - 'default' moderate cooling rate 
+  // - "proof" slow cooling rate
+  quality: 'default',
   // Whether to include labels in node dimensions. Useful for avoiding label overlap
   nodeDimensionsIncludeLabels: false,
   // number of ticks per frame; higher is faster but more jerky
@@ -93,6 +99,8 @@ var defaultOptions = {
   tile: true,
   // Type of layout animation. The option set is {'during', 'end', false}
   animate: 'end',
+  // Duration for animate:end
+  animationDuration: 500,
   // Amount of vertical space to put between degree zero nodes during tiling (can also be a function)
   tilingPaddingVertical: 10,
   // Amount of horizontal space to put between degree zero nodes during tiling (can also be a function)
@@ -107,6 +115,10 @@ var defaultOptions = {
   initialEnergyOnIncremental: 0.5
 };
 ```
+
+*Note that this extension supports only relatively modern browsers.  Browsers like IE require significant shimming, for example with [core-js](https://www.npmjs.com/package/core-js).*
+
+*Note that while running Cytoscape.js in headless mode, stylingEnabled option of Cytoscape.js should be set as true because this extension considers node dimensions and some other styling properties.*
 
 
 ## Build targets
@@ -124,7 +136,7 @@ N.b. all builds use babel, so modern ES features can be used in the `src`.
 
 This project is set up to automatically be published to npm and bower.  To publish:
 
-1. Build the extension : `npm run build`
+1. Build the extension : `npm run build:release`
 1. Commit the build : `git commit -am "Build for release"`
 1. Bump the version number and tag: `npm version major|minor|patch`
 1. Push to origin: `git push && git push --tags`

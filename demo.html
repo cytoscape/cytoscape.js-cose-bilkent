@@ -12,6 +12,10 @@
     <!-- for testing with local version of cytoscape.js -->
     <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
 
+    <!--polyfills are needed for this extension for old browsers like IE -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/shim.min.js"></script>
+    <script src="https://raw.githack.com/iVis-at-Bilkent/layout-base/unstable/layout-base.js"></script>
+    <script src="https://raw.githack.com/iVis-at-Bilkent/cose-base/unstable/cose-base.js"></script>
     <script src="cytoscape-cose-bilkent.js"></script>
 
     <style>
@@ -42,10 +46,14 @@
         var cy = window.cy = cytoscape({
           container: document.getElementById('cy'),
 
-          layout: {
-            name: 'cose-bilkent',
-            animate: false,
-            randomize: true
+          ready: function(){
+            this.nodes().forEach(function(node){
+              let width = [30, 70, 110];
+              let size = width[Math.floor(Math.random()*3)];
+              node.css("width", size);
+              node.css("height", size);
+            });
+            this.layout({name: 'cose-bilkent', animationDuration: 1000}).run();
           },
 
           style: [
