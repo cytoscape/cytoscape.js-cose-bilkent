@@ -107,9 +107,11 @@ var defaults = {
   // - 'default' moderate cooling rate 
   // - "proof" slow cooling rate
   quality: 'default',
-  // include labels in node dimensions
+  // Include labels in node dimensions
   nodeDimensionsIncludeLabels: false,
-  // number of ticks per frame; higher is faster but more jerky
+  // Whether or not simple nodes (non-compound nodes) are of uniform dimensions
+  uniformNodeDimensions: false,
+  // Number of ticks per frame; higher is faster but more jerky
   refresh: 30,
   // Whether to fit the network view after when done
   fit: true,
@@ -188,6 +190,7 @@ var getUserOptions = function getUserOptions(options) {
   CoSEConstants.TILE = options.tile;
   CoSEConstants.TILING_PADDING_VERTICAL = typeof options.tilingPaddingVertical === 'function' ? options.tilingPaddingVertical.call() : options.tilingPaddingVertical;
   CoSEConstants.TILING_PADDING_HORIZONTAL = typeof options.tilingPaddingHorizontal === 'function' ? options.tilingPaddingHorizontal.call() : options.tilingPaddingHorizontal;
+  LayoutConstants.DEFAULT_UNIFORM_LEAF_NODE_SIZES = options.uniformNodeDimensions;
 };
 
 _CoSELayout.prototype.run = function () {

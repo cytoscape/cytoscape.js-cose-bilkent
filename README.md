@@ -81,7 +81,9 @@ var defaultOptions = {
   quality: 'default',
   // Whether to include labels in node dimensions. Useful for avoiding label overlap
   nodeDimensionsIncludeLabels: false,
-  // number of ticks per frame; higher is faster but more jerky
+  // Whether or not simple nodes (non-compound nodes) are of uniform dimensions
+  uniformNodeDimensions: false,
+  // Number of ticks per frame; higher is faster but more jerky
   refresh: 30,
   // Whether to fit the network view after when done
   fit: true,
