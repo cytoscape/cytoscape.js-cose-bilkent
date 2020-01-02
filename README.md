@@ -12,6 +12,8 @@ Please cite the following when using this layout:
 
 U. Dogrusoz, E. Giral, A. Cetintas, A. Civril, and E. Demir, "[A Layout Algorithm For Undirected Compound Graphs](http://www.sciencedirect.com/science/article/pii/S0020025508004799)", Information Sciences, 179, pp. 980-994, 2009.
 
+<p align="center"><img src="demo.gif" width="600"></p>
+
 ## Dependencies
 
  * Cytoscape.js ^3.2.0
