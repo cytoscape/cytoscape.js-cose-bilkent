@@ -406,12 +406,10 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
     //Attach the label properties to compound if labels will be included in node dimensions  
     if (this.options.nodeDimensionsIncludeLabels) {
       if (theChild.isParent()) {
-        var labelWidth = theChild.boundingBox({ includeLabels: true, includeNodes: false }).w;
-        var labelHeight = theChild.boundingBox({ includeLabels: true, includeNodes: false }).h;
-        var labelPos = theChild.css("text-halign");
-        theNode.labelWidth = labelWidth;
-        theNode.labelHeight = labelHeight;
-        theNode.labelPos = labelPos;
+        theNode.labelWidth = theChild.boundingBox({ includeLabels: true, includeNodes: false, includeOverlays: false }).w;
+        theNode.labelHeight = theChild.boundingBox({ includeLabels: true, includeNodes: false, includeOverlays: false }).h;
+        theNode.labelPosVertical = theChild.css("text-valign");
+        theNode.labelPosHorizontal = theChild.css("text-halign");
       }
     }
 
