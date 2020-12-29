@@ -94,11 +94,11 @@ var defaultOptions = {
   // Whether to enable incremental mode
   randomize: true,
   // Node repulsion (non overlapping) multiplier
-  nodeRepulsion: 4500,
-  // Ideal (intra-graph) edge length
-  idealEdgeLength: 50,
+  nodeRepulsion: function ( node ){ return 4500; },
+  // Ideal edge (non nested) length
+  idealEdgeLength: function (edge){ return 50; },
   // Divisor to compute edge forces
-  edgeElasticity: 0.45,
+  edgeElasticity: function ( edge ){ return 0.45; },
   // Nesting factor (multiplier) to compute ideal edge length for inter-graph edges
   nestingFactor: 0.1,
   // Gravity force (constant)
