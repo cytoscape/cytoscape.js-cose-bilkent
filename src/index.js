@@ -387,8 +387,8 @@ _CoSELayout.prototype.processEdgeList = function (gm, edges, layout) {
   if (this.options.idealEdgeLength != null){
     if (edges.length > 0)
       CoSEConstants.DEFAULT_EDGE_LENGTH = FDLayoutConstants.DEFAULT_EDGE_LENGTH = idealLengthTotal / edgeCount;
-    else if(!isFn(options.idealEdgeLength)) // in case there is no edge, but option gives a value to use
-      CoSEConstants.DEFAULT_EDGE_LENGTH = FDLayoutConstants.DEFAULT_EDGE_LENGTH = options.idealEdgeLength;
+    else if(!isFn(this.options.idealEdgeLength)) // in case there is no edge, but option gives a value to use
+      CoSEConstants.DEFAULT_EDGE_LENGTH = FDLayoutConstants.DEFAULT_EDGE_LENGTH = this.options.idealEdgeLength;
     else  // in case there is no edge and we cannot get a value from option (because it's a function)
       CoSEConstants.DEFAULT_EDGE_LENGTH = FDLayoutConstants.DEFAULT_EDGE_LENGTH = 50;
     // we need to update these constant values based on the ideal edge length constant
