@@ -160,10 +160,31 @@ _CoSELayout.prototype.run = function () {
     }
     var theId = ele.data('id');
     var lNode = self.idToLNode[theId];
+    var centerX = lNode.getRect().getCenterX();
+    var centerY = lNode.getRect().getCenterY();
+
+    if(options.nodeDimensionsIncludeLabels){
+      if(lNode.labelWidth){
+        if(lNode.labelPosHorizontal == "left"){
+          centerX += lNode.labelWidth/2;
+        }
+        else if(lNode.labelPosHorizontal == "right"){
+          centerX -= lNode.labelWidth/2;
+        }
+      }
+      if(lNode.labelHeight){
+        if(lNode.labelPosVertical == "top"){
+          centerY += lNode.labelHeight/2;
+        }
+        else if(lNode.labelPosVertical == "bottom"){
+          centerY -= lNode.labelHeight/2;
+        }
+      }
+    }
 
     return {
-      x: lNode.getRect().getCenterX(),
-      y: lNode.getRect().getCenterY()
+      x: centerX,
+      y: centerY
     };
   };
   
@@ -336,14 +357,14 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
     theNode.paddingRight = parseInt( theChild.css('padding') );
     theNode.paddingBottom = parseInt( theChild.css('padding') );
     
-    //Attach the label properties to compound if labels will be included in node dimensions  
+    //Attach the label properties to both compound and simple nodes if labels will be included in node dimensions
+    //These properties will be used while updating bounds of compounds during iterations or tiling
+    //and will be used for simple nodes while transferring final positions to cytoscape
     if(this.options.nodeDimensionsIncludeLabels){
-      if(theChild.isParent()){
-        theNode.labelWidth = theChild.boundingBox({ includeLabels: true, includeNodes: false, includeOverlays: false }).w;
-        theNode.labelHeight = theChild.boundingBox({ includeLabels: true, includeNodes: false, includeOverlays: false }).h;
-        theNode.labelPosVertical = theChild.css("text-valign");
-        theNode.labelPosHorizontal = theChild.css("text-halign");
-      }
+      theNode.labelWidth = theChild.boundingBox({ includeLabels: true, includeNodes: false, includeOverlays: false }).w;
+      theNode.labelHeight = theChild.boundingBox({ includeLabels: true, includeNodes: false, includeOverlays: false }).h;
+      theNode.labelPosVertical = theChild.css("text-valign");
+      theNode.labelPosHorizontal = theChild.css("text-halign");
     }
     
     // Map the layout node
