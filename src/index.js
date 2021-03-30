@@ -406,7 +406,7 @@ _CoSELayout.prototype.processEdgeList = function (gm, edges, layout) {
   // we need to update the ideal edge length constant with the avg. ideal length value after processing edges
   // in case there is no edge, use other options
   if (this.options.idealEdgeLength != null){
-    if (edges.length > 0)
+    if (edgeCount > 0)
       CoSEConstants.DEFAULT_EDGE_LENGTH = FDLayoutConstants.DEFAULT_EDGE_LENGTH = idealLengthTotal / edgeCount;
     else if(!isFn(this.options.idealEdgeLength)) // in case there is no edge, but option gives a value to use
       CoSEConstants.DEFAULT_EDGE_LENGTH = FDLayoutConstants.DEFAULT_EDGE_LENGTH = this.options.idealEdgeLength;
