@@ -22,6 +22,9 @@ let config = {
       { test: /\.js$/, exclude: /node_modules/, use: 'babel-loader' }
     ]
   },
+  optimization:
+	minimize: MIN ? true : false,
+  },
   externals: PROD ? {
     'cose-base': {
       commonjs2: 'cose-base',
@@ -30,14 +33,6 @@ let config = {
       root: 'coseBase'
     }
   } : {},
-  plugins: MIN ? [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-        drop_console: false,
-      }
-    })
-  ] : []
 };
 
 module.exports = config;
