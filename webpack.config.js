@@ -22,7 +22,7 @@ let config = {
       { test: /\.js$/, exclude: /node_modules/, use: 'babel-loader' }
     ]
   },
-  optimization:
+  optimization: {
 	minimize: MIN ? true : false,
   },
   externals: PROD ? {
