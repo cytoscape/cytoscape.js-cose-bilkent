@@ -102,9 +102,9 @@ var defaults = {
   ready: function ready() {},
   // Called on `layoutstop`
   stop: function stop() {},
-  // 'draft', 'default' or 'proof" 
-  // - 'draft' fast cooling rate 
-  // - 'default' moderate cooling rate 
+  // 'draft', 'default' or 'proof"
+  // - 'draft' fast cooling rate
+  // - 'default' moderate cooling rate
   // - "proof" slow cooling rate
   quality: 'default',
   // include labels in node dimensions
@@ -179,6 +179,7 @@ var getUserOptions = function getUserOptions(options) {
   if (options.gravityCompound != null) CoSEConstants.DEFAULT_COMPOUND_GRAVITY_STRENGTH = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_STRENGTH = options.gravityCompound;
   if (options.gravityRangeCompound != null) CoSEConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = options.gravityRangeCompound;
   if (options.initialEnergyOnIncremental != null) CoSEConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = options.initialEnergyOnIncremental;
+  if (options.tilingSortBy != null) CoSEConstants.TILING_SORT_BY = options.tilingSortBy;
 
   if (options.quality == 'draft') LayoutConstants.QUALITY = 0;else if (options.quality == 'proof') LayoutConstants.QUALITY = 2;else LayoutConstants.QUALITY = 1;
 
@@ -400,7 +401,7 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
     theNode.paddingRight = parseInt(theChild.css('padding'));
     theNode.paddingBottom = parseInt(theChild.css('padding'));
 
-    //Attach the label properties to compound if labels will be included in node dimensions  
+    //Attach the label properties to compound if labels will be included in node dimensions
     if (this.options.nodeDimensionsIncludeLabels) {
       if (theChild.isParent()) {
         var labelWidth = theChild.boundingBox({ includeLabels: true, includeNodes: false }).w;
