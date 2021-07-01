@@ -5,12 +5,15 @@ cytoscape-cose-bilkent
 
 ## Description
 
-The CoSE (Compound Spring Embedder) layout for Cytoscape.js developed by [i-Vis Lab](http://cs.bilkent.edu.tr/~ivis/) in Bilkent University is a spring embedder layout with support for compound graphs (nested structures) and varying (non-uniform) node dimensions.
-([demo](https://raw.githack.com/cytoscape/cytoscape.js-cose-bilkent/master/demo.html), [compound demo](https://raw.githack.com/cytoscape/cytoscape.js-cose-bilkent/master/demo-compound.html))
+
+The CoSE (pron. "cosay", **Co**mpound **S**pring **E**mbedder) layout for Cytoscape.js developed by [i-Vis Lab](http://cs.bilkent.edu.tr/~ivis/) in Bilkent University is a spring embedder layout with support for compound graphs (nested structures) and varying (non-uniform) node dimensions. A faster version of this layout style called fCoSE, also supporting user-defined placement constraints can be found [here](https://github.com/iVis-at-Bilkent/cytoscape.js-fcose).
+([demo](https://raw.githack.com/cytoscape/cytoscape.js-cose-bilkent/unstable/demo.html), [compound demo](https://raw.githack.com/cytoscape/cytoscape.js-cose-bilkent/unstable/demo-compound.html))
 
 Please cite the following when using this layout:
 
 U. Dogrusoz, E. Giral, A. Cetintas, A. Civril, and E. Demir, "[A Layout Algorithm For Undirected Compound Graphs](http://www.sciencedirect.com/science/article/pii/S0020025508004799)", Information Sciences, 179, pp. 980-994, 2009.
+
+<p align="center"><img src="demo.gif" width="600"></p>
 
 ## Dependencies
 
@@ -81,7 +84,9 @@ var defaultOptions = {
   quality: 'default',
   // Whether to include labels in node dimensions. Useful for avoiding label overlap
   nodeDimensionsIncludeLabels: false,
-  // number of ticks per frame; higher is faster but more jerky
+  // Whether or not simple nodes (non-compound nodes) are of uniform dimensions
+  uniformNodeDimensions: false,
+  // Number of ticks per frame; higher is faster but more jerky
   refresh: 30,
   // Whether to fit the network view after when done
   fit: true,
@@ -90,11 +95,11 @@ var defaultOptions = {
   // Whether to enable incremental mode
   randomize: true,
   // Node repulsion (non overlapping) multiplier
-  nodeRepulsion: 4500,
-  // Ideal (intra-graph) edge length
-  idealEdgeLength: 50,
+  nodeRepulsion: function ( node ){ return 4500; },
+  // Ideal edge (non nested) length
+  idealEdgeLength: function (edge){ return 50; },
   // Divisor to compute edge forces
-  edgeElasticity: 0.45,
+  edgeElasticity: function ( edge ){ return 0.45; },
   // Nesting factor (multiplier) to compute ideal edge length for inter-graph edges
   nestingFactor: 0.1,
   // Gravity force (constant)

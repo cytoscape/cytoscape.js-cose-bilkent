@@ -20,9 +20,11 @@ var defaults = {
   // - 'default' moderate cooling rate 
   // - "proof" slow cooling rate
   quality: 'default',
-  // include labels in node dimensions
+  // Include labels in node dimensions
   nodeDimensionsIncludeLabels: false,
-  // number of ticks per frame; higher is faster but more jerky
+  // Whether or not simple nodes (non-compound nodes) are of uniform dimensions
+  uniformNodeDimensions: false,
+  // Number of ticks per frame; higher is faster but more jerky
   refresh: 30,
   // Whether to fit the network view after when done
   fit: true,
@@ -31,11 +33,11 @@ var defaults = {
   // Whether to enable incremental mode
   randomize: true,
   // Node repulsion (non overlapping) multiplier
-  nodeRepulsion: 4500,
+  nodeRepulsion: function ( node ){ return 4500; },
   // Ideal edge (non nested) length
-  idealEdgeLength: 50,
+  idealEdgeLength: function (edge){ return 50; },
   // Divisor to compute edge forces
-  edgeElasticity: 0.45,
+  edgeElasticity: function ( edge ){ return 0.45; },
   // Nesting factor (multiplier) to compute ideal edge length for nested edges
   nestingFactor: 0.1,
   // Gravity force (constant)
@@ -76,18 +78,24 @@ function extend(defaults, options) {
   return obj;
 };
 
+function isFn(fn) {
+  return typeof fn === 'function';
+};
+  
+function optFn(opt, ele) {
+  if (isFn(opt)) {
+    return opt(ele);
+  } else {
+    return opt;
+  }
+};
+
 function _CoSELayout(_options) {
   this.options = extend(defaults, _options);
   getUserOptions(this.options);
 }
 
 var getUserOptions = function (options) {
-  if (options.nodeRepulsion != null)
-    CoSEConstants.DEFAULT_REPULSION_STRENGTH = FDLayoutConstants.DEFAULT_REPULSION_STRENGTH = options.nodeRepulsion;
-  if (options.idealEdgeLength != null)
-    CoSEConstants.DEFAULT_EDGE_LENGTH = FDLayoutConstants.DEFAULT_EDGE_LENGTH = options.idealEdgeLength;
-  if (options.edgeElasticity != null)
-    CoSEConstants.DEFAULT_SPRING_STRENGTH = FDLayoutConstants.DEFAULT_SPRING_STRENGTH = options.edgeElasticity;
   if (options.nestingFactor != null)
     CoSEConstants.PER_LEVEL_IDEAL_EDGE_LENGTH_FACTOR = FDLayoutConstants.PER_LEVEL_IDEAL_EDGE_LENGTH_FACTOR = options.nestingFactor;
   if (options.gravity != null)
@@ -113,7 +121,7 @@ var getUserOptions = function (options) {
     LayoutConstants.QUALITY = 1;
 
   CoSEConstants.NODE_DIMENSIONS_INCLUDE_LABELS = FDLayoutConstants.NODE_DIMENSIONS_INCLUDE_LABELS = LayoutConstants.NODE_DIMENSIONS_INCLUDE_LABELS = options.nodeDimensionsIncludeLabels;
-  CoSEConstants.DEFAULT_INCREMENTAL = FDLayoutConstants.DEFAULT_INCREMENTAL = LayoutConstants.DEFAULT_INCREMENTAL =
+  CoSEConstants.PURE_INCREMENTAL = CoSEConstants.DEFAULT_INCREMENTAL = FDLayoutConstants.DEFAULT_INCREMENTAL = LayoutConstants.DEFAULT_INCREMENTAL =
           !(options.randomize);
   CoSEConstants.ANIMATE = FDLayoutConstants.ANIMATE = LayoutConstants.ANIMATE = options.animate;
   CoSEConstants.TILE = options.tile;
@@ -121,6 +129,7 @@ var getUserOptions = function (options) {
           typeof options.tilingPaddingVertical === 'function' ? options.tilingPaddingVertical.call() : options.tilingPaddingVertical;
   CoSEConstants.TILING_PADDING_HORIZONTAL = 
           typeof options.tilingPaddingHorizontal === 'function' ? options.tilingPaddingHorizontal.call() : options.tilingPaddingHorizontal;
+  LayoutConstants.DEFAULT_UNIFORM_LEAF_NODE_SIZES = options.uniformNodeDimensions;
 };
 
 _CoSELayout.prototype.run = function () {
@@ -145,28 +154,39 @@ _CoSELayout.prototype.run = function () {
 
   this.root = gm.addRoot();
   this.processChildrenList(this.root, this.getTopMostNodes(nodes), layout);
-
-
-  for (var i = 0; i < edges.length; i++) {
-    var edge = edges[i];
-    var sourceNode = this.idToLNode[edge.data("source")];
-    var targetNode = this.idToLNode[edge.data("target")];
-    if(sourceNode !== targetNode && sourceNode.getEdgesBetween(targetNode).length == 0){
-      var e1 = gm.add(layout.newEdge(), sourceNode, targetNode);
-      e1.id = edge.id();
-    }
-  }
+  this.processEdgeList(this.gm, edges, layout);
   
-   var getPositions = function(ele, i){
+  var getPositions = function(ele, i){
     if(typeof ele === "number") {
       ele = i;
     }
     var theId = ele.data('id');
     var lNode = self.idToLNode[theId];
+    var centerX = lNode.getRect().getCenterX();
+    var centerY = lNode.getRect().getCenterY();
+
+    if(options.nodeDimensionsIncludeLabels){
+      if(lNode.labelWidth){
+        if(lNode.labelPosHorizontal == "left"){
+          centerX += lNode.labelWidth/2;
+        }
+        else if(lNode.labelPosHorizontal == "right"){
+          centerX -= lNode.labelWidth/2;
+        }
+      }
+      if(lNode.labelHeight){
+        if(lNode.labelPosVertical == "top"){
+          centerY += lNode.labelHeight/2;
+        }
+        else if(lNode.labelPosVertical == "bottom"){
+          centerY -= lNode.labelHeight/2;
+        }
+      }
+    }
 
     return {
-      x: lNode.getRect().getCenterX(),
-      y: lNode.getRect().getCenterY()
+      x: centerX,
+      y: centerY
     };
   };
   
@@ -330,24 +350,23 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
     else {
       theNode = parent.add(new CoSENode(this.graphManager));
     }
-    // Attach id to the layout node
+    // Attach id and repulsion value to the layout node
     theNode.id = theChild.data("id");
+    theNode.nodeRepulsion = optFn(this.options.nodeRepulsion, theChild);
     // Attach the paddings of cy node to layout node
     theNode.paddingLeft = parseInt( theChild.css('padding') );
     theNode.paddingTop = parseInt( theChild.css('padding') );
     theNode.paddingRight = parseInt( theChild.css('padding') );
     theNode.paddingBottom = parseInt( theChild.css('padding') );
     
-    //Attach the label properties to compound if labels will be included in node dimensions  
+    //Attach the label properties to both compound and simple nodes if labels will be included in node dimensions
+    //These properties will be used while updating bounds of compounds during iterations or tiling
+    //and will be used for simple nodes while transferring final positions to cytoscape
     if(this.options.nodeDimensionsIncludeLabels){
-      if(theChild.isParent()){
-          var labelWidth = theChild.boundingBox({ includeLabels: true, includeNodes: false }).w;          
-          var labelHeight = theChild.boundingBox({ includeLabels: true, includeNodes: false }).h;
-          var labelPos = theChild.css("text-halign");
-          theNode.labelWidth = labelWidth;
-          theNode.labelHeight = labelHeight;
-          theNode.labelPos = labelPos;
-      }
+      theNode.labelWidth = theChild.boundingBox({ includeLabels: true, includeNodes: false, includeOverlays: false }).w;
+      theNode.labelHeight = theChild.boundingBox({ includeLabels: true, includeNodes: false, includeOverlays: false }).h;
+      theNode.labelPosVertical = theChild.css("text-valign");
+      theNode.labelPosHorizontal = theChild.css("text-halign");
     }
     
     // Map the layout node
@@ -367,6 +386,38 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
       this.processChildrenList(theNewGraph, children_of_children, layout);
     }
   }
+};
+
+_CoSELayout.prototype.processEdgeList = function (gm, edges, layout) {
+  var idealLengthTotal = 0;
+  var edgeCount = 0;
+
+  for (var i = 0; i < edges.length; i++) {
+    var edge = edges[i];
+    var sourceNode = this.idToLNode[edge.data("source")];
+    var targetNode = this.idToLNode[edge.data("target")];
+    if(sourceNode !== targetNode && sourceNode.getEdgesBetween(targetNode).length == 0){
+      var e1 = gm.add(layout.newEdge(), sourceNode, targetNode);
+      e1.id = edge.id();
+      e1.idealLength = optFn(this.options.idealEdgeLength, edge);
+      e1.edgeElasticity = optFn(this.options.edgeElasticity, edge);
+      idealLengthTotal += e1.idealLength;
+      edgeCount++;
+    }
+  }
+  // we need to update the ideal edge length constant with the avg. ideal length value after processing edges
+  // in case there is no edge, use other options
+  if (this.options.idealEdgeLength != null){
+    if (edgeCount > 0)
+      CoSEConstants.DEFAULT_EDGE_LENGTH = FDLayoutConstants.DEFAULT_EDGE_LENGTH = idealLengthTotal / edgeCount;
+    else if(!isFn(this.options.idealEdgeLength)) // in case there is no edge, but option gives a value to use
+      CoSEConstants.DEFAULT_EDGE_LENGTH = FDLayoutConstants.DEFAULT_EDGE_LENGTH = this.options.idealEdgeLength;
+    else  // in case there is no edge and we cannot get a value from option (because it's a function)
+      CoSEConstants.DEFAULT_EDGE_LENGTH = FDLayoutConstants.DEFAULT_EDGE_LENGTH = 50;
+    // we need to update these constant values based on the ideal edge length constant
+    CoSEConstants.MIN_REPULSION_DIST = FDLayoutConstants.MIN_REPULSION_DIST = FDLayoutConstants.DEFAULT_EDGE_LENGTH / 10.0;
+    CoSEConstants.DEFAULT_RADIAL_SEPARATION = FDLayoutConstants.DEFAULT_EDGE_LENGTH;
+  }   
 };
 
 /**
