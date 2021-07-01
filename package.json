@@ -1,6 +1,6 @@
 {
   "name": "cytoscape-cose-bilkent",
-  "version": "4.1.0",
+  "version": "4.0.0",
   "description": "The CoSE layout for Cytoscape.js by Bilkent with enhanced compound node placement",
   "main": "cytoscape-cose-bilkent.js",
   "scripts": {
@@ -51,6 +51,6 @@
     "cytoscape": "^3.2.0"
   },
   "dependencies": {
-    "cose-base": "^1.0.0"
+    "cose-base": "https://github.com/iVis-at-Bilkent/cose-base#unstable"
   }
 }
