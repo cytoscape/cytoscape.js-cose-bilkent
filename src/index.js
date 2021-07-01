@@ -61,7 +61,10 @@ var defaults = {
   // Gravity range (constant)
   gravityRange: 3.8,
   // Initial cooling factor for incremental layout
-  initialEnergyOnIncremental: 0.5
+  initialEnergyOnIncremental: 0.5,
+  // The function that specifies the criteria for comparing nodes while sorting them during tiling operation.
+  // Takes the node id as a parameter and the default tiling operation is perfomed when this option is not set.
+  tilingSortBy: undefined
 };
 
 function extend(defaults, options) {
