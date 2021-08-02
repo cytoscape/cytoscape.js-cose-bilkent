@@ -15,7 +15,8 @@
     <!--polyfills are needed for this extension for old browsers like IE -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/shim.min.js"></script>
     <script src="https://unpkg.com/layout-base/layout-base.js"></script>
-    <script src="node_modules/cose-base/cose-base.js"></script>
+    <script src="https://unpkg.com/cose-base/cose-base.js"></script>
+    <!-- <script src="node_modules/cose-base/cose-base.js"></script> -->
     <script src="cytoscape-cose-bilkent.js"></script>
 
     <style>
@@ -43,9 +44,8 @@
     <script>
       document.addEventListener('DOMContentLoaded', function(){
 
-        var tilingSortBy = function( nodeId ) {
-          // console.log('sort by: ', nodeId)
-          return parseInt( nodeId );
+        var tilingCompareBy = function( nodeId1, nodeId2 ) {
+          return parseInt( nodeId1 ) - parseInt( nodeId2 );
         }
 
         var cy = window.cy = cytoscape({
@@ -58,7 +58,7 @@
               node.css("width", size);
               node.css("height", size);
             });
-            this.layout({name: 'cose-bilkent', animationDuration: 1000, tilingSortBy}).run();
+            this.layout({name: 'cose-bilkent', animationDuration: 1000, tilingCompareBy}).run();
           },
 
           style: [
@@ -182,7 +182,7 @@
             animationEasing: 'ease-out',
             animationDuration: 1000,
             randomize: true,
-            tilingSortBy
+            tilingCompareBy
           });
 
           layout.run();

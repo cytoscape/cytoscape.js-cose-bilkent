@@ -124,9 +124,14 @@ var defaultOptions = {
   gravityRange: 3.8,
   // Initial cooling factor for incremental layout
   initialEnergyOnIncremental: 0.5,
-  // The function that specifies the criteria for comparing nodes while sorting them during tiling operation.
-  // Takes the node id as a parameter and the default tiling operation is perfomed when this option is not set.
-  tilingSortBy: undefined
+  // The comparison function to be used while sorting nodes during tiling operation.
+  // Takes the ids of 2 nodes that will be compared as a parameter and the default tiling operation
+  // is performed when this option is not set.
+  // If ``tilingCompareBy(a,b)`` returns a value > than 0, sort b before a.
+  // If ``tilingCompareBy(a, b)`` returns a value ≤ 0, leave a and b in the same order.
+  // It works like ``compareFunction`` paramter of ``Array.prototype.sort()``
+  // (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+  tilingCompareBy: undefined
 };
 ```
 
