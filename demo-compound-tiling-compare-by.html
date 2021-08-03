@@ -44,9 +44,13 @@
     <script>
       document.addEventListener('DOMContentLoaded', function(){
 
+        var getCmpVal = function( nodeId ) {
+          return parseInt(nodeId.replace(/\D/g,''));
+        };
+
         var tilingCompareBy = function( nodeId1, nodeId2 ) {
-          return parseInt( nodeId1 ) - parseInt( nodeId2 );
-        }
+          return getCmpVal( nodeId1 ) - getCmpVal( nodeId2 );
+        };
 
         var cy = window.cy = cytoscape({
           container: document.getElementById('cy'),
