@@ -7,7 +7,7 @@
 		exports["cytoscapeCoseBilkent"] = factory(require("cose-base"));
 	else
 		root["cytoscapeCoseBilkent"] = factory(root["coseBase"]);
-})(self, function(__WEBPACK_EXTERNAL_MODULE__281__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE__281__) {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
@@ -30,9 +30,9 @@ var defaults = {
   ready: function ready() {},
   // Called on `layoutstop`
   stop: function stop() {},
-  // 'draft', 'default' or 'proof"
-  // - 'draft' fast cooling rate
-  // - 'default' moderate cooling rate
+  // 'draft', 'default' or 'proof" 
+  // - 'draft' fast cooling rate 
+  // - 'default' moderate cooling rate 
   // - "proof" slow cooling rate
   quality: 'default',
   // Include labels in node dimensions
