@@ -102,28 +102,18 @@ var defaultOptions = {
   edgeElasticity: function ( edge ){ return 0.45; },
   // Nesting factor (multiplier) to compute ideal edge length for inter-graph edges
   nestingFactor: 0.1,
-  // Gravity force (constant)
-  gravity: 0.25,
   // Maximum number of iterations to perform
   numIter: 2500,
-  // Whether to tile disconnected nodes
-  tile: true,
   // Type of layout animation. The option set is {'during', 'end', false}
   animate: 'end',
   // Duration for animate:end
   animationDuration: 500,
+  // Whether to tile disconnected nodes
+  tile: true,  
   // Amount of vertical space to put between degree zero nodes during tiling (can also be a function)
   tilingPaddingVertical: 10,
   // Amount of horizontal space to put between degree zero nodes during tiling (can also be a function)
   tilingPaddingHorizontal: 10,
-  // Gravity range (constant) for compounds
-  gravityRangeCompound: 1.5,
-  // Gravity force (constant) for compounds
-  gravityCompound: 1.0,
-  // Gravity range (constant)
-  gravityRange: 3.8,
-  // Initial cooling factor for incremental layout
-  initialEnergyOnIncremental: 0.5,
   // The comparison function to be used while sorting nodes during tiling operation.
   // Takes the ids of 2 nodes that will be compared as a parameter and the default tiling operation
   // is performed when this option is not set.
@@ -131,7 +121,17 @@ var defaultOptions = {
   // If ``tilingCompareBy(a, b)`` returns a value ≤ 0, leave a and b in the same order.
   // It works like ``compareFunction`` paramter of ``Array.prototype.sort()``
   // (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
-  tilingCompareBy: undefined
+  tilingCompareBy: undefined,
+  // Gravity force (constant)
+  gravity: 0.25,
+  // Gravity force (constant) for compounds
+  gravityCompound: 1.0,
+  // Gravity range (constant)
+  gravityRange: 3.8,  
+  // Gravity range (constant) for compounds
+  gravityRangeCompound: 1.5,
+  // Initial cooling factor for incremental layout
+  initialEnergyOnIncremental: 0.5
 };
 ```
 
