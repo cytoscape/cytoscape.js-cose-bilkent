@@ -5,6 +5,7 @@ cytoscape-cose-bilkent
 
 ## Description
 
+
 The CoSE (pron. "cosay", **Co**mpound **S**pring **E**mbedder) layout for Cytoscape.js developed by [i-Vis Lab](http://cs.bilkent.edu.tr/~ivis/) in Bilkent University is a spring embedder layout with support for compound graphs (nested structures) and varying (non-uniform) node dimensions. A faster version of this layout style called fCoSE, also supporting user-defined placement constraints can be found [here](https://github.com/iVis-at-Bilkent/cytoscape.js-fcose).
 ([demo](https://raw.githack.com/cytoscape/cytoscape.js-cose-bilkent/unstable/demo.html), [compound demo](https://raw.githack.com/cytoscape/cytoscape.js-cose-bilkent/unstable/demo-compound.html))
 
@@ -122,7 +123,15 @@ var defaultOptions = {
   // Gravity range (constant)
   gravityRange: 3.8,
   // Initial cooling factor for incremental layout
-  initialEnergyOnIncremental: 0.5
+  initialEnergyOnIncremental: 0.5,
+  // The comparison function to be used while sorting nodes during tiling operation.
+  // Takes the ids of 2 nodes that will be compared as a parameter and the default tiling operation
+  // is performed when this option is not set.
+  // If ``tilingCompareBy(a,b)`` returns a value > than 0, sort b before a.
+  // If ``tilingCompareBy(a, b)`` returns a value ≤ 0, leave a and b in the same order.
+  // It works like ``compareFunction`` paramter of ``Array.prototype.sort()``
+  // (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+  tilingCompareBy: undefined
 };
 ```
 

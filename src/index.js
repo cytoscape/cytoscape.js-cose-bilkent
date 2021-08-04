@@ -61,7 +61,10 @@ var defaults = {
   // Gravity range (constant)
   gravityRange: 3.8,
   // Initial cooling factor for incremental layout
-  initialEnergyOnIncremental: 0.5
+  initialEnergyOnIncremental: 0.5,
+  // The function that specifies the criteria for comparing nodes while sorting them during tiling operation.
+  // Takes the node id as a parameter and the default tiling operation is perfomed when this option is not set.
+  tilingCompareBy: undefined
 };
 
 function extend(defaults, options) {
@@ -110,7 +113,9 @@ var getUserOptions = function (options) {
     CoSEConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = options.gravityRangeCompound;
   if (options.initialEnergyOnIncremental != null)
     CoSEConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = options.initialEnergyOnIncremental;
-  
+  if (options.tilingCompareBy != null)
+    CoSEConstants.TILING_COMPARE_BY = options.tilingCompareBy;
+
   if (options.quality == 'draft')
     LayoutConstants.QUALITY = 0;
   else if(options.quality == 'proof')
