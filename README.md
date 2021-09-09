@@ -117,10 +117,11 @@ var defaultOptions = {
   // The comparison function to be used while sorting nodes during tiling operation.
   // Takes the ids of 2 nodes that will be compared as a parameter and the default tiling operation
   // is performed when this option is not set.
-  // If ``tilingCompareBy(a,b)`` returns a value > than 0, sort b before a.
-  // If ``tilingCompareBy(a, b)`` returns a value ≤ 0, leave a and b in the same order.
-  // It works like ``compareFunction`` paramter of ``Array.prototype.sort()``
+  // It works similar to ``compareFunction`` parameter of ``Array.prototype.sort()``
   // (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+  // If node1 is less then node2 by some ordering criterion ``tilingCompareBy(nodeId1,nodeId2)`` must return a negative value
+  // If node1 is greater then node2 by some ordering criterion ``tilingCompareBy(nodeId1, nodeId2)`` must return a positive value
+  // If node1 is equal to node2 by some ordering criterion ``tilingCompareBy(nodeId1, nodeId2)`` must return 0
   tilingCompareBy: undefined,
   // Gravity force (constant)
   gravity: 0.25,
