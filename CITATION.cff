@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Dogrusoz"
+  given-names: "Ugur"
+  orcid: "https://orcid.org/0000-0002-7153-0784"
+- family-names: "Giral"
+  given-names: "Erhan"
+- family-names: "Cetintas"
+  given-names: "Ahmet"
+- family-names: "Civril"
+  given-names: "Ali" 
+- family-names: "Demir"
+  given-names: "Emek"    
+title: "cytoscape-cose-bilkent"
+version: 4.1.0
+date-released: 2019-09-09
+url: "https://github.com/cytoscape/cytoscape.js-cose-bilkent"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Dogrusoz"
+    given-names: "Ugur"
+    orcid: "https://orcid.org/0000-0002-7153-0784"
+  - family-names: "Giral"
+    given-names: "Erhan"
+  - family-names: "Cetintas"
+    given-names: "Ahmet"
+  - family-names: "Civril"
+    given-names: "Ali" 
+  - family-names: "Demir"
+    given-names: "Emek"
+  doi: "10.1016/j.ins.2008.11.017"
+  journal: "Information Sciences"
+  month: 3
+  start: 980 # First page number
+  end: 994 # Last page number
+  title: "A layout algorithm for undirected compound graphs"
+  issue: 7
+  volume: 179
+  year: 2009
