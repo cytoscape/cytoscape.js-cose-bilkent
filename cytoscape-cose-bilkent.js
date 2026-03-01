@@ -85,7 +85,12 @@ var defaults = {
   initialEnergyOnIncremental: 0.5,
   // The function that specifies the criteria for comparing nodes while sorting them during tiling operation.
   // Takes the node id as a parameter and the default tiling operation is perfomed when this option is not set.
-  tilingCompareBy: undefined
+  tilingCompareBy: undefined,
+  // Function that determines if a node is bound to a parent boundary and returns the parent
+  // function(node) { return undefined; }
+  boundaryNodeConstraint: undefined,
+  // Maximum boundary handling iteration configuration
+  boundaryMaxIteration: undefined
 };
 
 function extend(defaults, options) {
@@ -128,6 +133,7 @@ var getUserOptions = function getUserOptions(options) {
   if (options.gravityRangeCompound != null) CoSEConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = options.gravityRangeCompound;
   if (options.initialEnergyOnIncremental != null) CoSEConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = options.initialEnergyOnIncremental;
   if (options.tilingCompareBy != null) CoSEConstants.TILING_COMPARE_BY = options.tilingCompareBy;
+  if (options.boundaryMaxIteration != null) CoSEConstants.BOUNDARY_MAX_ITERATION = options.boundaryMaxIteration;
 
   if (options.quality == 'draft') LayoutConstants.QUALITY = 0;else if (options.quality == 'proof') LayoutConstants.QUALITY = 2;else LayoutConstants.QUALITY = 1;
 
@@ -373,6 +379,20 @@ _CoSELayout.prototype.processChildrenList = function (parent, children, layout) 
 
     // Map the layout node
     this.idToLNode[theChild.data("id")] = theNode;
+
+    if (this.options.boundaryNodeConstraint) {
+      var boundedNodeCy = optFn(this.options.boundaryNodeConstraint, theChild);
+      if (boundedNodeCy) {
+        var boundedNodeCose = this.idToLNode[boundedNodeCy.id()];
+        if (boundedNodeCose) {
+          var parentGraph = boundedNodeCose.child;
+          if (!parentGraph) {
+            parentGraph = layout.getGraphManager().add(layout.newGraph(), boundedNodeCose);
+          }
+          theNode.boundaryGraph = parentGraph;
+        }
+      }
+    }
 
     if (isNaN(theNode.rect.x)) {
       theNode.rect.x = 0;

@@ -132,7 +132,12 @@ var defaultOptions = {
   // Gravity range (constant) for compounds
   gravityRangeCompound: 1.5,
   // Initial cooling factor for incremental layout
-  initialEnergyOnIncremental: 0.5
+  initialEnergyOnIncremental: 0.5,
+  // Function that determines if a node is bound to a parent boundary and returns the parent
+  // function(node) { return undefined; }
+  boundaryNodeConstraint: undefined,
+  // Maximum boundary handling iteration configuration
+  boundaryMaxIteration: undefined
 };
 ```
 
