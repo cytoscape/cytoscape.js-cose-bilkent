@@ -89,8 +89,8 @@ var defaults = {
   // Function that determines if a node is bound to a parent boundary and returns the parent
   // function(node) { return undefined; }
   boundaryNodeConstraint: undefined,
-  // Maximum boundary handling iteration configuration
-  boundaryMaxIteration: undefined
+  // How difficult it is for a boundary node to change sides during layout (a positive integer)
+  parentSideAdhesion: 5
 };
 
 function extend(defaults, options) {
@@ -133,7 +133,7 @@ var getUserOptions = function getUserOptions(options) {
   if (options.gravityRangeCompound != null) CoSEConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = FDLayoutConstants.DEFAULT_COMPOUND_GRAVITY_RANGE_FACTOR = options.gravityRangeCompound;
   if (options.initialEnergyOnIncremental != null) CoSEConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = FDLayoutConstants.DEFAULT_COOLING_FACTOR_INCREMENTAL = options.initialEnergyOnIncremental;
   if (options.tilingCompareBy != null) CoSEConstants.TILING_COMPARE_BY = options.tilingCompareBy;
-  if (options.boundaryMaxIteration != null) CoSEConstants.BOUNDARY_MAX_ITERATION = options.boundaryMaxIteration;
+  if (options.parentSideAdhesion != null) CoSEConstants.BOUNDARY_MAX_ITERATION = options.parentSideAdhesion;
 
   if (options.quality == 'draft') LayoutConstants.QUALITY = 0;else if (options.quality == 'proof') LayoutConstants.QUALITY = 2;else LayoutConstants.QUALITY = 1;
 
