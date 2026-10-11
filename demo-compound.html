@@ -7,7 +7,9 @@
 
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+    <script src="https://unpkg.com/cytoscape-graphml/cytoscape-graphml.js"></script>
 
     <!-- for testing with local version of cytoscape.js -->
     <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
@@ -182,6 +184,65 @@
 
           layout.run();
         });
+
+        function loadGraphMLFromStr(s) {
+          cy.elements().remove();
+          cy.graphml({ layoutBy: 'preset' });
+          cy.graphml(s);
+
+          var hasPositions = false;
+          cy.nodes().forEach(function (node) {
+            var x = Number(node.data('x'));
+            var y = Number(node.data('y'));
+            if (!isNaN(x) && !isNaN(y) && (x !== 0 || y !== 0)) {
+              hasPositions = true;
+              if (!node.isParent()) {
+                node.position({ x: x, y: y });
+              }
+            }
+            if (!node.isParent()) {
+              var w = Number(node.data('width'));
+              var h = Number(node.data('height'));
+              if (!isNaN(w) && w > 0) {
+                node.css('width', w);
+              }
+              if (!isNaN(h) && h > 0) {
+                node.css('height', h);
+              }
+            }
+          });
+
+          if (hasPositions) {
+            cy.layout({ name: 'preset' }).run();
+            cy.fit(30);
+          } else {
+            cy.layout({
+              name: 'cose-bilkent',
+              animate: 'end',
+              animationEasing: 'ease-out',
+              animationDuration: 1000,
+              randomize: true
+            }).run();
+          }
+        }
+
+        var fileInput = document.getElementById("fileInput");
+        document.getElementById("upload").addEventListener("click", function () {
+          fileInput.value = null;
+          fileInput.click();
+        });
+
+        fileInput.addEventListener("change", function () {
+          var file = this.files[0];
+          if (!file) {
+            return;
+          }
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            loadGraphMLFromStr(e.target.result);
+          };
+          reader.readAsText(file);
+        });
       });
     </script>
   </head>
@@ -191,6 +252,8 @@
 
     <button id="randomize" type="button">Randomize</button>
     <button id="layoutButton" type="button">CoSE-Bilkent</button>
+    <button id="upload" type="button" title="Upload GraphML file">Upload File</button>
+    <input type="file" id="fileInput" accept=".graphml" style="display: none;">
 
     <div id="cy"></div>
 
