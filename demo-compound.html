@@ -169,7 +169,8 @@
             animate: 'end',
             animationEasing: 'ease-out',
             animationDuration: 1000,
-            randomize: true
+            randomize: true,
+            uniformNodeDimensions: document.getElementById("uniformDimensions").checked
           });
 
           layout.run();
@@ -221,7 +222,8 @@
               animate: 'end',
               animationEasing: 'ease-out',
               animationDuration: 1000,
-              randomize: true
+              randomize: true,
+              uniformNodeDimensions: document.getElementById("uniformDimensions").checked
             }).run();
           }
         }
@@ -254,6 +256,9 @@
     <button id="layoutButton" type="button">CoSE-Bilkent</button>
     <button id="upload" type="button" title="Upload GraphML file">Upload File</button>
     <input type="file" id="fileInput" accept=".graphml" style="display: none;">
+    <label style="margin-left: 10px;">
+      <input type="checkbox" id="uniformDimensions"> Uniform Node Dimensions
+    </label>
 
     <div id="cy"></div>
 
