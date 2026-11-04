@@ -166,9 +166,10 @@
         document.getElementById("layoutButton").addEventListener("click", function(){
           var layout = cy.layout({
             name: 'cose-bilkent',
-            animate: 'end',
+            animate: document.getElementById("animateLayout").checked ? 'during' : 'end',
             animationEasing: 'ease-out',
             animationDuration: 1000,
+            refresh: 5,
             randomize: true,
             uniformNodeDimensions: document.getElementById("uniformDimensions").checked
           });
@@ -219,9 +220,10 @@
           } else {
             cy.layout({
               name: 'cose-bilkent',
-              animate: 'end',
+              animate: document.getElementById("animateLayout").checked ? 'during' : 'end',
               animationEasing: 'ease-out',
               animationDuration: 1000,
+              refresh: 5,
               randomize: true,
               uniformNodeDimensions: document.getElementById("uniformDimensions").checked
             }).run();
@@ -258,6 +260,9 @@
     <input type="file" id="fileInput" accept=".graphml" style="display: none;">
     <label style="margin-left: 10px;">
       <input type="checkbox" id="uniformDimensions"> Uniform Node Dimensions
+    </label>
+    <label style="margin-left: 10px;">
+      <input type="checkbox" id="animateLayout"> Animate Layout
     </label>
 
     <div id="cy"></div>
