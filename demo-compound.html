@@ -163,13 +163,17 @@
                     { group:'edges', data:{ id: 'e40', source: 'n16', target: 'n40'} }
                    ]
         });
+        document.getElementById("animateLayout").addEventListener("change", function() {
+          document.getElementById("animationSettings").style.display = this.checked ? "inline" : "none";
+        });
         document.getElementById("layoutButton").addEventListener("click", function(){
           var layout = cy.layout({
             name: 'cose-bilkent',
             animate: document.getElementById("animateLayout").checked ? 'during' : 'end',
             animationEasing: 'ease-out',
             animationDuration: 1000,
-            refresh: 5,
+            refresh: Number(document.getElementById("refresh").value),
+            fit: document.getElementById("animateLayout").checked ? document.getElementById("fit").checked : true,
             randomize: true,
             uniformNodeDimensions: document.getElementById("uniformDimensions").checked
           });
@@ -223,7 +227,8 @@
               animate: document.getElementById("animateLayout").checked ? 'during' : 'end',
               animationEasing: 'ease-out',
               animationDuration: 1000,
-              refresh: 5,
+              refresh: Number(document.getElementById("refresh").value),
+              fit: document.getElementById("animateLayout").checked ? document.getElementById("fit").checked : true,
               randomize: true,
               uniformNodeDimensions: document.getElementById("uniformDimensions").checked
             }).run();
@@ -264,6 +269,14 @@
     <label style="margin-left: 10px;">
       <input type="checkbox" id="animateLayout"> Animate Layout
     </label>
+    <span id="animationSettings" style="display: none;"> 
+      <label style="margin-left: 10px;" title="Number of ticks per frame; higher is faster">
+        Refresh: <input type="number" id="refresh" min="1" value="5" style="width: 50px;">
+      </label>
+      <label style="margin-left: 10px;">
+        <input type="checkbox" id="fit" checked> Fit
+      </label>
+    </span>
 
     <div id="cy"></div>
 
